@@ -38,7 +38,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.05" ?>
+<?php $staminia_version = "12.06.07" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -619,7 +619,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           </div>
         </div>
         -->
-        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider</p>
+        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA">Stamin.IA! @ github</a></p>
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
