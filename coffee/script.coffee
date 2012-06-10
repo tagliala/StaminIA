@@ -49,7 +49,7 @@ createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
     if _i is _len-1
       l = ranges[r].length - 1
       ranges[r].push minute if ranges[r][l] isnt minute
-        
+
   result = []
   for range in ranges
     result.push range.join "-"
@@ -87,7 +87,7 @@ Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
 # Stops propagation of click event on login form
 $('.dropdown-menu').find('form').click (e) ->
   e.stopPropagation()
-  
+
 # Document.ready
 $ ->
   hasParams = gup("params")?
@@ -96,7 +96,6 @@ $ ->
   $(FORM_ID).submit() if hasParams and AUTOSTART
   $("#imgMadeInItaly").tooltip()
   $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax
-    
 
 $(FORM_ID).validate({
   ignore: ".ignore"
@@ -727,7 +726,7 @@ $("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
 
 setPlayerFormFields = (player, checkUrlParameter = false) -> 
   return if checkUrlParameter && gup("params")?
-  
+
   PlayersData = Staminia.PlayersData
   formReference = $(FORM_ID)[0]
   return unless PlayersData?
@@ -780,4 +779,3 @@ Staminia.isChartsEnabled = isChartsEnabled
 Staminia.isVerboseModeEnabled = isVerboseModeEnabled
 Staminia.isPressingEnabled = isPressingEnabled
 Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled
-
