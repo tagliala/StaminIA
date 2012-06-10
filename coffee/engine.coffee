@@ -12,7 +12,6 @@ FULLTIME = 90
 SUBTOTALMINUTES = 88
 
 LOW_STAMINA = 0.46
-REGEXP_FLOAT = /^\d+((\.|\,)\d+)?$/
 
 CHECKPOINT = 5
 CHECKPOINTS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 ]
@@ -73,32 +72,6 @@ $ ->
   DEBUG = Staminia.CONFIG.DEBUG
   AUTOSTART = Staminia.CONFIG.AUTOSTART
   return
-
-window.arrayToString = (substituteAtArray) ->
-  return "" unless substituteAtArray.length
- 
-  ranges = []
-  r = 0
-
-  for minute in substituteAtArray
-    unless ranges[r]
-      ranges[r] = []
-      ranges[r].push minute
-      check_with = minute + 1
-    else if minute isnt check_with      
-      ranges[r].push check_with - 1 unless ranges[r][ranges[r].length - 1] is check_with - 1
-      r++
-      _i--
-    else if minute is check_with
-      check_with = minute + 1
-    if _i is _len-1
-      l = ranges[r].length - 1
-      ranges[r].push minute if ranges[r][l] isnt minute
-        
-  result = []
-  for range in ranges
-    result.push range.join "-"
-  result.join ","
 
 minuteToCheckpoint = (minute) ->
   if minute is 1
@@ -281,10 +254,11 @@ printContributionTable = ->
   $("#tabDebug").append tempHTML
 
 Staminia.Engine.start = ->
-  $("#tabDebug").html ""
-  $("#tabContributions").html ""
-  $(".alert").alert "close"
-
+  @result =
+    minutes: []
+    substituteAt: []
+    mayNotReplace: false
+    
   formReference = $(Staminia.CONFIG.FORM_ID)[0]
   if Staminia.isAdvancedModeEnabled()
     player1Form = validateSkill formReference.Staminia_Advanced_Player_1_Form.value, "form"
@@ -311,38 +285,12 @@ Staminia.Engine.start = ->
   player1StrengthStaminaIndependent = calculateStrength player1Skill, player1Form, player1Stamina, player1Experience, false
   player2StrengthStaminaIndependent = calculateStrength player2Skill, player2Form, player2Stamina, player2Experience, false
 
-  warnings = ""
-  
-  if player2Strength > player1Strength
-    warnings += """
-       <li>#{Staminia.messages.warning_p2_stronger_than_p1}</li>
-       """
+  @result.player2_stronger_than_player1 = player2Strength > player1Strength
+  @result.player1Strength = Staminia.number_format player1Strength, 2
+  @result.player2Strength = Staminia.number_format player2Strength, 2
 
-  if Staminia.isVerboseModeEnabled()
-    tempHTML = """
-      <h3 class="legend-like">#{Staminia.messages.strength_table}</h3>
-      <table class="table table-striped table-condensed table-staminia table-staminia-strength width-auto">
-        <thead>
-          <tr>
-            <th></th><th>#{Staminia.messages.player1}</th><th>#{Staminia.messages.player2}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>#{Staminia.messages.strength}</td>
-            <td>#{Staminia.number_format(player1Strength, 2)}</td>
-            <td>#{Staminia.number_format(player2Strength, 2)}</td>
-          </tr>
-          <tr>
-            <td>#{Staminia.messages.strength_st_independent}</td>
-            <td>#{Staminia.number_format(player1StrengthStaminaIndependent, 2)}</td>
-            <td>#{Staminia.number_format(player2StrengthStaminaIndependent, 2)}</td>
-          </tr>
-        </tbody>
-      </table>
-      <p><small>#{Staminia.messages.used_in_calculation}</small></p>
-      """
-    $("#tabContributions").append tempHTML
+  @result.player1StrengthStaminaIndependent = Staminia.number_format player1StrengthStaminaIndependent, 2
+  @result.player2StrengthStaminaIndependent = Staminia.number_format player2StrengthStaminaIndependent, 2
 
   player1TotalContribution = 0
   player2TotalContribution = 0
@@ -392,82 +340,45 @@ Staminia.Engine.start = ->
     min = totalContributionArray[minute] if totalContributionArray[minute] < min
 
   min = -1 if max is min
+  @result.max = Staminia.number_format(max, 2)
+  @result.min = Staminia.number_format(min, 2)
 
   if Staminia.isVerboseModeEnabled()
-    tableHeader = """
-      <thead>
-        <tr>
-          <th>#{Staminia.messages.substitution_minute}</th>
-          <th>#{Staminia.messages.total_contribution}</th>
-          <th>#{Staminia.messages.contribution_percent}</th>
-          <th>#{Staminia.messages.p1_contrib}</th>
-          <th>#{Staminia.messages.p2_contrib}</th>
-          <th>#{Staminia.messages.notes}</th>
-        </tr>
-      </thead>
-      """
-
-    tableSeparator = "<tr><td colspan='6'></td></tr>"
-    
-    tempHTML = """
-      <h3 class="legend-like">#{Staminia.messages.contribution_table}</h3>
-      <table class="table table-striped table-condensed table-staminia table-staminia-contributions width-auto">
-        <thead>
-        </thead>
-          #{tableHeader}
-        </thead>
-        <tbody>
-      """
-
-    for minute in [KICKOFF..FULLTIME]
-      if minute is HALFTIME
-        tempHTML += tableHeader
-        continue
+    for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
       p1PlayedMinutes = minute - 1
       --p1PlayedMinutes  if minute > HALFTIME
       p2PlayedMinutes = SUBTOTALMINUTES - minute + 1
       ++p2PlayedMinutes  if minute > HALFTIME
-      isMax = (totalContributionArray[minute] is max)
-      isMin = (totalContributionArray[minute] is min)
-      contributionPercent = totalContributionArray[minute] / max * 100
-      tempHTML += """
-        <tr class="#{(if isMax then " max" else "") + (if isMin then " min" else "")}">
-          <td>#{minute}</td>
-          <td>#{Staminia.number_format(totalContributionArray[minute], 2)}</td>
-          <td>#{Staminia.number_format(contributionPercent, 2)}%</td>
-          <td>#{Staminia.number_format(player1AVGArray[minute - 1] * player1StrengthStaminaIndependent * (p1PlayedMinutes / SUBTOTALMINUTES), 2)}</td>
-          <td>#{Staminia.number_format(player2AVGArray[minute] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES), 2)}</td>
-          <td>#{(if isMax then "MAX" else (if isMin then "MIN" else (if 100 - contributionPercent < 1 then "~ 1%" else ""))) + (if minute is player1LowStamina then " " + Staminia.messages.p1_bad_stamina else "") + (if minute is player2LowStamina then " " + Staminia.messages.p2_bad_stamina else "")}</td>
-        </tr>
-        """
-    tempHTML += "</tbody></table>"
-    $("#tabContributions").append tempHTML
-
-  substituteAtArray = []
+      @result.minutes[minute] =
+        total: Staminia.number_format(totalContributionArray[minute], 2)
+        percent: Staminia.number_format(totalContributionArray[minute] / max * 100, 2)
+        p1: Staminia.number_format(player1AVGArray[minute - 1] * player1StrengthStaminaIndependent * (p1PlayedMinutes / SUBTOTALMINUTES), 2)
+        p2: Staminia.number_format(player2AVGArray[minute] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES), 2)
+        isMax: (totalContributionArray[minute] is max)
+        isMin: (totalContributionArray[minute] is min)
+  substituteAt = []
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
     if totalContributionArray[minute] is max
       if minute is FULLTIME
-        doNotReplace = true
+        mayNotReplace = true
       else
-        substituteAtArray.push minute
+        substituteAt.push minute
     p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
     p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
    
-  warnings += "<li>#{Staminia.messages.warning_p1_stamina_se(player1LowStamina)}</li>" if p1LowStaminaRisk
-  warnings += "<li>#{Staminia.messages.warning_p2_stamina_se(player2LowStamina)}</li>" if p2LowStaminaRisk
-
-  $('#AlertsContainer').append Staminia.createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings}</ul>" unless warnings is ""
-     
-  # LAST THINGS
-  if Staminia.isVerboseModeEnabled()
-    $("#tabContributionsNav").show() 
-    $("#tabContributionsNav").find("a").tab "show"
+  @result.player1_low_stamina_se = player1LowStamina
+  @result.player2_low_stamina_se = player2LowStamina
+  @result.player1_low_stamina_se_risk = p1LowStaminaRisk
+  @result.player2_low_stamina_se_risk = p2LowStaminaRisk
+  @result.substituteAt = substituteAt
+  @result.mayNotReplace = mayNotReplace
 
   if Staminia.CONFIG.DEBUG_STEP
     printContributionTable()
     $("#tabDebugNav").show() 
     #$("#tabDebugNav").find("a").tab "show"
-
+  @result.status = "OK"
+  @result
     
     
     
@@ -705,7 +616,7 @@ Staminia.Engine.start = ->
       continue  if i is HALFTIME
       if totalContributionArray[i] is max
         if i is FULLTIME
-          doNotReplace = true
+          mayNotReplace = true
         else
           substituteAtArray.push i
         lowStaminaSERiskP1 = true  if player1LowStamina > 0 and i >= player1LowStamina

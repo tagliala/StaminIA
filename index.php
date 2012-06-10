@@ -38,7 +38,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.07" ?>
+<?php $staminia_version = "12.06.10" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -85,7 +85,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
           <ul class="nav pull-right">
             <li class="dropdown" id="dropdownLogin">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
-                <span id="menuLoginTitle">CHPP</span>
+                <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu" id="loginDropdown">
@@ -94,7 +94,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
                     <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
                     <fieldset>
                       <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
-                      <button type="submit" class="btn" id="CHPPLink">Login</button>
+                      <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
                     </fieldset>
                   </form>
                   <small class="align-justify"><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
@@ -205,11 +205,18 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           
           <!-- Tab Content Start -->
           <div class="tab-content">
-          
+            
+            <div id="AlertsContainer"></div>
+            
+            <noscript>
+              <div class="alert alert-block alert-error">
+                <h4 class="alert-heading"><?= localize("Error"); ?></h4>
+                <?= localize("You need a browser with JavaScript support") ?>
+              </div>
+            </noscript>
+            
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
-              <div id="AlertsContainer">
-              </div>
               <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></sub></h1>
               <p><?= sprintf(localize("SHORT_HELP"),localize("Player 1"), localize("Player 2")) ?></p>
 
@@ -569,14 +576,22 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <h3 class="legend-like"><?= localize("Thanks to"); ?>:</h3>
               <p>
                 <b>CHPP-teles</b> (653581), <b>GM-Andreac</b> (7790187), <b>Cuomos</b> (4052076), <b>Danfisico</b> (3232936), <b>Hiddink14</b> (9141503), <b>sulce</b> (9767434), <b>Shinobi-fisc</b> (7328722), <b>taccola</b> (7541533), <b>Cacchino</b> (11389955), <b>-Materasso-</b> (7313267), <b>arezzowave</b> (11613695), <b>trigrottro</b> (10193531), <b>Manny_Ray-BSK</b> (6506224), <b>xin</b> [old 3D Logo], Federation <b>"L'Antica Osteria da Ciccio"</b> (91634), Federation <b>"DAC - Crick &amp; Croack"</b> (37817)
+                <br/><br/>
               </p>
               <h3 class="legend-like"><?= localize("Translated by"); ?>:</h3>
               <p>
                 <?= localize("TRANSLATED_BY"); ?>
+                <br/><br/>
               </p>
               <h3 class="legend-like"><?= localize("Nerd thanks"); ?>:</h3>
               <p>
-                <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's team</a>, <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>, <a href="https://github.com/mojombo/clippy">mojombo / clippy</a>, <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
+                <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's team</a>,
+                <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
+                <a href="https://github.com/mojombo/clippy">mojombo/clippy</a>,
+                <a href="https://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
+                <a href="https://bitbucket.org/cleonello/jqplot/wiki/Home">cleonello/jqplot</a>,
+                <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
+                <br/><br/>
               </p>
             </div>
             

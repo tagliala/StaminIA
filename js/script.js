@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, resetAndHideTabs, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -47,6 +47,70 @@
       source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
     });
     return source;
+  };
+
+  createSubstitutionAlert = function(substituteAtArray, mayNotReplace) {
+    var body, check_with, l, minute, r, range, ranges, result, title, _i, _j, _len, _len1;
+    ranges = [];
+    r = 0;
+    for (_i = 0, _len = substituteAtArray.length; _i < _len; _i++) {
+      minute = substituteAtArray[_i];
+      if (!ranges[r]) {
+        ranges[r] = [];
+        ranges[r].push(minute);
+        check_with = minute + 1;
+      } else if (minute !== check_with) {
+        if (ranges[r][ranges[r].length - 1] !== check_with - 1) {
+          ranges[r].push(check_with - 1);
+        }
+        r++;
+        _i--;
+      } else if (minute === check_with) {
+        check_with = minute + 1;
+      }
+      if (_i === _len - 1) {
+        l = ranges[r].length - 1;
+        if (ranges[r][l] !== minute) {
+          ranges[r].push(minute);
+        }
+      }
+    }
+    result = [];
+    for (_j = 0, _len1 = ranges.length; _j < _len1; _j++) {
+      range = ranges[_j];
+      result.push(range.join("-"));
+    }
+    title = "";
+    body = "";
+    if (substituteAtArray.length > 0) {
+      title = "";
+      if (substituteAtArray.length === 1) {
+        title += "" + Staminia.messages.replace + " " + Staminia.messages.at_minute;
+      } else {
+        title += "" + Staminia.messages.replace + " " + Staminia.messages.at_minutes;
+      }
+      body = "<p class=\"minutes\">" + (result.join(", ")) + "</p>";
+      if (mayNotReplace) {
+        body += "" + Staminia.messages.may_not_replace;
+      }
+    } else {
+      title = Staminia.messages.do_not_replace;
+    }
+    $('#AlertsContainer').append(createAlert({
+      "id": "formSubstituteAt",
+      "type": "success",
+      "title": title,
+      "body": body
+    }));
+  };
+
+  resetAndHideTabs = function() {
+    $("#tabChartsNav").hide();
+    $("#tabContributionsNav").hide();
+    $("#tabDebugNav").hide();
+    $("#tabCharts").html("");
+    $("#tabContributions").html("");
+    return $("#tabDebug").html("");
   };
 
   FORM_ID = Staminia.CONFIG.FORM_ID;
@@ -127,9 +191,58 @@
       }
     },
     submitHandler: function(form) {
+      var css_classes, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
       $("#calculate").addClass("disabled");
-      $(".alert").alert("close");
-      Staminia.Engine.start();
+      resetAndHideTabs();
+      $("#AlertsContainer").html("");
+      result = Staminia.Engine.start();
+      warnings_list = "";
+      if (result.player2_stronger_than_player1) {
+        warnings_list += "<li>" + Staminia.messages.player2_stronger_than_player1 + "</li>";
+      }
+      if (result.player1_low_stamina_se_risk) {
+        warnings_list += "<li>" + (Staminia.messages.player1_low_stamina_se(result.player1_low_stamina_se)) + "</li>";
+      }
+      if (result.player2_low_stamina_se_risk) {
+        warnings_list += "<li>" + (Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)) + "</li>";
+      }
+      if (warnings_list !== "") {
+        $('#AlertsContainer').append(createAlert({
+          "id": "formWarnings",
+          "type": "warning",
+          "title": Staminia.messages.status_warning,
+          "body": "<ul>" + warnings_list + "</ul>"
+        }));
+      }
+      if (isVerboseModeEnabled()) {
+        tempHTML = "<h3 class=\"legend-like\">" + Staminia.messages.strength_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-strength width-auto\">\n  <thead>\n    <tr>\n      <th></th><th>" + Staminia.messages.player1 + "</th><th>" + Staminia.messages.player2 + "</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>" + Staminia.messages.strength + "</td>\n      <td>" + (number_format(result.player1Strength, 2)) + "</td>\n      <td>" + (number_format(result.player2Strength, 2)) + "</td>\n    </tr>\n    <tr>\n      <td>" + Staminia.messages.strength_st_independent + "</td>\n      <td>" + (number_format(result.player1StrengthStaminaIndependent, 2)) + "</td>\n      <td>" + (number_format(result.player2StrengthStaminaIndependent, 2)) + "</td>\n    </tr>\n  </tbody>\n</table>\n<p><small>" + Staminia.messages.used_in_calculation + "</small></p>";
+        $("#tabContributions").append(tempHTML);
+        tableHeader = "<thead>\n  <tr>\n    <th class=\"min-width\">" + Staminia.messages.substitution_minute + "</th>\n    <th>" + Staminia.messages.total_contribution + "</th>\n    <th>" + Staminia.messages.contribution_percent + "</th>\n    <th>" + Staminia.messages.p1_contrib + "</th>\n    <th>" + Staminia.messages.p2_contrib + "</th>\n    <th>" + Staminia.messages.notes + "</th>\n  </tr>\n</thead>";
+        tableSeparator = "<tr><td colspan='6'></td></tr>";
+        tempHTML = "<h3 class=\"legend-like\">" + Staminia.messages.contribution_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-contributions width-auto\">\n  <thead>\n  </thead>\n    " + tableHeader + "\n  </thead>\n  <tbody>";
+        player1LowStamina = String(result.player1_low_stamina_se);
+        player2LowStamina = String(result.player2_low_stamina_se);
+        for (minute in result.minutes) {
+          minuteObject = result.minutes[minute];
+          totalContribution = minuteObject.total;
+          percentContribution = minuteObject.percent;
+          p1Contribution = minuteObject.p1;
+          p2Contribution = minuteObject.p2;
+          isMax = minuteObject.isMax;
+          isMin = minuteObject.isMin;
+          if (minute === "46") {
+            tempHTML += tableHeader;
+          }
+          note = (isMax ? "MAX" : (isMin ? "MIN" : (100 - percentContribution < 1 ? "~ 1%" : ""))) + (minute === player1LowStamina ? " " + Staminia.messages.p1_low_stamina : "") + (minute === player2LowStamina ? " " + Staminia.messages.p2_low_stamina : "");
+          css_classes = (isMax ? " max" : "") + (isMin ? " min" : "");
+          tempHTML += "<tr class=\"" + css_classes + "\">\n  <td>" + minute + "</td>\n  <td>" + totalContribution + "</td>\n  <td>" + percentContribution + "%</td>\n  <td>" + p1Contribution + "</td>\n  <td>" + p2Contribution + "</td>\n  <td>" + note + "</td>\n</tr>";
+        }
+        tempHTML += "</tbody></table>";
+        $("#tabContributions").append(tempHTML);
+        $("#tabContributionsNav").show();
+        $("#tabContributionsNav").find("a").tab("show");
+      }
+      createSubstitutionAlert(result.substituteAt, result.mayNotReplace);
       $("#calculate").removeClass("disabled");
     },
     highlight: function(element, errorClass, validClass) {
@@ -405,6 +518,14 @@
     });
   });
 
+  $('a[data-toggle="tab"]').on('shown', function(e) {
+    if ($(e.target).attr("href") === "#tabCredits") {
+      return $("#AlertsContainer").hide();
+    } else {
+      return $("#AlertsContainer").show();
+    }
+  });
+
   $("#resetApp").on("click", function(e) {
     $(FORM_ID).each(function() {
       if (typeof this.reset === 'function' || (typeof this.reset === 'object' && !this.reset.nodeType)) {
@@ -412,7 +533,8 @@
       }
     });
     $('.control-group').removeClass("error");
-    $(".alert").alert("close");
+    $("#AlertsContainer").html("");
+    resetAndHideTabs();
     $("button[data-checkbox-button], button[data-radio-button]").each(function() {
       var form;
       form = $(FORM_ID)[0];
@@ -758,14 +880,12 @@
 
   Staminia.number_format = number_format;
 
-  Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled;
+  Staminia.isChartsEnabled = isChartsEnabled;
 
   Staminia.isVerboseModeEnabled = isVerboseModeEnabled;
 
   Staminia.isPressingEnabled = isPressingEnabled;
 
-  Staminia.isChartsEnabled = isChartsEnabled;
-
-  Staminia.createAlert = createAlert;
+  Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled;
 
 }).call(this);
