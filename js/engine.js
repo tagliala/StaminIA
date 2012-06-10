@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, REGEXP_FLOAT, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getContributionAtMinute, getPlayerBonus, getSimpleSkill, minuteToCheckpoint, printContributionTable, validateSkill;
+  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getContributionAtMinute, getPlayerBonus, getSimpleSkill, minuteToCheckpoint, printContributionTable, validateSkill;
 
   window.Staminia = window.Staminia || {};
 
@@ -23,8 +23,6 @@
   SUBTOTALMINUTES = 88;
 
   LOW_STAMINA = 0.46;
-
-  REGEXP_FLOAT = /^\d+((\.|\,)\d+)?$/;
 
   CHECKPOINT = 5;
 
@@ -91,43 +89,6 @@
     DEBUG = Staminia.CONFIG.DEBUG;
     AUTOSTART = Staminia.CONFIG.AUTOSTART;
   });
-
-  window.arrayToString = function(substituteAtArray) {
-    var check_with, l, minute, r, range, ranges, result, _i, _j, _len, _len1;
-    if (!substituteAtArray.length) {
-      return "";
-    }
-    ranges = [];
-    r = 0;
-    for (_i = 0, _len = substituteAtArray.length; _i < _len; _i++) {
-      minute = substituteAtArray[_i];
-      if (!ranges[r]) {
-        ranges[r] = [];
-        ranges[r].push(minute);
-        check_with = minute + 1;
-      } else if (minute !== check_with) {
-        if (ranges[r][ranges[r].length - 1] !== check_with - 1) {
-          ranges[r].push(check_with - 1);
-        }
-        r++;
-        _i--;
-      } else if (minute === check_with) {
-        check_with = minute + 1;
-      }
-      if (_i === _len - 1) {
-        l = ranges[r].length - 1;
-        if (ranges[r][l] !== minute) {
-          ranges[r].push(minute);
-        }
-      }
-    }
-    result = [];
-    for (_j = 0, _len1 = ranges.length; _j < _len1; _j++) {
-      range = ranges[_j];
-      result.push(range.join("-"));
-    }
-    return result.join(",");
-  };
 
   minuteToCheckpoint = function(minute) {
     if (minute === 1) {
@@ -288,10 +249,12 @@
   };
 
   Staminia.Engine.start = function() {
-    var contributionPercent, doNotReplace, formReference, isMax, isMin, max, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, pressing, substituteAtArray, tableHeader, tableSeparator, tempHTML, totalContributionArray, warnings, _i, _j, _k, _l, _m, _ref;
-    $("#tabDebug").html("");
-    $("#tabContributions").html("");
-    $(".alert").alert("close");
+    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _ref;
+    this.result = {
+      minutes: [],
+      substituteAt: [],
+      mayNotReplace: false
+    };
     formReference = $(Staminia.CONFIG.FORM_ID)[0];
     if (Staminia.isAdvancedModeEnabled()) {
       player1Form = validateSkill(formReference.Staminia_Advanced_Player_1_Form.value, "form");
@@ -316,14 +279,11 @@
     player2Strength = calculateStrength(player2Skill, player2Form, player2Stamina, player2Experience, true);
     player1StrengthStaminaIndependent = calculateStrength(player1Skill, player1Form, player1Stamina, player1Experience, false);
     player2StrengthStaminaIndependent = calculateStrength(player2Skill, player2Form, player2Stamina, player2Experience, false);
-    warnings = "";
-    if (player2Strength > player1Strength) {
-      warnings += "<li>" + Staminia.messages.warning_p2_stronger_than_p1 + "</li>";
-    }
-    if (Staminia.isVerboseModeEnabled()) {
-      tempHTML = "<h3 class=\"legend-like\">" + Staminia.messages.strength_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-strength width-auto\">\n  <thead>\n    <tr>\n      <th></th><th>" + Staminia.messages.player1 + "</th><th>" + Staminia.messages.player2 + "</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>" + Staminia.messages.strength + "</td>\n      <td>" + (Staminia.number_format(player1Strength, 2)) + "</td>\n      <td>" + (Staminia.number_format(player2Strength, 2)) + "</td>\n    </tr>\n    <tr>\n      <td>" + Staminia.messages.strength_st_independent + "</td>\n      <td>" + (Staminia.number_format(player1StrengthStaminaIndependent, 2)) + "</td>\n      <td>" + (Staminia.number_format(player2StrengthStaminaIndependent, 2)) + "</td>\n    </tr>\n  </tbody>\n</table>\n<p><small>" + Staminia.messages.used_in_calculation + "</small></p>";
-      $("#tabContributions").append(tempHTML);
-    }
+    this.result.player2_stronger_than_player1 = player2Strength > player1Strength;
+    this.result.player1Strength = Staminia.number_format(player1Strength, 2);
+    this.result.player2Strength = Staminia.number_format(player2Strength, 2);
+    this.result.player1StrengthStaminaIndependent = Staminia.number_format(player1StrengthStaminaIndependent, 2);
+    this.result.player2StrengthStaminaIndependent = Staminia.number_format(player2StrengthStaminaIndependent, 2);
     player1TotalContribution = 0;
     player2TotalContribution = 0;
     player1LowStamina = -1;
@@ -394,13 +354,11 @@
     if (max === min) {
       min = -1;
     }
+    this.result.max = Staminia.number_format(max, 2);
+    this.result.min = Staminia.number_format(min, 2);
     if (Staminia.isVerboseModeEnabled()) {
-      tableHeader = "<thead>\n  <tr>\n    <th>" + Staminia.messages.substitution_minute + "</th>\n    <th>" + Staminia.messages.total_contribution + "</th>\n    <th>" + Staminia.messages.contribution_percent + "</th>\n    <th>" + Staminia.messages.p1_contrib + "</th>\n    <th>" + Staminia.messages.p2_contrib + "</th>\n    <th>" + Staminia.messages.notes + "</th>\n  </tr>\n</thead>";
-      tableSeparator = "<tr><td colspan='6'></td></tr>";
-      tempHTML = "<h3 class=\"legend-like\">" + Staminia.messages.contribution_table + "</h3>\n<table class=\"table table-striped table-condensed table-staminia table-staminia-contributions width-auto\">\n  <thead>\n  </thead>\n    " + tableHeader + "\n  </thead>\n  <tbody>";
       for (minute = _l = KICKOFF; KICKOFF <= FULLTIME ? _l <= FULLTIME : _l >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_l : --_l) {
-        if (minute === HALFTIME) {
-          tempHTML += tableHeader;
+        if (!(minute !== HALFTIME)) {
           continue;
         }
         p1PlayedMinutes = minute - 1;
@@ -411,24 +369,26 @@
         if (minute > HALFTIME) {
           ++p2PlayedMinutes;
         }
-        isMax = totalContributionArray[minute] === max;
-        isMin = totalContributionArray[minute] === min;
-        contributionPercent = totalContributionArray[minute] / max * 100;
-        tempHTML += "<tr class=\"" + ((isMax ? " max" : "") + (isMin ? " min" : "")) + "\">\n  <td>" + minute + "</td>\n  <td>" + (Staminia.number_format(totalContributionArray[minute], 2)) + "</td>\n  <td>" + (Staminia.number_format(contributionPercent, 2)) + "%</td>\n  <td>" + (Staminia.number_format(player1AVGArray[minute - 1] * player1StrengthStaminaIndependent * (p1PlayedMinutes / SUBTOTALMINUTES), 2)) + "</td>\n  <td>" + (Staminia.number_format(player2AVGArray[minute] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES), 2)) + "</td>\n  <td>" + ((isMax ? "MAX" : (isMin ? "MIN" : (100 - contributionPercent < 1 ? "~ 1%" : ""))) + (minute === player1LowStamina ? " " + Staminia.messages.p1_bad_stamina : "") + (minute === player2LowStamina ? " " + Staminia.messages.p2_bad_stamina : "")) + "</td>\n</tr>";
+        this.result.minutes[minute] = {
+          total: Staminia.number_format(totalContributionArray[minute], 2),
+          percent: Staminia.number_format(totalContributionArray[minute] / max * 100, 2),
+          p1: Staminia.number_format(player1AVGArray[minute - 1] * player1StrengthStaminaIndependent * (p1PlayedMinutes / SUBTOTALMINUTES), 2),
+          p2: Staminia.number_format(player2AVGArray[minute] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES), 2),
+          isMax: totalContributionArray[minute] === max,
+          isMin: totalContributionArray[minute] === min
+        };
       }
-      tempHTML += "</tbody></table>";
-      $("#tabContributions").append(tempHTML);
     }
-    substituteAtArray = [];
+    substituteAt = [];
     for (minute = _m = KICKOFF; KICKOFF <= FULLTIME ? _m <= FULLTIME : _m >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_m : --_m) {
       if (!(minute !== HALFTIME)) {
         continue;
       }
       if (totalContributionArray[minute] === max) {
         if (minute === FULLTIME) {
-          doNotReplace = true;
+          mayNotReplace = true;
         } else {
-          substituteAtArray.push(minute);
+          substituteAt.push(minute);
         }
       }
       if (player1LowStamina > 0 && minute >= player1LowStamina) {
@@ -438,28 +398,18 @@
         p2LowStaminaRisk = true;
       }
     }
-    if (p1LowStaminaRisk) {
-      warnings += "<li>" + (Staminia.messages.warning_p1_stamina_se(player1LowStamina)) + "</li>";
-    }
-    if (p2LowStaminaRisk) {
-      warnings += "<li>" + (Staminia.messages.warning_p2_stamina_se(player2LowStamina)) + "</li>";
-    }
-    if (warnings !== "") {
-      $('#AlertsContainer').append(Staminia.createAlert({
-        "id": "formWarnings",
-        "type": "warning",
-        "title": Staminia.messages.status_warning,
-        "body": "<ul>" + warnings + "</ul>"
-      }));
-    }
-    if (Staminia.isVerboseModeEnabled()) {
-      $("#tabContributionsNav").show();
-      $("#tabContributionsNav").find("a").tab("show");
-    }
+    this.result.player1_low_stamina_se = player1LowStamina;
+    this.result.player2_low_stamina_se = player2LowStamina;
+    this.result.player1_low_stamina_se_risk = p1LowStaminaRisk;
+    this.result.player2_low_stamina_se_risk = p2LowStaminaRisk;
+    this.result.substituteAt = substituteAt;
+    this.result.mayNotReplace = mayNotReplace;
     if (Staminia.CONFIG.DEBUG_STEP) {
       printContributionTable();
-      return $("#tabDebugNav").show();
+      $("#tabDebugNav").show();
     }
+    this.result.status = "OK";
+    return this.result;
   };
 
   /*
@@ -687,7 +637,7 @@
         continue  if i is HALFTIME
         if totalContributionArray[i] is max
           if i is FULLTIME
-            doNotReplace = true
+            mayNotReplace = true
           else
             substituteAtArray.push i
           lowStaminaSERiskP1 = true  if player1LowStamina > 0 and i >= player1LowStamina

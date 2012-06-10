@@ -38,7 +38,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.07" ?>
+<?php $staminia_version = "12.06.10" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -206,10 +206,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           <!-- Tab Content Start -->
           <div class="tab-content">
           
+            <div id="AlertsContainer">
+            </div>
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
-              <div id="AlertsContainer">
-              </div>
               <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></sub></h1>
               <p><?= sprintf(localize("SHORT_HELP"),localize("Player 1"), localize("Player 2")) ?></p>
 

@@ -31,6 +31,45 @@ format = (source, params) ->
     return
   source
 
+createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
+  ranges = []
+  r = 0
+
+  for minute in substituteAtArray
+    unless ranges[r]
+      ranges[r] = []
+      ranges[r].push minute
+      check_with = minute + 1
+    else if minute isnt check_with      
+      ranges[r].push check_with - 1 unless ranges[r][ranges[r].length - 1] is check_with - 1
+      r++
+      _i--
+    else if minute is check_with
+      check_with = minute + 1
+    if _i is _len-1
+      l = ranges[r].length - 1
+      ranges[r].push minute if ranges[r][l] isnt minute
+        
+  result = []
+  for range in ranges
+    result.push range.join "-"
+  title = ""
+  body = ""
+  if substituteAtArray.length > 0
+    title = ""
+    if substituteAtArray.length is 1
+      title += "#{Staminia.messages.replace} #{Staminia.messages.at_minute}"
+    else
+      title += "#{Staminia.messages.replace} #{Staminia.messages.at_minutes}"
+    body = """
+      <p class="minutes">#{result.join ","}</p>
+      """
+    body += "#{Staminia.messages.may_not_replace}" if mayNotReplace
+  else
+    title = Staminia.messages.do_not_replace
+  $('#AlertsContainer').append createAlert "id": "formSubstituteAt", "type": "success", "title" : title, "body": body
+  return
+
 FORM_ID = Staminia.CONFIG.FORM_ID
 TABLE_ID = Staminia.CONFIG.TABLE_ID
 DEBUG = Staminia.CONFIG.DEBUG
@@ -81,9 +120,113 @@ $(FORM_ID).validate({
       return
   submitHandler: (form) ->   
     $("#calculate").addClass "disabled"
-    $(".alert").alert "close"
-    Staminia.Engine.start()
+    resetAndHideTabs()
+    $("#AlertsContainer").html ""
+    result = Staminia.Engine.start()
+    
+    # Show warnings
+    warnings_list = ""
+    if result.player2_stronger_than_player1
+      warnings_list += "<li>#{Staminia.messages.player2_stronger_than_player1}</li>"
+    if result.player1_low_stamina_se_risk
+      warnings_list += "<li>#{Staminia.messages.player1_low_stamina_se(result.player1_low_stamina_se)}</li>"
+    if result.player2_low_stamina_se_risk
+      warnings_list += "<li>#{Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
+    $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
+
+    # Show contributions table
+    if isVerboseModeEnabled()
+      # Strength table
+      tempHTML = """
+        <h3 class="legend-like">#{Staminia.messages.strength_table}</h3>
+        <table class="table table-striped table-condensed table-staminia table-staminia-strength width-auto">
+          <thead>
+            <tr>
+              <th></th><th>#{Staminia.messages.player1}</th><th>#{Staminia.messages.player2}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#{Staminia.messages.strength}</td>
+              <td>#{number_format(result.player1Strength, 2)}</td>
+              <td>#{number_format(result.player2Strength, 2)}</td>
+            </tr>
+            <tr>
+              <td>#{Staminia.messages.strength_st_independent}</td>
+              <td>#{number_format(result.player1StrengthStaminaIndependent, 2)}</td>
+              <td>#{number_format(result.player2StrengthStaminaIndependent, 2)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><small>#{Staminia.messages.used_in_calculation}</small></p>
+        """
+      $("#tabContributions").append tempHTML
+
+      # Contributions table
+      tableHeader = """
+        <thead>
+          <tr>
+            <th class="min-width">#{Staminia.messages.substitution_minute}</th>
+            <th>#{Staminia.messages.total_contribution}</th>
+            <th>#{Staminia.messages.contribution_percent}</th>
+            <th>#{Staminia.messages.p1_contrib}</th>
+            <th>#{Staminia.messages.p2_contrib}</th>
+            <th>#{Staminia.messages.notes}</th>
+          </tr>
+        </thead>
+        """
+
+      tableSeparator = "<tr><td colspan='6'></td></tr>"
+
+      tempHTML = """
+        <h3 class="legend-like">#{Staminia.messages.contribution_table}</h3>
+        <table class="table table-striped table-condensed table-staminia table-staminia-contributions width-auto">
+          <thead>
+          </thead>
+            #{tableHeader}
+          </thead>
+          <tbody>
+        """
+      player1LowStamina = (String) result.player1_low_stamina_se
+      player2LowStamina = (String) result.player2_low_stamina_se
+      for minute of result.minutes
+        minuteObject = result.minutes[minute]
+        totalContribution = minuteObject.total
+        percentContribution = minuteObject.percent
+        p1Contribution = minuteObject.p1
+        p2Contribution = minuteObject.p2
+        isMax = minuteObject.isMax
+        isMin = minuteObject.isMin
+        if minute is "46"
+          tempHTML += tableHeader
+        note = (if isMax then "MAX" else (if isMin then "MIN" else (if 100 - percentContribution < 1 then "~ 1%" else ""))) + (if minute is player1LowStamina then " " + Staminia.messages.p1_low_stamina else "") + (if minute is player2LowStamina then " " + Staminia.messages.p2_low_stamina else "")
+        css_classes = (if isMax then " max" else "") + (if isMin then " min" else "")
+        tempHTML += """
+          <tr class="#{css_classes}">
+            <td>#{minute}</td>
+            <td>#{totalContribution}</td>
+            <td>#{percentContribution}%</td>
+            <td>#{p1Contribution}</td>
+            <td>#{p2Contribution}</td>
+            <td>#{note}</td>
+          </tr>
+          """
+      tempHTML += "</tbody></table>"
+      $("#tabContributions").append tempHTML
+
+      $("#tabContributionsNav").show() 
+      $("#tabContributionsNav").find("a").tab "show"
+
+    createSubstitutionAlert(result.substituteAt, result.mayNotReplace)
+
+    #if Staminia.CONFIG.DEBUG_STEP
+    #  printContributionTable()
+    #  $("#tabDebugNav").show() 
+    #  #$("#tabDebugNav").find("a").tab "show"
+
+    # Reset button status
     $("#calculate").removeClass "disabled"
+
     return
   highlight: (element, errorClass, validClass) ->
      $(element).closest("div").addClass(errorClass).removeClass(validClass)
@@ -314,6 +457,21 @@ $("input[data-validate='range'], select[data-validate='range']").each ->
   $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] })
   return
 
+resetAndHideTabs = ->
+  $("#tabChartsNav").hide()
+  $("#tabContributionsNav").hide()
+  $("#tabDebugNav").hide()
+  $("#tabCharts").html ""
+  $("#tabContributions").html ""
+  $("#tabDebug").html ""
+
+# Hide alerts when showing credits
+$('a[data-toggle="tab"]').on 'shown', (e) ->
+  if $(e.target).attr("href") is "#tabCredits"
+    $("#AlertsContainer").hide()
+  else
+    $("#AlertsContainer").show()
+
 # Stamin.IA! Reset Button
 $("#resetApp").on "click", (e) ->
   $(FORM_ID).each ->
@@ -321,8 +479,9 @@ $("#resetApp").on "click", (e) ->
       this.reset()
 
   $('.control-group').removeClass "error"
-  $(".alert").alert "close"
-
+  $("#AlertsContainer").html ""
+  resetAndHideTabs()
+  
   $("button[data-checkbox-button], button[data-radio-button]").each ->
     form = $(FORM_ID)[0]
     form[$(this).data("linkedTo")].value = $(this).data "default-value"
@@ -617,10 +776,8 @@ $("#CHPP_Revoke_Auth_Link").on "click", ->
 Staminia.format = format
 Staminia.number_format = number_format
 
-Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled
+Staminia.isChartsEnabled = isChartsEnabled
 Staminia.isVerboseModeEnabled = isVerboseModeEnabled
 Staminia.isPressingEnabled = isPressingEnabled
-Staminia.isChartsEnabled = isChartsEnabled
-
-Staminia.createAlert = createAlert
+Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled
 
