@@ -62,13 +62,21 @@ createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
     else
       title += "#{Staminia.messages.replace} #{Staminia.messages.at_minutes}"
     body = """
-      <p class="minutes">#{result.join ","}</p>
+      <p class="minutes">#{result.join ", "}</p>
       """
     body += "#{Staminia.messages.may_not_replace}" if mayNotReplace
   else
     title = Staminia.messages.do_not_replace
   $('#AlertsContainer').append createAlert "id": "formSubstituteAt", "type": "success", "title" : title, "body": body
   return
+
+resetAndHideTabs = ->
+  $("#tabChartsNav").hide()
+  $("#tabContributionsNav").hide()
+  $("#tabDebugNav").hide()
+  $("#tabCharts").html ""
+  $("#tabContributions").html ""
+  $("#tabDebug").html ""
 
 FORM_ID = Staminia.CONFIG.FORM_ID
 TABLE_ID = Staminia.CONFIG.TABLE_ID
@@ -456,14 +464,6 @@ updatePredictions = ->
 $("input[data-validate='range'], select[data-validate='range']").each -> 
   $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] })
   return
-
-resetAndHideTabs = ->
-  $("#tabChartsNav").hide()
-  $("#tabContributionsNav").hide()
-  $("#tabDebugNav").hide()
-  $("#tabCharts").html ""
-  $("#tabContributions").html ""
-  $("#tabDebug").html ""
 
 # Hide alerts when showing credits
 $('a[data-toggle="tab"]').on 'shown', (e) ->

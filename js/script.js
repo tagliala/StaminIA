@@ -89,7 +89,7 @@
       } else {
         title += "" + Staminia.messages.replace + " " + Staminia.messages.at_minutes;
       }
-      body = "<p class=\"minutes\">" + (result.join(",")) + "</p>";
+      body = "<p class=\"minutes\">" + (result.join(", ")) + "</p>";
       if (mayNotReplace) {
         body += "" + Staminia.messages.may_not_replace;
       }
@@ -102,6 +102,15 @@
       "title": title,
       "body": body
     }));
+  };
+
+  resetAndHideTabs = function() {
+    $("#tabChartsNav").hide();
+    $("#tabContributionsNav").hide();
+    $("#tabDebugNav").hide();
+    $("#tabCharts").html("");
+    $("#tabContributions").html("");
+    return $("#tabDebug").html("");
   };
 
   FORM_ID = Staminia.CONFIG.FORM_ID;
@@ -508,15 +517,6 @@
       range: [$(this).data("rangeMin"), $(this).data("rangeMax")]
     });
   });
-
-  resetAndHideTabs = function() {
-    $("#tabChartsNav").hide();
-    $("#tabContributionsNav").hide();
-    $("#tabDebugNav").hide();
-    $("#tabCharts").html("");
-    $("#tabContributions").html("");
-    return $("#tabDebug").html("");
-  };
 
   $('a[data-toggle="tab"]').on('shown', function(e) {
     if ($(e.target).attr("href") === "#tabCredits") {
