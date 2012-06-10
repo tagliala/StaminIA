@@ -1,4 +1,5 @@
 <?php
+include 'config.php';
 include 'lib/PHT/PHT.php';
 session_start();
 $HT = $_SESSION['HT'];
@@ -38,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.10" ?>
+<?php $staminia_version = "12.06.11" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -638,7 +639,20 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
+<?php
+if (defined('GA_ID')) { ?>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '<?= GA_ID ?>']);
+      _gaq.push(['_trackPageview']);
 
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+<? } ?>
     <script src="js/vendor/jquery-1.7.2.min.js"></script>
     <script src="js/vendor/jqform/jquery.form.min.js"></script>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
