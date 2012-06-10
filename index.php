@@ -218,7 +218,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
-              <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></sub></h1>
+              <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
               <p><?= sprintf(localize("SHORT_HELP"),localize("Player 1"), localize("Player 2")) ?></p>
 
               <!-- Main Form Start -->
@@ -423,14 +423,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
                           <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div">
+                        </div>
                       </td>
                       <td>
                         <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
                           <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div">
+                        </div>
                       </td>
                     </tr>
                     <tr class="advanced hide">
