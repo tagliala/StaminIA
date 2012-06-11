@@ -359,3 +359,17 @@ p.minutes {
 .min-width {
   width: 1px;
 }
+
+@media (max-width: 767px) {
+  .modal {
+    position: absolute;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 10px;
+    box-sizing: border-box;
+    width: auto;
+  }
+  .modal-body {
+    max-height: none !important;
+  }
+}

@@ -250,16 +250,18 @@
 .navbar .btn-navbar {
   display: none;
   float: right;
-  padding: 7px 10px;
+  padding: 7px 4px;
   margin-left: 5px;
   margin-right: 5px;
-  .buttonBackground(@navbarBackgroundHighlight, @navbarBackground);
+  background: transparent;
+  border: 0;
 }
 .navbar .btn-navbar .icon-bar {
   display: block;
   width: 18px;
   height: 2px;
   background-color: #f5f5f5;
+  .box-shadow(1px 1px 1px @black);
 }
 .btn-navbar .icon-bar + .icon-bar {
   margin-top: 3px;
