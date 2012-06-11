@@ -110,6 +110,7 @@
     $("#tabDebugNav").hide();
     $("#chartTotal").html("");
     $("#chartPartial").html("");
+    $("#tabContributions").html("");
     return $("#tabDebug").html("");
   };
 

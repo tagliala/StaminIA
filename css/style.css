@@ -373,9 +373,6 @@ p.minutes {
   .modal-body {
     max-height: none !important;
   }
-  .modal-backdrop {
-    background: none;
-  }
 }
 
 #chartTotal, #chartPartial {

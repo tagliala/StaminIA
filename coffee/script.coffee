@@ -76,6 +76,7 @@ resetAndHideTabs = ->
   $("#tabDebugNav").hide()
   $("#chartTotal").html ""
   $("#chartPartial").html ""
+  $("#tabContributions").html ""
   $("#tabDebug").html ""
 
 FORM_ID = Staminia.CONFIG.FORM_ID
