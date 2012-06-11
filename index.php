@@ -1,4 +1,5 @@
 <?php
+include 'config.php';
 include 'lib/PHT/PHT.php';
 session_start();
 $HT = $_SESSION['HT'];
@@ -38,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.10" ?>
+<?php $staminia_version = "12.06.12" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -60,7 +61,6 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <!-- Le styles -->
     <link href="css/style.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.css" /> -->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="img/staminia_favicon.png">
@@ -217,7 +217,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
-              <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></sub></h1>
+              <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
               <p><?= sprintf(localize("SHORT_HELP"),localize("Player 1"), localize("Player 2")) ?></p>
 
               <!-- Main Form Start -->
@@ -422,14 +422,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
                           <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div">
+                        </div>
                       </td>
                       <td>
                         <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
                           <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div">
+                        </div>
                       </td>
                     </tr>
                     <tr class="advanced hide">
@@ -561,6 +561,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             
             <!-- Charts -->
             <div class="tab-pane" id="tabCharts">
+              <div id="charts">
+                 <div id="chartTotal" class="chart"></div>
+                 <div id="chartPartial" class="chart"></div>
+              </div>
             </div>
 
             <!-- Contributions -->
@@ -638,10 +642,35 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
+<?php
+if (defined('GA_ID')) { ?>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '<?= GA_ID ?>']);
+      _gaq.push(['_trackPageview']);
 
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+<? } ?>
     <script src="js/vendor/jquery-1.7.2.min.js"></script>
     <script src="js/vendor/jqform/jquery.form.min.js"></script>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
+
+    <!-- jqplot -->
+    <script type="text/javascript">
+      var async_scripts = [ "js/vendor/jqplot/jquery.jqplot-custom.min.js" ];
+      for (var i in async_scripts) {
+        var node = document.createElement('script'); node.type = 'text/javascript'; node.async = true;
+        node.src =  async_scripts[i];
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(node, s);
+      }
+    </script>
+    <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/jqplot/excanvas.js"></script><![endif]-->
 
 <!-- scripts concatenated and minified via ant build script-->
 <script src="js/script.js"></script>

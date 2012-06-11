@@ -74,7 +74,8 @@ resetAndHideTabs = ->
   $("#tabChartsNav").hide()
   $("#tabContributionsNav").hide()
   $("#tabDebugNav").hide()
-  $("#tabCharts").html ""
+  $("#chartTotal").html ""
+  $("#chartPartial").html ""
   $("#tabContributions").html ""
   $("#tabDebug").html ""
 
@@ -130,7 +131,7 @@ $(FORM_ID).validate({
     resetAndHideTabs()
     $("#AlertsContainer").html ""
     result = Staminia.Engine.start()
-    
+
     # Show warnings
     warnings_list = ""
     if result.player2_stronger_than_player1
@@ -141,7 +142,7 @@ $(FORM_ID).validate({
       warnings_list += "<li>#{Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
     $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
 
-    # Show contributions table
+    # Render Contributions table
     if isVerboseModeEnabled()
       # Strength table
       tempHTML = """
@@ -187,11 +188,8 @@ $(FORM_ID).validate({
 
       tempHTML = """
         <h3 class="legend-like">#{Staminia.messages.contribution_table}</h3>
-        <table class="table table-striped table-condensed table-staminia table-staminia-contributions width-auto">
-          <thead>
-          </thead>
-            #{tableHeader}
-          </thead>
+        <table class="table table-striped table-condensed table-staminia table-staminia-contributions">
+          #{tableHeader}
           <tbody>
         """
       player1LowStamina = (String) result.player1_low_stamina_se
@@ -220,11 +218,100 @@ $(FORM_ID).validate({
           """
       tempHTML += "</tbody></table>"
       $("#tabContributions").append tempHTML
+      $("#tabContributionsNav").show()
 
-      $("#tabContributionsNav").show() 
-      $("#tabContributionsNav").find("a").tab "show"
+    # Render Charts
+    if isChartsEnabled()
+      JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
+
+      document.plot1 = $.jqplot 'chartTotal', result.plotData,
+        title:
+          text: Staminia.messages.total_contribution
+        axesDefaults:
+          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+          labelOptions:
+            fontSize: '8pt'
+        axes:
+          xaxis:
+            label: Staminia.messages.minute
+            pad: 0
+            tickOptions:
+              formatString: '%d'
+            ticks: JQPLOT_GRID
+          yaxis:
+            min: (Number) result.min * 0.99
+            max: (Number) result.max * 1.01
+            label: Staminia.messages.contribution
+            tickOptions:
+              formatString: '%.2f'
+        highlighter:
+          show: true
+          sizeAdjust: 7.5
+        legend:
+          show: false
+          location: "s"
+        series: [
+          {
+            label: "test"
+            color: "#01158F"
+          }, {
+            show: false
+            color: "#A51107"
+          }, { show: false
+          color: "#158F01"
+          }
+        ]
+
+      document.plot2 = $.jqplot 'chartPartial', result.plotData,
+        title:
+          text: Staminia.messages.partial_contributions
+        axesDefaults:
+          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+          labelOptions:
+            fontSize: '8pt'
+        axes:
+          xaxis:
+            label: Staminia.messages.minute
+            pad: 0
+            tickOptions:
+              formatString: '%d'
+            ticks: JQPLOT_GRID
+          yaxis:
+            autoscale: true
+            label: Staminia.messages.contribution
+            tickOptions:
+              formatString: '%.2f'
+        highlighter:
+          show: true
+          sizeAdjust: 7.5
+        legend:
+          show: true
+          location: "se"
+        series: [
+          {
+            label: "test"
+            color: "#01158F"
+            show: false
+          }, {
+            label: Staminia.messages.p1_contrib
+            color: "#A51107"
+          }, {
+            label: Staminia.messages.p2_contrib
+            color: "#158F01"
+          }
+        ]
+        $("#tabChartsNav").show()
 
     createSubstitutionAlert(result.substituteAt, result.mayNotReplace)
+
+    # Show the right tab
+    if isChartsEnabled()
+      $("#tabChartsNav").find("a").tab "show"
+      document.plot1.replot()
+      document.plot2.replot()
+    else if isVerboseModeEnabled()
+      $("#tabContributionsNav").find("a").tab "show"
+
 
     #if Staminia.CONFIG.DEBUG_STEP
     #  printContributionTable()
@@ -464,12 +551,16 @@ $("input[data-validate='range'], select[data-validate='range']").each ->
   $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] })
   return
 
-# Hide alerts when showing credits
+# Hide alerts when showing credits and redraw charts if needed
 $('a[data-toggle="tab"]').on 'shown', (e) ->
   if $(e.target).attr("href") is "#tabCredits"
     $("#AlertsContainer").hide()
   else
     $("#AlertsContainer").show()
+  if $(e.target).attr("href") is "#tabCharts"
+    document.plot1.replot() if document.plot1?
+    document.plot2.replot() if document.plot2?
+  return
 
 # Stamin.IA! Reset Button
 $("#resetApp").on "click", (e) ->
@@ -770,6 +861,12 @@ $("#CHPP_Refresh_Data").on "click", ->
 $("#CHPP_Revoke_Auth_Link").on "click", ->
   $(this).closest("[class~='open']").removeClass 'open'
   window.confirm Staminia.messages.revoke_auth_confirm
+
+# Resize charts if needed
+$(window).resize $.debounce 500, ->
+  return unless $("#tabChartsNav").hasClass "active"
+  document.plot1.replot() if document.plot1?
+  document.plot2.replot() if document.plot2?
 
 #export
 Staminia.format = format

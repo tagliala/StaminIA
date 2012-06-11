@@ -249,7 +249,7 @@
   };
 
   Staminia.Engine.start = function() {
-    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _ref;
+    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotData, plotIndex, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _n, _ref;
     this.result = {
       minutes: [],
       substituteAt: [],
@@ -380,23 +380,41 @@
       }
     }
     substituteAt = [];
+    p1LowStaminaRisk = false;
+    p2LowStaminaRisk = false;
     for (minute = _m = KICKOFF; KICKOFF <= FULLTIME ? _m <= FULLTIME : _m >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_m : --_m) {
-      if (!(minute !== HALFTIME)) {
-        continue;
-      }
-      if (totalContributionArray[minute] === max) {
-        if (minute === FULLTIME) {
-          mayNotReplace = true;
-        } else {
-          substituteAt.push(minute);
+      if (minute !== HALFTIME) {
+        if (totalContributionArray[minute] === max) {
+          if (minute === FULLTIME) {
+            mayNotReplace = true;
+          } else {
+            substituteAt.push(minute);
+          }
+          if (player1LowStamina > 0 && minute >= player1LowStamina) {
+            p1LowStaminaRisk = true;
+          }
+          if (player2LowStamina > 0 && minute <= player2LowStamina) {
+            p2LowStaminaRisk = true;
+          }
         }
       }
-      if (player1LowStamina > 0 && minute >= player1LowStamina) {
-        p1LowStaminaRisk = true;
+    }
+    if (Staminia.isChartsEnabled()) {
+      plotData = [];
+      plotData[0] = [];
+      plotData[1] = [];
+      plotData[2] = [];
+      plotIndex = 0;
+      for (minute = _n = KICKOFF; KICKOFF <= FULLTIME ? _n < FULLTIME : _n > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_n : --_n) {
+        if (!(minute !== HALFTIME)) {
+          continue;
+        }
+        plotData[0][plotIndex] = [minute, totalContributionArray[minute]];
+        plotData[1][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent];
+        plotData[2][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent];
+        ++plotIndex;
       }
-      if (player2LowStamina > 0 && minute <= player2LowStamina) {
-        p2LowStaminaRisk = true;
-      }
+      this.result.plotData = plotData;
     }
     this.result.player1_low_stamina_se = player1LowStamina;
     this.result.player2_low_stamina_se = player2LowStamina;
@@ -671,124 +689,12 @@
       $("#warnings").show()
       $("#tabDebug").show()  if DEBUG
       $("#verbose").show()  if verbose
-      if formReference.Staminia_Options_Charts.checked
-        $("#charts").show()
-        JQPLOT_GRID = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89 ]
-        plotData = []
-        plotData[0] = []
-        plotData[1] = []
-        plotData[2] = []
-        plotIndex = 0
-        i = KICKOFF
-  
-        while i < FULLTIME
-          continue  if i is HALFTIME
-          plotData[0][plotIndex] = [ i, totalContributionArray[i] ]
-          plotData[1][plotIndex] = [ i, player1AVGArray[i] * player1StrengthStaminaIndependent ]
-          plotData[2][plotIndex] = [ i, player2AVGArray[i] * player2StrengthStaminaIndependent ]
-          ++plotIndex
-          ++i
-        $.jqplot "chartTotal", plotData,
-          title:
-            text: STRINGS["TOTAL_CONTRIBUTION"]
-  
-          axesDefaults:
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-            labelOptions:
-              fontSize: "8pt"
-  
-          axes:
-            xaxis:
-              label: STRINGS["MINUTE"]
-              pad: 0
-              tickOptions:
-                formatString: "%d"
-  
-              ticks: JQPLOT_GRID
-  
-            yaxis:
-              min: min * 0.99
-              max: max * 1.01
-              label: STRINGS["CONTRIBUTION"]
-              tickOptions:
-                formatString: "%.2f"
-  
-          highlighter:
-            show: true
-            sizeAdjust: 7.5
-  
-          legend:
-            show: false
-            location: "s"
-  
-          series: [
-            label: "test"
-            color: "#01158F"
-          ,
-            show: false
-            color: "#A51107"
-          ,
-            show: false
-            color: "#158F01"
-           ]
-  
-        $.jqplot "chartPartial", plotData,
-          title:
-            text: STRINGS["PARTIAL_CONTRIBUTIONS"]
-  
-          axesDefaults:
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-            labelOptions:
-              fontSize: "8pt"
-  
-          axes:
-            xaxis:
-              label: STRINGS["MINUTE"]
-              pad: 0
-              tickOptions:
-                formatString: "%d"
-  
-              ticks: JQPLOT_GRID
-  
-            yaxis:
-              autoscale: true
-              label: STRINGS["CONTRIBUTION"]
-              tickOptions:
-                formatString: "%.2f"
-  
-          highlighter:
-            show: true
-            sizeAdjust: 7.5
-  
-          legend:
-            show: true
-            location: "se"
-  
-          series: [
-            label: "test"
-            color: "#01158F"
-            show: false
-          ,
-            label: STRINGS["P1_CONTRIB"]
-            color: "#A51107"
-          ,
-            label: STRINGS["P2_CONTRIB"]
-            color: "#158F01"
-           ]
       $("#calculate").removeAttr "disabled"
       timerEnd = new Date()
       elapsedTime = timerEnd - timerStart
       $("#elapsedTime").html "Elapsed Time: <b>" + elapsedTime + "</b>ms"
       $("#elapsedTime").show()
       return
-  
-    pub = {}
-    pub.pageLoaded = pageLoaded
-    pub.fillCHPPForm = fillCHPPForm
-    pub.setLocale = setLocale
-    pub.showSkillsByPosition = showSkillsByPosition
-    pub
-  )()
   */
 
 

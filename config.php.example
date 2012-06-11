@@ -1,0 +1,4 @@
+<?php
+// google analytics' profile ID
+define('GA_ID', 'UA-XXXXX-X');
+?>

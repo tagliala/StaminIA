@@ -258,7 +258,7 @@ Staminia.Engine.start = ->
     minutes: []
     substituteAt: []
     mayNotReplace: false
-    
+
   formReference = $(Staminia.CONFIG.FORM_ID)[0]
   if Staminia.isAdvancedModeEnabled()
     player1Form = validateSkill formReference.Staminia_Advanced_Player_1_Form.value, "form"
@@ -357,15 +357,31 @@ Staminia.Engine.start = ->
         isMax: (totalContributionArray[minute] is max)
         isMin: (totalContributionArray[minute] is min)
   substituteAt = []
+  
+  p1LowStaminaRisk = false
+  p2LowStaminaRisk = false
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
     if totalContributionArray[minute] is max
       if minute is FULLTIME
         mayNotReplace = true
       else
         substituteAt.push minute
-    p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
-    p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
-   
+      p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
+      p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
+
+  if Staminia.isChartsEnabled()
+    plotData = []
+    plotData[0] = []
+    plotData[1] = []
+    plotData[2] = []
+    plotIndex = 0
+    for minute in [KICKOFF...FULLTIME] when minute isnt HALFTIME
+      plotData[0][plotIndex] = [minute, totalContributionArray[minute]]
+      plotData[1][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent]
+      plotData[2][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent]
+      ++plotIndex;
+    @result.plotData = plotData
+
   @result.player1_low_stamina_se = player1LowStamina
   @result.player2_low_stamina_se = player2LowStamina
   @result.player1_low_stamina_se_risk = p1LowStaminaRisk
@@ -650,122 +666,10 @@ Staminia.Engine.start = ->
     $("#warnings").show()
     $("#tabDebug").show()  if DEBUG
     $("#verbose").show()  if verbose
-    if formReference.Staminia_Options_Charts.checked
-      $("#charts").show()
-      JQPLOT_GRID = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89 ]
-      plotData = []
-      plotData[0] = []
-      plotData[1] = []
-      plotData[2] = []
-      plotIndex = 0
-      i = KICKOFF
-
-      while i < FULLTIME
-        continue  if i is HALFTIME
-        plotData[0][plotIndex] = [ i, totalContributionArray[i] ]
-        plotData[1][plotIndex] = [ i, player1AVGArray[i] * player1StrengthStaminaIndependent ]
-        plotData[2][plotIndex] = [ i, player2AVGArray[i] * player2StrengthStaminaIndependent ]
-        ++plotIndex
-        ++i
-      $.jqplot "chartTotal", plotData,
-        title:
-          text: STRINGS["TOTAL_CONTRIBUTION"]
-
-        axesDefaults:
-          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          labelOptions:
-            fontSize: "8pt"
-
-        axes:
-          xaxis:
-            label: STRINGS["MINUTE"]
-            pad: 0
-            tickOptions:
-              formatString: "%d"
-
-            ticks: JQPLOT_GRID
-
-          yaxis:
-            min: min * 0.99
-            max: max * 1.01
-            label: STRINGS["CONTRIBUTION"]
-            tickOptions:
-              formatString: "%.2f"
-
-        highlighter:
-          show: true
-          sizeAdjust: 7.5
-
-        legend:
-          show: false
-          location: "s"
-
-        series: [
-          label: "test"
-          color: "#01158F"
-        ,
-          show: false
-          color: "#A51107"
-        ,
-          show: false
-          color: "#158F01"
-         ]
-
-      $.jqplot "chartPartial", plotData,
-        title:
-          text: STRINGS["PARTIAL_CONTRIBUTIONS"]
-
-        axesDefaults:
-          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          labelOptions:
-            fontSize: "8pt"
-
-        axes:
-          xaxis:
-            label: STRINGS["MINUTE"]
-            pad: 0
-            tickOptions:
-              formatString: "%d"
-
-            ticks: JQPLOT_GRID
-
-          yaxis:
-            autoscale: true
-            label: STRINGS["CONTRIBUTION"]
-            tickOptions:
-              formatString: "%.2f"
-
-        highlighter:
-          show: true
-          sizeAdjust: 7.5
-
-        legend:
-          show: true
-          location: "se"
-
-        series: [
-          label: "test"
-          color: "#01158F"
-          show: false
-        ,
-          label: STRINGS["P1_CONTRIB"]
-          color: "#A51107"
-        ,
-          label: STRINGS["P2_CONTRIB"]
-          color: "#158F01"
-         ]
     $("#calculate").removeAttr "disabled"
     timerEnd = new Date()
     elapsedTime = timerEnd - timerStart
     $("#elapsedTime").html "Elapsed Time: <b>" + elapsedTime + "</b>ms"
     $("#elapsedTime").show()
     return
-
-  pub = {}
-  pub.pageLoaded = pageLoaded
-  pub.fillCHPPForm = fillCHPPForm
-  pub.setLocale = setLocale
-  pub.showSkillsByPosition = showSkillsByPosition
-  pub
-)()
 ###
