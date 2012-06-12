@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.12" ?>
+<?php $staminia_version = "12.06.13" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -61,6 +61,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <!-- Le styles -->
     <link href="css/style.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="img/staminia_favicon.png">
@@ -562,8 +563,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <!-- Charts -->
             <div class="tab-pane" id="tabCharts">
               <div id="charts">
-                 <div id="chartTotal" class="chart"></div>
-                 <div id="chartPartial" class="chart"></div>
+                <h3 class="legend-like"><?= localize("Total Contribution"); ?></h3>
+                <div id="chartTotal" class="chart"></div>
+                <h3 class="legend-like"><?= localize("Partial Contributions"); ?></h3>
+                <div id="chartPartial" class="chart"></div>
               </div>
             </div>
 
@@ -662,14 +665,7 @@ if (defined('GA_ID')) { ?>
     <script language="javascript" type="text/javascript" src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
 
     <!-- jqplot -->
-    <script type="text/javascript">
-      var async_scripts = [ "js/vendor/jqplot/jquery.jqplot-custom.min.js" ];
-      for (var i in async_scripts) {
-        var node = document.createElement('script'); node.type = 'text/javascript'; node.async = true;
-        node.src =  async_scripts[i];
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(node, s);
-      }
-    </script>
+    <script src="js/vendor/jqplot/jquery.jqplot-custom.min.js"></script>
     <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/jqplot/excanvas.js"></script><![endif]-->
 
 <!-- scripts concatenated and minified via ant build script-->

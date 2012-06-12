@@ -6,6 +6,10 @@
 
 .navbar .brand {
   padding: 0 20px;
+  text-shadow: 0 -1px 0 black;
+  font-family: 'Lobster', cursive;
+  top: -4px;
+  font-size: 24px;
 }
 
 #staminia-logo {
@@ -377,6 +381,6 @@ p.minutes {
 
 #chartTotal, #chartPartial {
   width: 100% !important;
-  height: 250px !important;
-  margin-top: 18px;
+  height: 250px;
+  margin: 18px 0 9px;
 }

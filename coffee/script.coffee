@@ -5,7 +5,7 @@ Staminia.CONFIG = Staminia.CONFIG || {}
 $.extend Staminia.CONFIG,
   FORM_ID: "#formPlayersInfo"
   TABLE_ID: "#playersInfoTable"
-  DEBUG: true
+  DEBUG: false
   DEBUG_STEP: 1
   AUTOSTART: true
   PREDICTIONS_ANDREAC: [ [ 0.5036, 0.2310, 0.0, 0.0, 0.0, 0.0 ], [ 0.0, 0.3492, 0.1180, 0.0, 0.0, 0.0 ], [ 0.0, 0.2514, 0.1590, 0.0, 0.0, 0.0 ], [ 0.0, 0.3546, 0.0825, 0.0556, 0.0, 0.0 ], [ 0.0, 0.3236, 0.0780, 0.1086, 0.0, 0.0 ], [ 0.0, 0.2480, 0.1080, 0.1375, 0.0, 0.0 ], [ 0.0, 0.3440, 0.0310, 0.0688, 0.0, 0.0 ], [ 0.0, 0.3256, 0.0780, 0.0604, 0.0, 0.0 ], [ 0.0, 0.1302, 0.4680, 0.0, 0.1149, 0.0 ], [ 0.0, 0.0733, 0.4420, 0.0, 0.1508, 0.0 ], [ 0.0, 0.2039, 0.4420, 0.0, 0.0760, 0.0 ], [ 0.0, 0.1383, 0.4130, 0.1073, 0.1071, 0.0 ], [ 0.0, 0.1314, 0.2180, 0.1848, 0.0669, 0.0 ], [ 0.0, 0.0652, 0.1830, 0.2081, 0.0803, 0.0 ], [ 0.0, 0.1831, 0.1830, 0.1556, 0.0484, 0.0 ], [ 0.0, 0.1341, 0.2760, 0.1350, 0.0671, 0.0 ], [ 0.0, 0.0, 0.0, 0.0808, 0.1306, 0.3077 ], [ 0.0, 0.0, 0.1950, 0.0550, 0.2189, 0.1778 ], [ 0.0, 0.0, 0.1950, 0.0550, 0.2661, 0.1778 ], [ 0.0, 0.0, 0.0, 0.0901, 0.1334, 0.2441 ] ]
@@ -223,10 +223,8 @@ $(FORM_ID).validate({
     # Render Charts
     if isChartsEnabled()
       JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
-
-      document.plot1 = $.jqplot 'chartTotal', result.plotData,
-        title:
-          text: Staminia.messages.total_contribution
+      console.log result.plotDataTotal
+      document.plot1 = $.jqplot 'chartTotal', result.plotDataTotal,
         axesDefaults:
           labelRenderer: $.jqplot.CanvasAxisLabelRenderer
           labelOptions:
@@ -253,18 +251,11 @@ $(FORM_ID).validate({
         series: [
           {
             label: "test"
-            color: "#01158F"
-          }, {
-            show: false
-            color: "#A51107"
-          }, { show: false
-          color: "#158F01"
+            color: "#08c"
           }
         ]
 
-      document.plot2 = $.jqplot 'chartPartial', result.plotData,
-        title:
-          text: Staminia.messages.partial_contributions
+      document.plot2 = $.jqplot 'chartPartial', result.plotDataPartial,
         axesDefaults:
           labelRenderer: $.jqplot.CanvasAxisLabelRenderer
           labelOptions:
@@ -289,15 +280,11 @@ $(FORM_ID).validate({
           location: "se"
         series: [
           {
-            label: "test"
-            color: "#01158F"
-            show: false
-          }, {
             label: Staminia.messages.p1_contrib
-            color: "#A51107"
+            color: "#9d261d"
           }, {
             label: Staminia.messages.p2_contrib
-            color: "#158F01"
+            color: "#46a546"
           }
         ]
         $("#tabChartsNav").show()
