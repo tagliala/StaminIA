@@ -223,8 +223,8 @@ $(FORM_ID).validate({
     # Render Charts
     if isChartsEnabled()
       JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
-
-      document.plot1 = $.jqplot 'chartTotal', result.plotData,
+      console.log result.plotDataTotal
+      document.plot1 = $.jqplot 'chartTotal', result.plotDataTotal,
         title:
           text: Staminia.messages.total_contribution
         axesDefaults:
@@ -253,16 +253,11 @@ $(FORM_ID).validate({
         series: [
           {
             label: "test"
-            color: "#01158F"
-          }, {
-            show: false
-            color: "#A51107"
-          }, { show: false
-          color: "#158F01"
+            color: "#08c"
           }
         ]
 
-      document.plot2 = $.jqplot 'chartPartial', result.plotData,
+      document.plot2 = $.jqplot 'chartPartial', result.plotDataPartial,
         title:
           text: Staminia.messages.partial_contributions
         axesDefaults:
@@ -289,15 +284,11 @@ $(FORM_ID).validate({
           location: "se"
         series: [
           {
-            label: "test"
-            color: "#01158F"
-            show: false
-          }, {
             label: Staminia.messages.p1_contrib
-            color: "#A51107"
+            color: "#9d261d"
           }, {
             label: Staminia.messages.p2_contrib
-            color: "#158F01"
+            color: "#46a546"
           }
         ]
         $("#tabChartsNav").show()

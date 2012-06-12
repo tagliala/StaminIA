@@ -249,7 +249,7 @@
   };
 
   Staminia.Engine.start = function() {
-    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotData, plotIndex, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _n, _ref;
+    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotDataPartial, plotDataTotal, plotIndex, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _n, _ref;
     this.result = {
       minutes: [],
       substituteAt: [],
@@ -400,21 +400,23 @@
       }
     }
     if (Staminia.isChartsEnabled()) {
-      plotData = [];
-      plotData[0] = [];
-      plotData[1] = [];
-      plotData[2] = [];
+      plotDataTotal = [];
+      plotDataPartial = [];
+      plotDataTotal[0] = [];
+      plotDataPartial[0] = [];
+      plotDataPartial[1] = [];
       plotIndex = 0;
       for (minute = _n = KICKOFF; KICKOFF <= FULLTIME ? _n < FULLTIME : _n > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_n : --_n) {
         if (!(minute !== HALFTIME)) {
           continue;
         }
-        plotData[0][plotIndex] = [minute, totalContributionArray[minute]];
-        plotData[1][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent];
-        plotData[2][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent];
+        plotDataTotal[0][plotIndex] = [minute, totalContributionArray[minute]];
+        plotDataPartial[0][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent];
+        plotDataPartial[1][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent];
         ++plotIndex;
       }
-      this.result.plotData = plotData;
+      this.result.plotDataTotal = plotDataTotal;
+      this.result.plotDataPartial = plotDataPartial;
     }
     this.result.player1_low_stamina_se = player1LowStamina;
     this.result.player2_low_stamina_se = player2LowStamina;

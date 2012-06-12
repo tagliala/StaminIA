@@ -663,6 +663,7 @@ if (defined('GA_ID')) { ?>
 
     <!-- jqplot -->
     <script type="text/javascript">
+      // This custom script contains: CanvasTextRenderer, CanvasAxisLabelRenderer, highlighter
       var async_scripts = [ "js/vendor/jqplot/jquery.jqplot-custom.min.js" ];
       for (var i in async_scripts) {
         var node = document.createElement('script'); node.type = 'text/javascript'; node.async = true;

@@ -370,17 +370,19 @@ Staminia.Engine.start = ->
       p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
 
   if Staminia.isChartsEnabled()
-    plotData = []
-    plotData[0] = []
-    plotData[1] = []
-    plotData[2] = []
+    plotDataTotal = []
+    plotDataPartial = []
+    plotDataTotal[0] = []
+    plotDataPartial[0] = []
+    plotDataPartial[1] = []
     plotIndex = 0
     for minute in [KICKOFF...FULLTIME] when minute isnt HALFTIME
-      plotData[0][plotIndex] = [minute, totalContributionArray[minute]]
-      plotData[1][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent]
-      plotData[2][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent]
+      plotDataTotal[0][plotIndex] = [minute, totalContributionArray[minute]]
+      plotDataPartial[0][plotIndex] = [minute, player1AVGArray[minute] * player1StrengthStaminaIndependent]
+      plotDataPartial[1][plotIndex] = [minute, player2AVGArray[minute] * player2StrengthStaminaIndependent]
       ++plotIndex;
-    @result.plotData = plotData
+    @result.plotDataTotal = plotDataTotal
+    @result.plotDataPartial = plotDataPartial
 
   @result.player1_low_stamina_se = player1LowStamina
   @result.player2_low_stamina_se = player2LowStamina
