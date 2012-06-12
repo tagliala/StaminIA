@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.12" ?>
+<?php $staminia_version = "12.06.13" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -665,15 +665,7 @@ if (defined('GA_ID')) { ?>
     <script language="javascript" type="text/javascript" src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
 
     <!-- jqplot -->
-    <script type="text/javascript">
-      // This custom script contains: CanvasTextRenderer, CanvasAxisLabelRenderer, highlighter
-      var async_scripts = [ "js/vendor/jqplot/jquery.jqplot-custom.min.js" ];
-      for (var i in async_scripts) {
-        var node = document.createElement('script'); node.type = 'text/javascript'; node.async = true;
-        node.src =  async_scripts[i];
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(node, s);
-      }
-    </script>
+    <script src="js/vendor/jqplot/jquery.jqplot-custom.min.js"></script>
     <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/jqplot/excanvas.js"></script><![endif]-->
 
 <!-- scripts concatenated and minified via ant build script-->

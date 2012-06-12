@@ -424,7 +424,7 @@
     this.result.player2_low_stamina_se_risk = p2LowStaminaRisk;
     this.result.substituteAt = substituteAt;
     this.result.mayNotReplace = mayNotReplace;
-    if (Staminia.CONFIG.DEBUG_STEP) {
+    if (Staminia.CONFIG.DEBUG) {
       printContributionTable();
       $("#tabDebugNav").show();
     }
