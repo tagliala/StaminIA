@@ -391,7 +391,7 @@ Staminia.Engine.start = ->
   @result.substituteAt = substituteAt
   @result.mayNotReplace = mayNotReplace
 
-  if Staminia.CONFIG.DEBUG_STEP
+  if Staminia.CONFIG.DEBUG
     printContributionTable()
     $("#tabDebugNav").show() 
     #$("#tabDebugNav").find("a").tab "show"
