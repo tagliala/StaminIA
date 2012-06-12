@@ -381,6 +381,6 @@ p.minutes {
 
 #chartTotal, #chartPartial {
   width: 100% !important;
-  height: 250px !important;
-  margin-top: 18px;
+  height: 250px;
+  margin: 18px 0 9px;
 }

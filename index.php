@@ -563,8 +563,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <!-- Charts -->
             <div class="tab-pane" id="tabCharts">
               <div id="charts">
-                 <div id="chartTotal" class="chart"></div>
-                 <div id="chartPartial" class="chart"></div>
+                <h3 class="legend-like"><?= localize("Total Contribution"); ?></h3>
+                <div id="chartTotal" class="chart"></div>
+                <h3 class="legend-like"><?= localize("Partial Contributions"); ?></h3>
+                <div id="chartPartial" class="chart"></div>
               </div>
             </div>
 
