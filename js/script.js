@@ -244,7 +244,6 @@
       }
       if (isChartsEnabled()) {
         JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89];
-        console.log(result.plotDataTotal);
         document.plot1 = $.jqplot('chartTotal', result.plotDataTotal, {
           axesDefaults: {
             labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
