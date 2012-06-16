@@ -17,6 +17,32 @@ $.extend Staminia.CONFIG,
     Winger: 3
     Passing: 4
     Scoring: 5
+  PLOT_OPTIONS:
+    lines:
+      show: true
+      lineWidth: 3
+    points:
+      show: true
+      radius: 3
+    xaxis:
+      color: "#666666"
+      ticks: [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
+    yaxis:
+      color: "#666666"
+      tickDecimals: 2
+    grid:
+      backgroundColor: "#FFFDF6"
+      color: "#CCCCCC"
+      borderColor: "#999999"
+      hoverable: true
+      labelMargin: 15
+      markings: [
+        xaxis:
+          from: 1
+          to: 46
+        color: "#FAF8F1"
+      ]
+
 
 format = (source, params) ->
   if arguments.length is 1
@@ -75,7 +101,7 @@ resetAndHideTabs = ->
   $("#tabContributionsNav").hide()
   $("#tabDebugNav").hide()
   $("#chartTotal").html ""
-  $("#chartPartial").html ""
+  $("#chartPartials").html ""
   $("#tabContributions").html ""
   $("#tabDebug").html ""
 
@@ -222,79 +248,50 @@ $(FORM_ID).validate({
 
     # Render Charts
     if isChartsEnabled()
-      JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
-      document.plot1 = $.jqplot 'chartTotal', result.plotDataTotal,
-        axesDefaults:
-          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          labelOptions:
-            fontSize: '8pt'
-        axes:
-          xaxis:
-            label: Staminia.messages.minute
-            pad: 0
-            tickOptions:
-              formatString: '%d'
-            ticks: JQPLOT_GRID
-          yaxis:
-            min: (Number) result.min * 0.99
-            max: (Number) result.max * 1.01
-            label: Staminia.messages.contribution
-            tickOptions:
-              formatString: '%.2f'
-        highlighter:
-          show: true
-          sizeAdjust: 7.5
-        legend:
-          show: false
-          location: "s"
-        series: [
-          {
-            label: "test"
-            color: "#08c"
-          }
-        ]
+      plot_options = $.extend true, {}, Staminia.CONFIG.PLOT_OPTIONS
+      $.extend true, plot_options,
+        points:
+          fillColor: "#08c"
+        yaxis:
+          min: (Number) result.min * 0.99
+          max: (Number) result.max * 1.01
+      document.plot1 = $.plot $('#chartTotal'), [ data: result.plotDataTotal[0], color: "#08c" ], plot_options
 
-      document.plot2 = $.jqplot 'chartPartial', result.plotDataPartial,
-        axesDefaults:
-          labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          labelOptions:
-            fontSize: '8pt'
-        axes:
-          xaxis:
-            label: Staminia.messages.minute
-            pad: 0
-            tickOptions:
-              formatString: '%d'
-            ticks: JQPLOT_GRID
-          yaxis:
-            autoscale: true
-            label: Staminia.messages.contribution
-            tickOptions:
-              formatString: '%.2f'
-        highlighter:
-          show: true
-          sizeAdjust: 7.5
+      dataset = [
+        {
+          data: result.plotDataPartial[0]
+          color: "#9d261d"
+          label: Staminia.messages.p1_contrib
+          points:
+            fillColor: "#9d261d"
+        }, {
+          data: result.plotDataPartial[1]
+          color: "#46a546"
+          label: Staminia.messages.p2_contrib
+          points:
+            fillColor: "#46a546"
+        }
+      ]
+
+      plot_options = $.extend true, {}, Staminia.CONFIG.PLOT_OPTIONS
+      $.extend true, plot_options,
         legend:
-          show: true
-          location: "se"
-        series: [
-          {
-            label: Staminia.messages.p1_contrib
-            color: "#9d261d"
-          }, {
-            label: Staminia.messages.p2_contrib
-            color: "#46a546"
-          }
-        ]
-        $("#tabChartsNav").show()
+          position: "se"
+          labelBoxBorderColor: "#cccccc"
+          margin: [10, 10]
+          backgroundColor: "#ffffff"
+          backgroundOpacity: 0.5
+          borderColor: "#cccccc"
+      document.plot2 = $.plot $('#chartPartials'), dataset, plot_options
+      $("#tabChartsNav").show()
 
     createSubstitutionAlert(result.substituteAt, result.mayNotReplace)
 
     # Show the right tab
     if isChartsEnabled()
       $("#tabChartsNav").find("a").tab "show"
-      document.plot1.replot()
-      document.plot2.replot()
+      plot_redraw document.plot1
+      plot_redraw document.plot2
     else if isVerboseModeEnabled()
       $("#tabContributionsNav").find("a").tab "show"
 
@@ -544,8 +541,8 @@ $('a[data-toggle="tab"]').on 'shown', (e) ->
   else
     $("#AlertsContainer").show()
   if $(e.target).attr("href") is "#tabCharts"
-    document.plot1.replot() if document.plot1?
-    document.plot2.replot() if document.plot2?
+    plot_redraw document.plot1
+    plot_redraw document.plot2
   return
 
 # Stamin.IA! Reset Button
@@ -848,11 +845,42 @@ $("#CHPP_Revoke_Auth_Link").on "click", ->
   $(this).closest("[class~='open']").removeClass 'open'
   window.confirm Staminia.messages.revoke_auth_confirm
 
+plot_redraw = (plot) ->
+  return unless plot?
+  plot.resize()
+  plot.setupGrid()
+  plot.draw()
+
 # Resize charts if needed
 $(window).resize $.debounce 500, ->
   return unless $("#tabChartsNav").hasClass "active"
-  document.plot1.replot() if document.plot1?
-  document.plot2.replot() if document.plot2?
+  plot_redraw document.plot1 if document.plot1?
+  plot_redraw document.plot2 if document.plot2?
+
+# Charts tooltips
+showTooltip = (x, y, contents) ->
+  $content_div = $('<div id="flot-tooltip">' + contents + '</div>').appendTo("body")
+
+  $content_div.css
+    display: "none"
+    visibility: "visible"
+    top: y - $content_div.height() - 11
+    left: x - $content_div.width() - 11
+  .fadeIn("fast")
+
+previousPoint = null
+
+$("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
+  if (item)
+    return if previousPoint is item.dataIndex
+    previousPoint = item.dataIndex
+    $("#flot-tooltip").remove()
+    x = item.datapoint[0]
+    y = item.datapoint[1].toFixed 2
+    showTooltip item.pageX, item.pageY, "#{Staminia.messages.minute}: #{x}<br/>#{Staminia.messages.contribution}: #{y}"
+  else
+    $("#flot-tooltip").remove()
+    previousPoint = null
 
 #export
 Staminia.format = format

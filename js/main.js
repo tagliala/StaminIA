@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, resetAndHideTabs, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -25,6 +25,40 @@
       Winger: 3,
       Passing: 4,
       Scoring: 5
+    },
+    PLOT_OPTIONS: {
+      lines: {
+        show: true,
+        lineWidth: 3
+      },
+      points: {
+        show: true,
+        radius: 3
+      },
+      xaxis: {
+        color: "#666666",
+        ticks: [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
+      },
+      yaxis: {
+        color: "#666666",
+        tickDecimals: 2
+      },
+      grid: {
+        backgroundColor: "#FFFDF6",
+        color: "#CCCCCC",
+        borderColor: "#999999",
+        hoverable: true,
+        labelMargin: 15,
+        markings: [
+          {
+            xaxis: {
+              from: 1,
+              to: 46
+            },
+            color: "#FAF8F1"
+          }
+        ]
+      }
     }
   });
 
@@ -109,7 +143,7 @@
     $("#tabContributionsNav").hide();
     $("#tabDebugNav").hide();
     $("#chartTotal").html("");
-    $("#chartPartial").html("");
+    $("#chartPartials").html("");
     $("#tabContributions").html("");
     return $("#tabDebug").html("");
   };
@@ -192,7 +226,7 @@
       }
     },
     submitHandler: function(form) {
-      var JQPLOT_GRID, css_classes, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
+      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
@@ -243,95 +277,58 @@
         $("#tabContributionsNav").show();
       }
       if (isChartsEnabled()) {
-        JQPLOT_GRID = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89];
-        document.plot1 = $.jqplot('chartTotal', result.plotDataTotal, {
-          axesDefaults: {
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-            labelOptions: {
-              fontSize: '8pt'
-            }
+        plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
+        $.extend(true, plot_options, {
+          points: {
+            fillColor: "#08c"
           },
-          axes: {
-            xaxis: {
-              label: Staminia.messages.minute,
-              pad: 0,
-              tickOptions: {
-                formatString: '%d'
-              },
-              ticks: JQPLOT_GRID
-            },
-            yaxis: {
-              min: Number(result.min * 0.99),
-              max: Number(result.max * 1.01),
-              label: Staminia.messages.contribution,
-              tickOptions: {
-                formatString: '%.2f'
-              }
-            }
-          },
-          highlighter: {
-            show: true,
-            sizeAdjust: 7.5
-          },
-          legend: {
-            show: false,
-            location: "s"
-          },
-          series: [
-            {
-              label: "test",
-              color: "#08c"
-            }
-          ]
+          yaxis: {
+            min: Number(result.min * 0.99),
+            max: Number(result.max * 1.01)
+          }
         });
-        document.plot2 = $.jqplot('chartPartial', result.plotDataPartial, {
-          axesDefaults: {
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-            labelOptions: {
-              fontSize: '8pt'
+        document.plot1 = $.plot($('#chartTotal'), [
+          {
+            data: result.plotDataTotal[0],
+            color: "#08c"
+          }
+        ], plot_options);
+        dataset = [
+          {
+            data: result.plotDataPartial[0],
+            color: "#9d261d",
+            label: Staminia.messages.p1_contrib,
+            points: {
+              fillColor: "#9d261d"
             }
-          },
-          axes: {
-            xaxis: {
-              label: Staminia.messages.minute,
-              pad: 0,
-              tickOptions: {
-                formatString: '%d'
-              },
-              ticks: JQPLOT_GRID
-            },
-            yaxis: {
-              autoscale: true,
-              label: Staminia.messages.contribution,
-              tickOptions: {
-                formatString: '%.2f'
-              }
+          }, {
+            data: result.plotDataPartial[1],
+            color: "#46a546",
+            label: Staminia.messages.p2_contrib,
+            points: {
+              fillColor: "#46a546"
             }
-          },
-          highlighter: {
-            show: true,
-            sizeAdjust: 7.5
-          },
+          }
+        ];
+        plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
+        $.extend(true, plot_options, {
           legend: {
-            show: true,
-            location: "se"
-          },
-          series: [
-            {
-              label: Staminia.messages.p1_contrib,
-              color: "#9d261d"
-            }, {
-              label: Staminia.messages.p2_contrib,
-              color: "#46a546"
-            }
-          ]
-        }, $("#tabChartsNav").show());
+            position: "se",
+            labelBoxBorderColor: "#cccccc",
+            margin: [10, 10],
+            backgroundColor: "#ffffff",
+            backgroundOpacity: 0.5,
+            borderColor: "#cccccc"
+          }
+        });
+        document.plot2 = $.plot($('#chartPartials'), dataset, plot_options);
+        $("#tabChartsNav").show();
       }
       createSubstitutionAlert(result.substituteAt, result.mayNotReplace);
       if (isChartsEnabled()) {
         $("#tabChartsNav").find("a").tab("show");
-        document.plot1.replot();
-        document.plot2.replot();
+        plot_redraw(document.plot1);
+        plot_redraw(document.plot2);
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
       }
@@ -617,12 +614,8 @@
       $("#AlertsContainer").show();
     }
     if ($(e.target).attr("href") === "#tabCharts") {
-      if (document.plot1 != null) {
-        document.plot1.replot();
-      }
-      if (document.plot2 != null) {
-        document.plot2.replot();
-      }
+      plot_redraw(document.plot1);
+      plot_redraw(document.plot2);
     }
   });
 
@@ -976,17 +969,56 @@
     return window.confirm(Staminia.messages.revoke_auth_confirm);
   });
 
+  plot_redraw = function(plot) {
+    if (plot == null) {
+      return;
+    }
+    plot.resize();
+    plot.setupGrid();
+    return plot.draw();
+  };
+
   $(window).resize($.debounce(500, function() {
     if (!$("#tabChartsNav").hasClass("active")) {
       return;
     }
     if (document.plot1 != null) {
-      document.plot1.replot();
+      plot_redraw(document.plot1);
     }
     if (document.plot2 != null) {
-      return document.plot2.replot();
+      return plot_redraw(document.plot2);
     }
   }));
+
+  showTooltip = function(x, y, contents) {
+    var $content_div;
+    $content_div = $('<div id="flot-tooltip">' + contents + '</div>').appendTo("body");
+    return $content_div.css({
+      display: "none",
+      visibility: "visible",
+      top: y - $content_div.height() - 11,
+      left: x - $content_div.width() - 11
+    }).fadeIn("fast");
+  };
+
+  previousPoint = null;
+
+  $("#chartTotal, #chartPartials").bind("plothover", function(event, pos, item) {
+    var x, y;
+    if (item) {
+      if (previousPoint === item.dataIndex) {
+        return;
+      }
+      previousPoint = item.dataIndex;
+      $("#flot-tooltip").remove();
+      x = item.datapoint[0];
+      y = item.datapoint[1].toFixed(2);
+      return showTooltip(item.pageX, item.pageY, "" + Staminia.messages.minute + ": " + x + "<br/>" + Staminia.messages.contribution + ": " + y);
+    } else {
+      $("#flot-tooltip").remove();
+      return previousPoint = null;
+    }
+  });
 
   Staminia.format = format;
 
