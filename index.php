@@ -60,7 +60,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
     <!-- Le fav and touch icons -->
@@ -660,22 +660,21 @@ if (defined('GA_ID')) { ?>
     </script>
 <? } ?>
     <script src="js/vendor/jquery-1.7.2.min.js"></script>
-    <script src="js/vendor/jqform/jquery.form.min.js"></script>
-    <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
-    <script language="javascript" type="text/javascript" src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- jqplot -->
     <script src="js/vendor/jqplot/jquery.jqplot-custom.min.js"></script>
     <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/jqplot/excanvas.js"></script><![endif]-->
 
-<!-- scripts concatenated and minified via ant build script-->
-<script src="js/script.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/engine.js"></script>
-<!-- end scripts-->
+    <!-- scripts concatenated and minified via build script -->
+    <script src="js/vendor/jqform/jquery.form.min.js"></script>
+    <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
+    <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/engine.js"></script>
+    <!-- end scripts -->
 
-    <script src="js/vendor/bootstrap.min.js"></script>
-    
     <script>
       document.startAjax = <?php if ($tryAjax) { echo "true"; } else { echo "false"; } ?>;
 <?php 
