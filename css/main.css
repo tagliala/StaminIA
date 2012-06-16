@@ -2,7 +2,6 @@
 @import url('bootstrap-overload.css');
 @import url('bootstrap-responsive.css');
 @import url('flags.css');
-@import url('jquery.jqplot.css');
 
 .navbar .brand {
   padding: 0 20px;
@@ -379,8 +378,31 @@ p.minutes {
   }
 }
 
-#chartTotal, #chartPartial {
+#chartTotal, #chartPartials {
   width: 100% !important;
   height: 250px;
   margin: 18px 0 9px;
+}
+
+#charts .legendLabel {
+  color: #666666;
+}
+
+#charts .legend table {
+  border: 1px solid #cccccc;
+  cursor: default;
+}
+
+#flot-tooltip {
+  position: absolute;
+  visibility: hidden;
+  display: block;
+  top: 0;
+  left: 0;
+  padding: 2px;
+  border: 1px solid #ccc;
+  font-size: 10px;
+  background-color: #e7e7e7;
+  opacity: 0.80;
+  filter: alpha(opacity=80);
 }

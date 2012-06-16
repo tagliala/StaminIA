@@ -566,7 +566,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 <h3 class="legend-like"><?= localize("Total Contribution"); ?></h3>
                 <div id="chartTotal" class="chart"></div>
                 <h3 class="legend-like"><?= localize("Partial Contributions"); ?></h3>
-                <div id="chartPartial" class="chart"></div>
+                <div id="chartPartials" class="chart"></div>
               </div>
             </div>
 
@@ -596,7 +596,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
                 <a href="https://github.com/mojombo/clippy">mojombo/clippy</a>,
                 <a href="https://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
-                <a href="https://bitbucket.org/cleonello/jqplot/wiki/Home">cleonello/jqplot</a>,
+                <a href="https://github.com/flot/flot">flot/flot</a>,
                 <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
                 <br/><br/>
               </p>
@@ -662,11 +662,9 @@ if (defined('GA_ID')) { ?>
     <script src="js/vendor/jquery-1.7.2.min.js"></script>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
-    <!-- jqplot -->
-    <script src="js/vendor/jqplot/jquery.jqplot-custom.min.js"></script>
-    <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/jqplot/excanvas.js"></script><![endif]-->
-
     <!-- scripts concatenated and minified via build script -->
+    <!-- flot -->
+    <script src="js/vendor/flot/jquery.flot.js"></script>
     <script src="js/vendor/jqform/jquery.form.min.js"></script>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
     <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
@@ -674,6 +672,8 @@ if (defined('GA_ID')) { ?>
     <script src="js/plugins.js"></script>
     <script src="js/engine.js"></script>
     <!-- end scripts -->
+
+    <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/flot/excanvas.min.js"></script><![endif]-->
 
     <script>
       document.startAjax = <?php if ($tryAjax) { echo "true"; } else { echo "false"; } ?>;

@@ -60,7 +60,7 @@ jquery-validation is licensed under the MIT License
 
 jQuery throttle / debounce is licensed under the MIT License
 
-jqPlot is licensed under the MIT License
+flot is licensed under the MIT License
 
 PHT is licensed under the PHP License, version 3.0
 
