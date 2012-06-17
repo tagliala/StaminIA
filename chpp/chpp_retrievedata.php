@@ -1,4 +1,5 @@
 <?php
+ob_start("ob_gzhandler");
 header('Content-type: application/json');
 include '../lib/PHT/PHT.php';
 include 'config.php';
