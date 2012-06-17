@@ -17,4 +17,9 @@ echo # Building Stamin.IA!
 set MYDIR=%~dp0
 set JAVA_HOME=c:\Program Files (x86)\Java\jdk1.7.0_05
 set ANT_OPTS=-D"file.encoding=UTF-8"
-.\apache-ant-1.8.3\bin\ant minify
+cmd /c .\apache-ant-1.8.3\bin\ant minify
+echo.
+
+echo # Copying .htaccess
+copy /y config\htaccess ..\publish\.htaccess
+echo.

@@ -1013,7 +1013,7 @@
       $("#flot-tooltip").remove();
       x = item.datapoint[0];
       y = item.datapoint[1].toFixed(2);
-      return showTooltip(item.pageX, item.pageY, "" + Staminia.messages.minute + ": " + x + "<br/>" + Staminia.messages.contribution + ": " + y);
+      return showTooltip(item.pageX, item.pageY, "" + Staminia.messages.substitution_minute + ": " + x + "<br/>" + Staminia.messages.contribution + ": " + y);
     } else {
       $("#flot-tooltip").remove();
       return previousPoint = null;

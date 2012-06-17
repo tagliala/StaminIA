@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.06.16" ?>
+<?php $staminia_version = "12.06.17" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -663,11 +663,10 @@ if (defined('GA_ID')) { ?>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
-    <!-- flot -->
-    <script src="js/vendor/flot/jquery.flot.js"></script>
     <script src="js/vendor/jqform/jquery.form.min.js"></script>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
     <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="js/jquery.flot.js"></script>
     <script src="js/main.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/engine.js"></script>
