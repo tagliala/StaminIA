@@ -877,7 +877,7 @@ $("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
     $("#flot-tooltip").remove()
     x = item.datapoint[0]
     y = item.datapoint[1].toFixed 2
-    showTooltip item.pageX, item.pageY, "#{Staminia.messages.minute}: #{x}<br/>#{Staminia.messages.contribution}: #{y}"
+    showTooltip item.pageX, item.pageY, "#{Staminia.messages.substitution_minute}: #{x}<br/>#{Staminia.messages.contribution}: #{y}"
   else
     $("#flot-tooltip").remove()
     previousPoint = null
