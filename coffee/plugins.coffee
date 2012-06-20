@@ -27,16 +27,28 @@ class ClippableBehavior
     if @flashBridge.length is 0
       content =
         """
-        <object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" id=\"global-clippy-object-tag\" width=\"100%\" height=\"100%\">
-          <param name=\"movie\" value=\"flash/clippy.swf\"/>\n  <param name=\"FlashVars\" value=\"id=global-clippy-instance\">
-          <param name=\"allowScriptAccess\" value=\"always\" />\n  <param name=\"scale\" value=\"exactfit\">
-          <embed src=\"flash/clippy.swf\"
-                 width=\"100%\" height=\"100%\"
-                 name=\"global-clippy-object-tag\"
-                 FlashVars=\"id=global-clippy-instance\"
-                 allowScriptAccess=\"always\"
-                 scale=\"exactfit\">
-          </embed>
+        <!-- Adobe Flash Inception -->
+        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-clippy-object-tag" width="100%" height="100%">
+          <param name="movie" value="flash/clippy.swf" />
+          <param name="FlashVars" value="id=global-clippy-instance" />
+          <param name="allowScriptAccess" value="always" />
+          <param name="scale" value="exactfit">
+          <object type="application/x-shockwave-flash"
+                  data="flash/clippy.swf"
+                  flashvars="id=global-clippy-instance"
+                  allowscriptaccess="always"
+                  scale="exactfit"
+                  width="100%"
+                  height="100%">
+            <embed src="flash/clippy.swf"
+                   width="100%"
+                   height="100%"
+                   name="global-clippy-object-tag"
+                   FlashVars="id=global-clippy-instance"
+                   allowScriptAccess="always"
+                   scale="exactfit">
+            </embed>
+          </object>
         </object>
         """
       @flashBridge = $("<div>" + content + "</div>").attr("id", "global-clippy-flash-bug")
