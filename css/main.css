@@ -4,26 +4,26 @@
 @import url('flags.css');
 
 .navbar .brand {
-  padding: 0 20px;
-  text-shadow: 0 -1px 0 black;
-  font-family: 'Lobster', cursive;
   top: -4px;
+  padding: 0 20px;
+  font-family: 'Lobster', cursive;
   font-size: 24px;
+  text-shadow: 0 -1px 0 black;
 }
 
 #staminia-logo {
-  background : url("../img/css_sprite.png") no-repeat 0 -38px;
   display:inline-block;
-  width: 31px;
   height: 25px;
+  width: 31px;
   margin-top: 7px;
+  background : url("../img/css_sprite.png") no-repeat 0 -38px;
 }
 
 #staminia-brand {
-  display:inline-block;
   position: relative;
-  left: 5px;
+  display:inline-block;
   top: -5px;
+  left: 5px;
 }
 
 @media (min-width: 980px) {
@@ -31,8 +31,8 @@
     padding-top: 40px;
   }
   #main {
-    background: white;
     padding: 10px;
+    background: white;
   }
 }
 
@@ -68,8 +68,8 @@ form.staminiaForm {
 
 form.staminiaForm table {
   width : auto;
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
 }
 
 form.staminiaForm td, form.staminiaForm th {
@@ -81,8 +81,8 @@ form.staminiaForm .control-group {
 }
 
 form.staminiaForm select, form.staminiaForm input {
-  margin : 0;
   width : 100%;
+  margin : 0;
 }
 
 #Staminia_Player_1, #Staminia_Player_2 {
@@ -107,9 +107,9 @@ tr.motherClubBonus td {
 }
 
 #imgCHPPLogo {
-  background : url("../img/css_sprite.png") no-repeat -65px 0;
-  width: 87px;
   height: 50px;
+  width: 87px;
+  background : url("../img/css_sprite.png") no-repeat -65px 0;
 }
 
 #imgValidHTML {
@@ -117,32 +117,32 @@ tr.motherClubBonus td {
 }
 
 #imgHTML5 {
-  background : url("../img/css_sprite.png") no-repeat -68px -52px;
-  width: 30px;
   height: 32px; 
+  width: 30px;
+  background : url("../img/css_sprite.png") no-repeat -68px -52px;
 }
 
 #imgCSS3 {
-  background : url("../img/css_sprite.png") no-repeat -98px -52px;
-  width: 24px;
   height: 22px; 
+  width: 24px;
+  background : url("../img/css_sprite.png") no-repeat -98px -52px;
 }
 
 #imgMadeInItaly {
-  background : url("../img/css_sprite.png") no-repeat -153px -52px;
-  width: 80px;
   height: 15px; 
+  width: 80px;
+  background : url("../img/css_sprite.png") no-repeat -153px -52px;
 }
 
 #generatedLinkBody {
+  overflow : hidden;
   word-wrap: break-word;
   word-break: break-all;
-  overflow : hidden;
 }
 
 #loginDropdown {
-  padding : 15px;
   width : 240px;
+  padding : 15px;
   color : black;
 }
 
@@ -157,8 +157,8 @@ tr.motherClubBonus td {
 
 #loginDropdown label.rememberme {
   display : block;
-  margin : 0;
   float : left;
+  margin : 0;
   line-height : 28px;
 }
 
@@ -180,14 +180,18 @@ tr.motherClubBonus td {
 }
 
 .clippy {
-  background : url("../img/css_sprite.png") no-repeat -206px -16px;  
-  display:inline-block;
-  width: 14px;
   height: 14px;
+  width: 14px;
+  display:inline-block;
+  background : url("../img/css_sprite.png") no-repeat -206px -16px;  
 }
 
 .clippy-disabled {
   background : url("../img/css_sprite.png") no-repeat -206px -31px;  
+}
+
+#global-clippy-flash-bug {
+  line-height: 1px;
 }
 
 div.form-actions .btn {
@@ -195,8 +199,8 @@ div.form-actions .btn {
 }
 
 abbr {
-  text-decoration: none;
   border-bottom: 1px dotted;
+  text-decoration: none;
   cursor : help;
 }
 
@@ -225,8 +229,8 @@ option.isSuspended {
 }
 
 .mainTitle {
-  font-size : 20px;
   line-height : 24px;
+  font-size : 20px;
 }
 
 .nav-tabs > li.credits {
@@ -278,25 +282,25 @@ table.table-staminia th[colspan] {
 }
 
 .btn-status {
-  width : 28px;
-  display : table-cell;
-  text-align : center;
-  padding-left : 0;
-  padding-right : 0;
-  position : absolute;
   z-index : 1;
+  position : absolute;
+  display : table-cell;
+  width : 28px;
+  padding-right : 0;
+  padding-left : 0;
+  text-align : center;
 }
 
 .btn-checkbox .btn:nth-child(2) {
+  z-index : 0;
   position : absolute;
   top: 0;
   left: 0;
-  width : 100%;
   height : 28px;
-  overflow: hidden;
-  z-index : 0;
-  text-align : left;
+  width : 100%;
   padding-left: 35px;
+  overflow: hidden;
+  text-align : left;
 }
 
 .btn-checkbox .btn:nth-child(2) > span {
@@ -367,6 +371,9 @@ p.minutes {
 
 @media (max-width: 767px) {
   .modal {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
     box-sizing: border-box;
     position: absolute;
     top: 0 !important;
@@ -380,8 +387,8 @@ p.minutes {
 }
 
 #chartTotal, #chartPartials {
-  width: 100% !important;
   height: 250px;
+  width: 100% !important;
   margin: 18px 0 9px;
 }
 
@@ -396,12 +403,12 @@ p.minutes {
 
 #flot-tooltip {
   position: absolute;
-  visibility: hidden;
   display: block;
+  visibility: hidden;
   top: 0;
   left: 0;
-  padding: 2px;
   border: 1px solid #ccc;
+  padding: 2px;
   font-size: 10px;
   background-color: #e7e7e7;
   opacity: 0.80;
