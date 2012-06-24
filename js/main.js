@@ -226,7 +226,7 @@
       }
     },
     submitHandler: function(form) {
-      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
+      var $elem, css_classes, dataset, docViewTop, elemTop, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
@@ -331,6 +331,14 @@
         plot_redraw(document.plot2);
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
+      }
+      $elem = $(".nav-tabs");
+      docViewTop = $(window).scrollTop();
+      elemTop = $elem.offset().top;
+      if (docViewTop > elemTop) {
+        $('html, body').animate({
+          scrollTop: elemTop
+        }, 200);
       }
       $("#calculate").removeClass("disabled");
     },
