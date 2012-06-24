@@ -66,7 +66,7 @@ createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
       ranges[r] = []
       ranges[r].push minute
       check_with = minute + 1
-    else if minute isnt check_with      
+    else if minute isnt check_with
       ranges[r].push check_with - 1 unless ranges[r][ranges[r].length - 1] is check_with - 1
       r++
       _i--
@@ -130,7 +130,7 @@ $(FORM_ID).validate({
   errorLabelContainer: "#formErrorsUl"
   errorElement: "li"
   focusInvalid: true
-  showErrors: (errorMap, errorList) -> 
+  showErrors: (errorMap, errorList) ->
     if (@numberOfInvalids() == 0)
       $("#formErrors").remove()
     @defaultShowErrors()
@@ -152,7 +152,7 @@ $(FORM_ID).validate({
         $('#formErrors').dismiss()
       validator.focusInvalid()
       return
-  submitHandler: (form) ->   
+  submitHandler: (form) ->
     $("#calculate").addClass "disabled"
     resetAndHideTabs()
     $("#AlertsContainer").html ""
@@ -298,8 +298,15 @@ $(FORM_ID).validate({
 
     #if Staminia.CONFIG.DEBUG_STEP
     #  printContributionTable()
-    #  $("#tabDebugNav").show() 
+    #  $("#tabDebugNav").show()
     #  #$("#tabDebugNav").find("a").tab "show"
+
+    # Set the view at the right point
+    $elem = $(".nav-tabs")
+    docViewTop = $(window).scrollTop()
+    elemTop = $elem.offset().top
+    if docViewTop > elemTop
+      $('html, body').animate {scrollTop: elemTop}, 200
 
     # Reset button status
     $("#calculate").removeClass "disabled"
@@ -335,7 +342,7 @@ number_format = (number = "", decimals = 0, dec_point = ".", thousands_sep = ","
   if (s[1] or "").length < prec
     s[1] = s[1] or ""
     s[1] += new Array(prec - s[1].length + 1).join "0"
-  
+
   s.join dec_point
 
 # Dynamic Table Stripe
@@ -361,7 +368,7 @@ showSkillsByPosition = ->
   $("#{FORM_ID} tr[class~=advanced]:not([id*=_Advanced_]) *[name*=_Advanced_]").removeClass "ignore"
   $("#{FORM_ID} tr[class~=advanced][id*=_Advanced_] *[name*=_Advanced_]").addClass "ignore"
   $("#{TABLE_ID} tr[class~=advanced][id*=_Advanced_]").addClass("hide").hide()
-  
+
   position = (Number) $("#Staminia_Advanced_Position").val()
   return unless position >= 0 and position <= 19
   SKILL_ENUMERATOR = Staminia.CONFIG.PR_ENUM_SKILL
@@ -406,7 +413,7 @@ isAdvancedModeEnabled = ->
 enableCHPPMode = ->
   $("#{TABLE_ID} tr[class~='chpp']").removeClass("hide").show()
   return
-  
+
 disableCHPPMode = ->
   $("#{TABLE_ID} tr[class~='chpp']").addClass("hide").hide()
   return
@@ -451,7 +458,7 @@ $("#getLink").on "click", (e) ->
   unless $(FORM_ID).validate().form()
     $("#generatedLink").alert('close')
     return
-  
+
   link = document.location.href.split("?")[0]
   locale = gup "locale"
 
@@ -459,14 +466,14 @@ $("#getLink").on "click", (e) ->
     link += "?locale=#{locale}&amp;"
   else
     link +="?"
-  
+
   link += "params=#{encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue().toString().replace(/,/g,"-"))}"
 
   clippy = """
     &nbsp;<span class="clippy" data-clipboard-text="#{link}" id="staminiaClippy"></span>
     """
   body = link
-  
+
   if $("#generatedLinkBody").length
     $("#copyLinkToClipboard").data("text", link)
     $("#staminiaClippy").attr("data-clipboard-text", link)
@@ -506,7 +513,7 @@ $("button[data-checkbox-button]").on "click", (e) ->
     $status_button.find("i").removeClass("icon-ok").addClass "icon-remove"
   return
 
-$("#Staminia_Options_AdvancedModeButton").on "click", (e) -> 
+$("#Staminia_Options_AdvancedModeButton").on "click", (e) ->
   $status_button = $("##{$(this).attr 'id'}_Status")
   if $status_button.hasClass "btn-success"
     enableAdvancedMode()
@@ -529,8 +536,8 @@ updatePredictions = ->
   else
     Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
   return
-  
-$("input[data-validate='range'], select[data-validate='range']").each -> 
+
+$("input[data-validate='range'], select[data-validate='range']").each ->
   $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] })
   return
 
@@ -554,12 +561,12 @@ $("#resetApp").on "click", (e) ->
   $('.control-group').removeClass "error"
   $("#AlertsContainer").html ""
   resetAndHideTabs()
-  
+
   $("button[data-checkbox-button], button[data-radio-button]").each ->
     form = $(FORM_ID)[0]
     form[$(this).data("linkedTo")].value = $(this).data "default-value"
     return
-    
+
   checkFormButtonsAppearance()
   disableAdvancedMode()
   setupCHPPPlayerFields()
@@ -573,7 +580,7 @@ $.validator.methods.range = (value, element, param) ->
 $.validator.methods.number = (value, element) ->
   return @optional(element) or /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value)
 
-$.validator.addMethod "position" , (value, element, params) -> 
+$.validator.addMethod "position" , (value, element, params) ->
  @optional(element) or value >= params[0] and value <= params[1]
 , jQuery.validator.messages.required
 
@@ -620,7 +627,7 @@ $.ajaxSetup {
           $("#CHPP_Status_Description").html """
             #{Staminia.messages.error_unknown}.<br/>
             #{Staminia.messages.retry_to_authorize}.
-            """ 
+            """
       when "Error"
         switch jsonObject.ErrorCode
           when "InvalidToken"
@@ -636,12 +643,12 @@ $.ajaxSetup {
         $("#CHPP_Status_Description").html """
           #{error_message}<br/>
           #{description_message}
-          """ 
+          """
         loginMenuShow()
         $("#CHPP_Refresh_Data").data "completeText", $("#CHPP_Refresh_Data").data("errorText")
     $("#CHPP_Refresh_Data_Status").removeAttr "disabled"
     return
-        
+
   error : (jqXHR, textStatus, thrownError) ->
     switch textStatus
       when "timeout"
@@ -659,12 +666,12 @@ $.ajaxSetup {
     $("#CHPP_Status_Description").html """
       #{error_message}<br/>
       #{description_message}
-      """ 
+      """
     loginMenuShow()
     $("#CHPP_Refresh_Data").data "completeText", $("#CHPP_Refresh_Data").data("errorText")
     $("#CHPP_Refresh_Data_Status").removeAttr "disabled"
     return
-  
+
   complete : (jqXHR, textStatus) ->
     $("#CHPP_Results").show()
     $("#CHPP_Refresh_Data").button 'complete'
@@ -732,9 +739,9 @@ sortCHPPPlayerFields = ->
     when "Loyalty"
       field = "Loyalty"
       reverse = true
-      
+
   PlayersData.sort sort_by(field, reverse, primer)
-  
+
   return
 
 updateCHPPPlayerFields = ->
@@ -742,7 +749,7 @@ updateCHPPPlayerFields = ->
   return unless PlayersData?
 
   sortCHPPPlayerFields()
-  
+
   $("#CHPP_Player_1").html ""
   $("#CHPP_Player_2").html ""
 
@@ -754,8 +761,7 @@ updateCHPPPlayerFields = ->
     optionElement.addClass("isSuspended") if ((Number) player.Cards) >= 3
     optionElement.addClass("isTransferListed") if player.TransferListed
     optionElement.attr "value", index
-    name = 
-    optionElement.text "#{ number = if player.PlayerNumber? then player.PlayerNumber + '.' else '' } #{player.PlayerName} #{ mc = if player.MotherClubBonus then '\u2665' else '' }"
+    name = optionElement.text "#{ number = if player.PlayerNumber? then player.PlayerNumber + '.' else '' } #{player.PlayerName} #{ mc = if player.MotherClubBonus then '\u2665' else '' }"
     select.append optionElement
 
   selectP1 = select.clone("true")
@@ -778,7 +784,7 @@ setupCHPPPlayerFields = (checkUrlParameter = false) ->
     setPlayerFormFields 1, checkUrlParameter
     setPlayerFormFields 2, checkUrlParameter
   return
-          
+
 $("#{FORM_ID} select[id=CHPP_Player_1]").on "change", ->
   setPlayerFormFields 1
   return
@@ -798,7 +804,7 @@ $("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
 
   return
 
-setPlayerFormFields = (player, checkUrlParameter = false) -> 
+setPlayerFormFields = (player, checkUrlParameter = false) ->
   return if checkUrlParameter && gup("params")?
 
   PlayersData = Staminia.PlayersData
@@ -806,7 +812,7 @@ setPlayerFormFields = (player, checkUrlParameter = false) ->
   return unless PlayersData?
   PlayerData = PlayersData[formReference["CHPP_Player_" + player].value]
   return unless PlayerData?
-  
+
   # Standard Mode
   formReference["Staminia_Simple_Player_#{player}_Experience"].value = PlayerData.Experience;
   formReference["Staminia_Simple_Player_#{player}_Stamina"].value = PlayerData.StaminaSkill;
@@ -840,7 +846,7 @@ loginMenuShow = ->
 
 $("#CHPP_Refresh_Data").on "click", ->
   $.ajax { url: "chpp/chpp_retrievedata.php?refresh", cache: false }
-  
+
 $("#CHPP_Revoke_Auth_Link").on "click", ->
   $(this).closest("[class~='open']").removeClass 'open'
   window.confirm Staminia.messages.revoke_auth_confirm
