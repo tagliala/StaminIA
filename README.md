@@ -64,6 +64,8 @@ flot is licensed under the MIT License
 
 PHT is licensed under the PHP License, version 3.0
 
+This product includes PHP, freely available from <http://www.php.net/>
+
 
 
 Thanks
