@@ -11,12 +11,31 @@
   text-shadow: 0 -1px 0 black;
 }
 
+.btn i[class^="icon"] {
+  position: relative;
+  top: 1px;
+  line-height: 15px !important;
+  font-size: 16px;
+}
+
 #staminia-logo {
   display:inline-block;
   height: 25px;
   width: 31px;
   margin-top: 7px;
-  background : url("../img/css_sprite.png") no-repeat 0 -38px;
+  background: url("../img/logo.png") no-repeat;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (min--moz-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+  #staminia-logo {
+    height: 25px;
+    width: 31px;
+    background: url("../img/logo-hd.png") no-repeat;
+    background-size: 31px 25px;
+  }
 }
 
 #staminia-brand {
@@ -310,8 +329,12 @@ table.table-staminia th[colspan] {
 .btn-group > .btn {
   margin-left: 0px;
 }
+.btn-warning {
+  color: black !important;
+}
 
 .btn-progress:disabled {
+  color: white;
   background-color: #149bdf;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
