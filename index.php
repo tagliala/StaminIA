@@ -594,9 +594,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <p>
                 <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's team</a>,
                 <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
-                <a href="https://github.com/mojombo/clippy">mojombo/clippy</a>,
-                <a href="https://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
-                <a href="https://github.com/flot/flot">flot/flot</a>,
+                <a href="http://github.com/mojombo/clippy">mojombo/clippy</a>,
+                <a href="http://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
+                <a href="http://github.com/flot/flot">flot/flot</a>,
+                <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>,
                 <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
                 <br/><br/>
               </p>
