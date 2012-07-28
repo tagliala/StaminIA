@@ -401,7 +401,7 @@
   };
 
   createAlert = function(params) {
-    return "<div class=\"alert alert-block alert-" + params.type + " fade in\" id=\"" + params.id + "\">\n  <a href=\"#\" data-dismiss=\"alert\" class=\"close\">&times;</a>\n  <h4 class=\"alert-heading\">" + params.title + "</h4>\n    <p id=\"" + params.id + "Body\">" + params.body + "</p>\n </div>";
+    return "<div class=\"alert alert-block alert-" + params.type + " fade in\" id=\"" + params.id + "\">\n  <button class=\"close\" data-dismiss=\"alert\" type=\"button\">&times;</button>\n  <h4 class=\"alert-heading\">" + params.title + "</h4>\n  <p id=\"" + params.id + "Body\">" + params.body + "</p>\n</div>";
   };
 
   $("#Staminia_Advanced_Position").on("change", function() {

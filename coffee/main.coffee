@@ -354,10 +354,10 @@ stripeTable = ->
 createAlert = (params) ->
   """
   <div class="alert alert-block alert-#{params.type} fade in" id="#{params.id}">
-    <a href="#" data-dismiss="alert" class="close">&times;</a>
+    <button class="close" data-dismiss="alert" type="button">&times;</button>
     <h4 class="alert-heading">#{params.title}</h4>
-      <p id="#{params.id}Body">#{params.body}</p>
-   </div>
+    <p id="#{params.id}Body">#{params.body}</p>
+  </div>
   """
 
 $("#Staminia_Advanced_Position").on "change", ->
