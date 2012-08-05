@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.07.28" ?>
+<?php $staminia_version = "12.08.05" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -581,17 +581,19 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             
             <!-- Credits -->
             <div class="tab-pane" id="tabCredits">
-              <h3 class="legend-like"><?= localize("Thanks to"); ?>:</h3>
+              <blockquote>
+                <p><?= localize("QUOTE"); ?></p>
+                <small>Danfisico (3232936)</small>
+              </blockquote>
+              <h3><?= localize("Thanks to"); ?>:</h3>
               <p>
                 <b>CHPP-teles</b> (653581), <b>GM-Andreac</b> (7790187), <b>Cuomos</b> (4052076), <b>Danfisico</b> (3232936), <b>Hiddink14</b> (9141503), <b>sulce</b> (9767434), <b>Shinobi-fisc</b> (7328722), <b>taccola</b> (7541533), <b>Cacchino</b> (11389955), <b>-Materasso-</b> (7313267), <b>arezzowave</b> (11613695), <b>trigrottro</b> (10193531), <b>Manny_Ray-BSK</b> (6506224), <b>xin</b> [old 3D Logo], Federation <b>"L'Antica Osteria da Ciccio"</b> (91634), Federation <b>"DAC - Crick &amp; Croack"</b> (37817)
-                <br/><br/>
               </p>
-              <h3 class="legend-like"><?= localize("Translated by"); ?>:</h3>
+              <h3><?= localize("Translated by"); ?>:</h3>
               <p>
                 <?= localize("TRANSLATED_BY"); ?>
-                <br/><br/>
               </p>
-              <h3 class="legend-like"><?= localize("Nerd thanks"); ?>:</h3>
+              <h3><?= localize("Nerd thanks"); ?>:</h3>
               <p>
                 <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's team</a>,
                 <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
@@ -600,7 +602,6 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 <a href="http://github.com/flot/flot">flot/flot</a>,
                 <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>,
                 <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
-                <br/><br/>
               </p>
             </div>
             
@@ -611,9 +612,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </div> <!-- First Row End -->
       
       <!-- Help Modal Start -->
-      <div class='modal hide fade' id='helpModal'>
+      <div class='modal hide' id='helpModal'>
         <div class='modal-header'>
-          <a class='close' data-dismiss='modal' href='#'>&times;</a>
+          <button type='button' class='close' data-dismiss='modal'>&times;</button>
           <h3><?= localize("Help") ?></h3>
         </div>
         <div class="modal-body">
@@ -643,7 +644,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           </div>
         </div>
         -->
-        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA">Stamin.IA! @ github</a></p>
+        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA"><i class="icon-github"></i> Stamin.IA! @ github</a></p>
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
