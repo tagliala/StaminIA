@@ -218,12 +218,6 @@ div.form-actions .btn {
   margin-bottom : 5px;
 }
 
-abbr {
-  border-bottom: 1px dotted;
-  text-decoration: none;
-  cursor : help;
-}
-
 .navbar li.hide {
   display : none;
 }
@@ -437,4 +431,9 @@ p.minutes {
   background-color: #e7e7e7;
   opacity: 0.80;
   filter: alpha(opacity=80);
+}
+
+#tabCredits > p,
+#tabCredits > blockquote {
+  margin-bottom: 18px;
 }
