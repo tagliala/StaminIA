@@ -614,7 +614,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       <!-- Help Modal Start -->
       <div class='modal hide' id='helpModal'>
         <div class='modal-header'>
-          <button type='button' class='close' data-dismiss='modal' href='#'>&times;</button>
+          <button type='button' class='close' data-dismiss='modal'>&times;</button>
           <h3><?= localize("Help") ?></h3>
         </div>
         <div class="modal-body">
@@ -644,7 +644,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           </div>
         </div>
         -->
-        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA">Stamin.IA! @ github</a></p>
+        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA"><i class="icon-github"></i> Stamin.IA! @ github</a></p>
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
