@@ -64,7 +64,7 @@ flot is licensed under the MIT License
 
 PHT is licensed under the PHP License, version 3.0
 
-Fontawesome is licensed under CC BY 3.0 License
+Font Awesome is licensed under CC BY 3.0 License
 
 This product includes PHP, freely available from <http://www.php.net/>
 
