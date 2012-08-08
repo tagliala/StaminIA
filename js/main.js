@@ -27,12 +27,14 @@
       Scoring: 5
     },
     PLOT_OPTIONS: {
+      shadowSize: 0,
       lines: {
         show: true,
-        lineWidth: 3
+        lineWidth: 2,
+        steps: false
       },
       points: {
-        show: true,
+        show: false,
         radius: 3
       },
       xaxis: {
@@ -41,23 +43,17 @@
       },
       yaxis: {
         color: "#666666",
-        tickDecimals: 2
+        tickFormatter: function(val, axis) {
+          return val.toFixed(2);
+        }
       },
       grid: {
-        backgroundColor: "#FFFDF6",
-        color: "#CCCCCC",
-        borderColor: "#999999",
+        backgroundColor: null,
+        color: null,
+        borderWidth: 2,
+        borderColor: "#AAAAAA",
         hoverable: true,
-        labelMargin: 15,
-        markings: [
-          {
-            xaxis: {
-              from: 1,
-              to: 46
-            },
-            color: "#FAF8F1"
-          }
-        ]
+        labelMargin: 15
       }
     }
   });
@@ -279,8 +275,12 @@
       if (isChartsEnabled()) {
         plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
         $.extend(true, plot_options, {
+          lines: {
+            fill: true,
+            fillColor: "rgba(0,136,204,0.1)"
+          },
           points: {
-            fillColor: "#08c"
+            fillColor: "#0088CC"
           },
           yaxis: {
             min: Number(result.min * 0.99),
@@ -290,23 +290,31 @@
         document.plot1 = $.plot($('#chartTotal'), [
           {
             data: result.plotDataTotal[0],
-            color: "#08c"
+            color: "#0088CC"
           }
         ], plot_options);
         dataset = [
           {
             data: result.plotDataPartial[0],
-            color: "#9d261d",
+            color: "#BD362F",
             label: Staminia.messages.p1_contrib,
             points: {
-              fillColor: "#9d261d"
+              fillColor: "#BD362F"
+            },
+            lines: {
+              fill: true,
+              fillColor: "rgba(189,54,47,0.1)"
             }
           }, {
             data: result.plotDataPartial[1],
-            color: "#46a546",
+            color: "#51A351",
             label: Staminia.messages.p2_contrib,
             points: {
-              fillColor: "#46a546"
+              fillColor: "#51A351"
+            },
+            lines: {
+              fill: true,
+              fillColor: "rgba(81,163,81,0.10)"
             }
           }
         ];
@@ -327,8 +335,10 @@
       createSubstitutionAlert(result.substituteAt, result.mayNotReplace);
       if (isChartsEnabled()) {
         $("#tabChartsNav").find("a").tab("show");
-        plot_redraw(document.plot1);
-        plot_redraw(document.plot2);
+        setTimeout(function() {
+          plot_redraw(document.plot1);
+          return plot_redraw(document.plot2);
+        }, 500);
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
       }
