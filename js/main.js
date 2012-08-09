@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -222,7 +222,7 @@
       }
     },
     submitHandler: function(form) {
-      var $elem, css_classes, dataset, docViewTop, elemTop, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
+      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
@@ -342,14 +342,7 @@
       } else if (isVerboseModeEnabled()) {
         $("#tabContributionsNav").find("a").tab("show");
       }
-      $elem = $(".nav-tabs");
-      docViewTop = $(window).scrollTop();
-      elemTop = $elem.offset().top;
-      if (docViewTop > elemTop) {
-        $('html, body').animate({
-          scrollTop: elemTop
-        }, 200);
-      }
+      scrollUpToResults();
       $("#calculate").removeClass("disabled");
     },
     highlight: function(element, errorClass, validClass) {
@@ -403,6 +396,18 @@
       s[1] += new Array(prec - s[1].length + 1).join("0");
     }
     return s.join(dec_point);
+  };
+
+  scrollUpToResults = function() {
+    var $elem, docViewTop, elemTop;
+    $elem = $(".nav-tabs");
+    docViewTop = $(window).scrollTop();
+    elemTop = $elem.offset().top;
+    if (docViewTop > elemTop) {
+      return $('html, body').animate({
+        scrollTop: elemTop
+      }, 200);
+    }
   };
 
   stripeTable = function() {
@@ -555,6 +560,7 @@
       }));
       new Staminia.ClippableBehavior($("#staminiaClippy")[0]);
     }
+    scrollUpToResults();
   });
 
   $("#switchPlayers").click(function() {
