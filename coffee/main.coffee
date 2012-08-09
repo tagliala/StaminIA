@@ -316,12 +316,8 @@ $(FORM_ID).validate({
     #  $("#tabDebugNav").show()
     #  #$("#tabDebugNav").find("a").tab "show"
 
-    # Set the view at the right point
-    $elem = $(".nav-tabs")
-    docViewTop = $(window).scrollTop()
-    elemTop = $elem.offset().top
-    if docViewTop > elemTop
-      $('html, body').animate {scrollTop: elemTop}, 200
+    # Scroll up if needed
+    scrollUpToResults()
 
     # Reset button status
     $("#calculate").removeClass "disabled"
@@ -359,6 +355,14 @@ number_format = (number = "", decimals = 0, dec_point = ".", thousands_sep = ","
     s[1] += new Array(prec - s[1].length + 1).join "0"
 
   s.join dec_point
+
+# Set the view at the right point
+scrollUpToResults = ->
+  $elem = $(".nav-tabs")
+  docViewTop = $(window).scrollTop()
+  elemTop = $elem.offset().top
+  if docViewTop > elemTop
+    $('html, body').animate {scrollTop: elemTop}, 200
 
 # Dynamic Table Stripe
 stripeTable = ->
@@ -497,6 +501,9 @@ $("#getLink").on "click", (e) ->
   else
     $("#AlertsContainer").append createAlert "id": "generatedLink", "type": "info", "body": body, "title" : Staminia.messages.copy_link + " " + clippy
     new Staminia.ClippableBehavior($("#staminiaClippy")[0])
+
+  # Scroll up if needed
+  scrollUpToResults()
   return
 
 # Stamin.IA! Switch Players Button
