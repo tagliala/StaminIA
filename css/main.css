@@ -404,7 +404,8 @@ p.minutes {
   }
 }
 
-#chartTotal, #chartPartials {
+#chartTotal,
+#chartPartials {
   height: 250px;
   width: 100% !important;
   margin: 18px 0 9px;
@@ -416,6 +417,8 @@ p.minutes {
 
 #charts .legend table {
   border: 1px solid #cccccc;
+  border-collapse: separate;
+  border-spacing: 2px;
   cursor: default;
 }
 
