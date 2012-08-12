@@ -1,6 +1,10 @@
 Changelog
 =========
 
+12.08.12
+--------
+* Updated jquery
+
 12.08.08
 --------
 * Minimal charts
