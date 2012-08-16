@@ -99,7 +99,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
                       <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
                     </fieldset>
                   </form>
-                  <small class="align-justify"><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                  <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
                 </li>
               </ul>
               <ul class="dropdown-menu hide" id="loggedInDropdown">
@@ -187,7 +187,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
             </div>
 
-            <div id="CHPP_Results" class="align-justify hide shy">
+            <div id="CHPP_Results" class="hide shy">
               <p id="CHPP_Status_Description"></p>
             </div>
 
@@ -553,10 +553,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                   </tbody>
                 </table>
                 <div class="align-center form-actions">
-                  <button type="submit" id="calculate" class="btn btn-primary btn-large"><?= localize("Calculate") ?></button>
-                  <button type="button" id="switchPlayers" class="btn btn-large"><?= localize("Switch players") ?></button>
-                  <button type="button" id="getLink" class="btn btn-large"><?= localize("Get link") ?></button>
-                  <button type="reset" id="resetApp" class="btn btn-large"><?= localize("Reset") ?></button>
+                  <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-large icon-magic"></i> <?= localize("Calculate") ?></button>
+                  <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-large icon-random"></i> <?= localize("Switch players") ?></button>
+                  <button type="button" id="getLink" class="btn btn-large"><i class="icon-large icon-link"></i> <?= localize("Get link") ?></button>
+                  <button type="reset" id="resetApp" class="btn btn-large btn-warning"><i class="icon-large icon-undo"></i> <?= localize("Reset") ?></button>
                 </div>
               </form> <!-- Main Form End -->
             </div>
