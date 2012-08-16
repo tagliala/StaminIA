@@ -187,7 +187,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
             </div>
 
-            <div id="CHPP_Results" class="hide shy">
+            <div id="CHPP_Results" class="hide shy align-left">
               <p id="CHPP_Status_Description"></p>
             </div>
 
