@@ -1,6 +1,10 @@
 Changelog
 =========
 
+12.08.16
+--------
+* Little restyling
+
 12.08.12
 --------
 * Updated jquery
