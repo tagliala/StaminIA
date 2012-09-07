@@ -11,7 +11,7 @@ SECONDHALF = 46
 FULLTIME = 90
 SUBTOTALMINUTES = 88
 
-LOW_STAMINA = 0.46
+LOW_STAMINA = 0.55
 
 CHECKPOINT = 5
 CHECKPOINTS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 ]
@@ -78,25 +78,29 @@ minuteToCheckpoint = (minute) ->
     0
   else
     Math.floor( (minute - 1) / CHECKPOINT ) + 1
- 
+
 getContributionAtMinute = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute
   stamina = (Number) stamina
   startsAtMinute = (Number) startsAtMinute
-  
+
   return 1 if stamina >= 9
-  
+
   currentCheckpoint = minuteToCheckpoint minute
   startsAtCheckpoint = minuteToCheckpoint startsAtMinute
   elapsedCheckpoints = minuteToCheckpoint(minute + startsAtMinute) - startsAtCheckpoint
   
   elapsedMinutesAfterCheckpoint = 0
-  
-  tirednessCoefficient = 0.05
-  tirednessCoefficient = 0.05 * (1 + ((9 - stamina) / 9) / 6.5)  if pressing
-  
-  energy = 1 - (tirednessCoefficient * (elapsedCheckpoints + 1)) - (0.01 * elapsedMinutesAfterCheckpoint) + (0.05 * stamina)
-  rest = Math.max(0.15, 0.05 * stamina)
+
+  engineStamina = stamina - 1
+
+  initialEnergy = 1 + 0.15 + (0.0027 * Math.pow(engineStamina, 2.0184))
+  decay = 1.2897 * Math.exp(-0.096 * engineStamina) / 100
+
+  decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
+
+  energy = initialEnergy - (minute * decay)
+  rest = 0.2
   energy += rest * (1 - (startsAtMinute / 44))  if (startsAtMinute <= 45) and (minute + startsAtMinute > 45)
   Math.min energy, 1
 

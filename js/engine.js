@@ -22,7 +22,7 @@
 
   SUBTOTALMINUTES = 88;
 
-  LOW_STAMINA = 0.46;
+  LOW_STAMINA = 0.55;
 
   CHECKPOINT = 5;
 
@@ -99,7 +99,7 @@
   };
 
   getContributionAtMinute = function(minute, stamina, startsAtMinute, pressing) {
-    var currentCheckpoint, elapsedCheckpoints, elapsedMinutesAfterCheckpoint, energy, rest, startsAtCheckpoint, tirednessCoefficient;
+    var currentCheckpoint, decay, elapsedCheckpoints, elapsedMinutesAfterCheckpoint, energy, engineStamina, initialEnergy, rest, startsAtCheckpoint;
     minute = Number(minute);
     stamina = Number(stamina);
     startsAtMinute = Number(startsAtMinute);
@@ -110,12 +110,14 @@
     startsAtCheckpoint = minuteToCheckpoint(startsAtMinute);
     elapsedCheckpoints = minuteToCheckpoint(minute + startsAtMinute) - startsAtCheckpoint;
     elapsedMinutesAfterCheckpoint = 0;
-    tirednessCoefficient = 0.05;
+    engineStamina = stamina - 1;
+    initialEnergy = 1 + 0.15 + (0.0027 * Math.pow(engineStamina, 2.0184));
+    decay = 1.2897 * Math.exp(-0.096 * engineStamina) / 100;
     if (pressing) {
-      tirednessCoefficient = 0.05 * (1 + ((9 - stamina) / 9) / 6.5);
+      decay = decay * (1 + ((9 - stamina) / 9) / 6.5);
     }
-    energy = 1 - (tirednessCoefficient * (elapsedCheckpoints + 1)) - (0.01 * elapsedMinutesAfterCheckpoint) + (0.05 * stamina);
-    rest = Math.max(0.15, 0.05 * stamina);
+    energy = initialEnergy - (minute * decay);
+    rest = 0.2;
     if ((startsAtMinute <= 45) && (minute + startsAtMinute > 45)) {
       energy += rest * (1 - (startsAtMinute / 44));
     }
