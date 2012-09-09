@@ -1,6 +1,10 @@
 Changelog
 =========
 
+12.09.09
+--------
+* Iframe protection
+
 12.08.16
 --------
 * Little restyling
