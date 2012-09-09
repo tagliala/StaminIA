@@ -119,8 +119,12 @@ Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
 $('.dropdown-menu').find('form').click (e) ->
   e.stopPropagation()
 
+checkIframe = ->
+  top.location = self.location if top.location isnt self.location
+
 # Document.ready
 $ ->
+  checkIframe()
   hasParams = gup("params")?
   fillForm() if hasParams
   stripeTable()
