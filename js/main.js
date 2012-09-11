@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -158,8 +158,15 @@
     return e.stopPropagation();
   });
 
+  checkIframe = function() {
+    if (top.location !== self.location) {
+      return top.location = self.location;
+    }
+  };
+
   $(function() {
     var hasParams;
+    checkIframe();
     hasParams = gup("params") != null;
     if (hasParams) {
       fillForm();
