@@ -164,26 +164,6 @@
     }
   };
 
-  $(function() {
-    var hasParams;
-    checkIframe();
-    hasParams = gup("params") != null;
-    if (hasParams) {
-      fillForm();
-    }
-    stripeTable();
-    if (hasParams && AUTOSTART) {
-      $(FORM_ID).submit();
-    }
-    $("#imgMadeInItaly").tooltip();
-    if (document.startAjax) {
-      return $.ajax({
-        url: "chpp/chpp_retrievedata.php",
-        cache: true
-      });
-    }
-  });
-
   $(FORM_ID).validate({
     ignore: ".ignore",
     errorContainer: "#formErrors",
@@ -1062,5 +1042,25 @@
   Staminia.isPressingEnabled = isPressingEnabled;
 
   Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled;
+
+  $(function() {
+    var hasParams;
+    checkIframe();
+    hasParams = gup("params") != null;
+    if (hasParams) {
+      fillForm();
+    }
+    stripeTable();
+    if (hasParams && AUTOSTART) {
+      $(FORM_ID).submit();
+    }
+    $("#imgMadeInItaly").tooltip();
+    if (document.startAjax) {
+      return $.ajax({
+        url: "chpp/chpp_retrievedata.php",
+        cache: true
+      });
+    }
+  });
 
 }).call(this);

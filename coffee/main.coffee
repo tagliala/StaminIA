@@ -122,16 +122,6 @@ $('.dropdown-menu').find('form').click (e) ->
 checkIframe = ->
   top.location = self.location if top.location isnt self.location
 
-# Document.ready
-$ ->
-  checkIframe()
-  hasParams = gup("params")?
-  fillForm() if hasParams
-  stripeTable()
-  $(FORM_ID).submit() if hasParams and AUTOSTART
-  $("#imgMadeInItaly").tooltip()
-  $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax
-
 $(FORM_ID).validate({
   ignore: ".ignore"
   errorContainer: "#formErrors"
@@ -922,3 +912,13 @@ Staminia.isChartsEnabled = isChartsEnabled
 Staminia.isVerboseModeEnabled = isVerboseModeEnabled
 Staminia.isPressingEnabled = isPressingEnabled
 Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled
+
+# Document.ready
+$ ->
+  checkIframe()
+  hasParams = gup("params")?
+  fillForm() if hasParams
+  stripeTable()
+  $(FORM_ID).submit() if hasParams and AUTOSTART
+  $("#imgMadeInItaly").tooltip()
+  $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax
