@@ -90,10 +90,22 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
 
   # decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
 
-  checkpoint = Math.ceil(minute / 5) * 5
+  # Magic Numbers
+  MINUTES_PER_CHECKPOINT = 5
+  HALF_TIME_CHECKPOINT = 9
 
-  energy = initialEnergy - (checkpoint * decay)
-  energy += rest if (startsAtMinute <= 39) and (minute + startsAtMinute > 45)
+  initialCheckpoint = Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT)
+  checkpoint = Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT)
+  elapsedCheckpoints = checkpoint - initialCheckpoint
+
+  energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
+
+  if (checkpoint <= HALF_TIME_CHECKPOINT)
+    energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
+  else
+    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT - 1)
+    secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * MINUTES_PER_CHECKPOINT * decay) + rest) 
+    energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
   Math.min energy / 100, 1
 
 window.getContribution = getContribution

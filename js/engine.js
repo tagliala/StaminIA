@@ -91,7 +91,7 @@
   });
 
   getContribution = function(minute, stamina, startsAtMinute, pressing) {
-    var checkpoint, coefficients, decay, energy, engineStamina, initialEnergy, rest;
+    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, coefficients, decay, elapsedCheckpoints, energy, engineStamina, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
     minute = Number(minute);
     stamina = Number(stamina);
     startsAtMinute = Number(startsAtMinute);
@@ -103,10 +103,18 @@
     rest = 18 + engineStamina / 5;
     initialEnergy = coefficients[0] + Math.pow(2 * engineStamina, coefficients[1]);
     decay = coefficients[2] - engineStamina / coefficients[3];
-    checkpoint = Math.ceil(minute / 5) * 5;
-    energy = initialEnergy - (checkpoint * decay);
-    if ((startsAtMinute <= 45) && (minute + startsAtMinute > 45)) {
-      energy += rest * (1 - (startsAtMinute / 44));
+    MINUTES_PER_CHECKPOINT = 5;
+    HALF_TIME_CHECKPOINT = 9;
+    initialCheckpoint = Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT);
+    checkpoint = Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT);
+    elapsedCheckpoints = checkpoint - initialCheckpoint;
+    energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
+    if (checkpoint <= HALF_TIME_CHECKPOINT) {
+      energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
+    } else {
+      secondHalfElapsedCheckpoints = checkpoint - HALF_TIME_CHECKPOINT - 1;
+      secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * MINUTES_PER_CHECKPOINT * decay) + rest);
+      energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
     }
     return Math.min(energy / 100, 1);
   };
