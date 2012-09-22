@@ -104,7 +104,7 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
   if (checkpoint < HALF_TIME_CHECKPOINT)
     energy = initialEnergy - (elapsedCheckpoints * decay)
   else
-    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT + 1)
+    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (if initialCheckpoint > 0 then 1 else 0)
     secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest) 
     energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay)
 
