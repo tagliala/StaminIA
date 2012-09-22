@@ -82,30 +82,40 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
 
   engineStamina = stamina
 
-  coefficients = [105.3, 1.15, 1.235, 14.25]
-  rest = 18 + engineStamina / 5
+  # coefficients = [105.3, 1.15, 1.235, 14.25]
+  coefficients = [2.92, 5.14, -0.38, 6.32]
 
-  initialEnergy = coefficients[0] + Math.pow 2 * engineStamina, coefficients[1]
-  decay = coefficients[2] - engineStamina / coefficients[3]
+  initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1]
+  decay = coefficients[2] * engineStamina + coefficients[3]
+  rest = 18.75 + (if engineStamina > 7 then Math.pow(engineStamina - 7, 2) else 0)
 
   # decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
 
   # Magic Numbers
   MINUTES_PER_CHECKPOINT = 5
-  HALF_TIME_CHECKPOINT = 9
+  HALF_TIME_CHECKPOINT = 10
 
-  initialCheckpoint = Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT)
-  checkpoint = Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT)
-  elapsedCheckpoints = checkpoint - initialCheckpoint
+  initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT))
+  checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT))
+  elapsedCheckpoints = checkpoint - initialCheckpoint + (if initialCheckpoint > 0 then 1 else 0)
 
   energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
 
-  if (checkpoint <= HALF_TIME_CHECKPOINT)
-    energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
+  if (checkpoint < HALF_TIME_CHECKPOINT)
+    energy = initialEnergy - (elapsedCheckpoints * decay)
   else
-    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT - 1)
-    secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * MINUTES_PER_CHECKPOINT * decay) + rest) 
-    energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
+    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT + 1)
+    secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest) 
+    energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay)
+
+  if Staminia.CONFIG.DEBUG && false
+    console.log "Initial Checkpoint: " + initialCheckpoint
+    console.log "Current Checkpoint: " + checkpoint
+    console.log "Elapsed Checkpoints: " + elapsedCheckpoints
+    console.log "Initial Energy: " + initialEnergy
+    console.log "Energy: " + energy
+    console.log "Decay: " + decay
+
   Math.min energy / 100, 1
 
 window.getContribution = getContribution

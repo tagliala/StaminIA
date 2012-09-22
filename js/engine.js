@@ -99,22 +99,30 @@
       return 1;
     }
     engineStamina = stamina;
-    coefficients = [105.3, 1.15, 1.235, 14.25];
-    rest = 18 + engineStamina / 5;
-    initialEnergy = coefficients[0] + Math.pow(2 * engineStamina, coefficients[1]);
-    decay = coefficients[2] - engineStamina / coefficients[3];
+    coefficients = [2.92, 5.14, -0.38, 6.32];
+    initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1];
+    decay = coefficients[2] * engineStamina + coefficients[3];
+    rest = 18.75 + (engineStamina > 7 ? Math.pow(engineStamina - 7, 2) : 0);
     MINUTES_PER_CHECKPOINT = 5;
-    HALF_TIME_CHECKPOINT = 9;
-    initialCheckpoint = Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT);
-    checkpoint = Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT);
-    elapsedCheckpoints = checkpoint - initialCheckpoint;
+    HALF_TIME_CHECKPOINT = 10;
+    initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT));
+    checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT));
+    elapsedCheckpoints = checkpoint - initialCheckpoint + (initialCheckpoint > 0 ? 1 : 0);
     energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
-    if (checkpoint <= HALF_TIME_CHECKPOINT) {
-      energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
+    if (checkpoint < HALF_TIME_CHECKPOINT) {
+      energy = initialEnergy - (elapsedCheckpoints * decay);
     } else {
-      secondHalfElapsedCheckpoints = checkpoint - HALF_TIME_CHECKPOINT - 1;
-      secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * MINUTES_PER_CHECKPOINT * decay) + rest);
-      energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
+      secondHalfElapsedCheckpoints = checkpoint - HALF_TIME_CHECKPOINT + 1;
+      secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest);
+      energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay);
+    }
+    if (Staminia.CONFIG.DEBUG && false) {
+      console.log("Initial Checkpoint: " + initialCheckpoint);
+      console.log("Current Checkpoint: " + checkpoint);
+      console.log("Elapsed Checkpoints: " + elapsedCheckpoints);
+      console.log("Initial Energy: " + initialEnergy);
+      console.log("Energy: " + energy);
+      console.log("Decay: " + decay);
     }
     return Math.min(energy / 100, 1);
   };
