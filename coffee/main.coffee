@@ -92,7 +92,7 @@ createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
     else
       title += "#{Staminia.messages.replace} #{Staminia.messages.at_minutes}"
     body = """
-      <p class="minutes">#{result.join ", "}</p>
+      <span class="minutes">#{result.join ", "}</span>
       """
     body += "#{Staminia.messages.may_not_replace}" if mayNotReplace
   else
@@ -156,6 +156,15 @@ $(FORM_ID).validate({
     $("#AlertsContainer").html ""
     result = Staminia.Engine.start()
 
+    if isOnlySecondHalfEnabled() && result.substituteAt.length > 0
+      newSubstitutionsArray = []
+      for minute in result.substituteAt when minute > 45
+        newSubstitutionsArray.push minute
+      if newSubstitutionsArray.length is 0
+        newSubstitutionsArray = [46]
+        bestInFirstHalf = true
+      result.substituteAt = newSubstitutionsArray
+
     # Show warnings
     warnings_list = ""
     if result.player2_stronger_than_player1
@@ -164,6 +173,8 @@ $(FORM_ID).validate({
       warnings_list += "<li>#{Staminia.messages.player1_low_stamina_se(result.player1_low_stamina_se)}</li>"
     if result.player2_low_stamina_se_risk
       warnings_list += "<li>#{Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
+    if bestInFirstHalf
+      warnings_list += "<li>#{Staminia.messages.best_in_first_half}</li>"
     $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
 
     # Render Contributions table
@@ -304,7 +315,6 @@ $(FORM_ID).validate({
     else if isVerboseModeEnabled()
       $("#tabContributionsNav").find("a").tab "show"
 
-
     #if Staminia.CONFIG.DEBUG_STEP
     #  printContributionTable()
     #  $("#tabDebugNav").show()
@@ -410,6 +420,9 @@ disableAdvancedMode =  ->
   $("#{TABLE_ID} tr[class~='simple']").removeClass("hide").show()
   $("#Staminia_Options_Predictions_Type").slideUp()
   return
+
+isOnlySecondHalfEnabled = ->
+  $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass "btn-success"
 
 isChartsEnabled = ->
   $("#Staminia_Options_ChartsButton_Status").hasClass "btn-success"

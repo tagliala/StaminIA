@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -119,7 +119,7 @@
       } else {
         title += "" + Staminia.messages.replace + " " + Staminia.messages.at_minutes;
       }
-      body = "<p class=\"minutes\">" + (result.join(", ")) + "</p>";
+      body = "<span class=\"minutes\">" + (result.join(", ")) + "</span>";
       if (mayNotReplace) {
         body += "" + Staminia.messages.may_not_replace;
       }
@@ -209,11 +209,26 @@
       }
     },
     submitHandler: function(form) {
-      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
+      var bestInFirstHalf, css_classes, dataset, isMax, isMin, minute, minuteObject, newSubstitutionsArray, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list, _i, _len, _ref;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
       result = Staminia.Engine.start();
+      if (isOnlySecondHalfEnabled() && result.substituteAt.length > 0) {
+        newSubstitutionsArray = [];
+        _ref = result.substituteAt;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          minute = _ref[_i];
+          if (minute > 45) {
+            newSubstitutionsArray.push(minute);
+          }
+        }
+        if (newSubstitutionsArray.length === 0) {
+          newSubstitutionsArray = [46];
+          bestInFirstHalf = true;
+        }
+        result.substituteAt = newSubstitutionsArray;
+      }
       warnings_list = "";
       if (result.player2_stronger_than_player1) {
         warnings_list += "<li>" + Staminia.messages.player2_stronger_than_player1 + "</li>";
@@ -223,6 +238,9 @@
       }
       if (result.player2_low_stamina_se_risk) {
         warnings_list += "<li>" + (Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)) + "</li>";
+      }
+      if (bestInFirstHalf) {
+        warnings_list += "<li>" + Staminia.messages.best_in_first_half + "</li>";
       }
       if (warnings_list !== "") {
         $('#AlertsContainer').append(createAlert({
@@ -445,6 +463,10 @@
     $("" + FORM_ID + " *[name*=_Simple_]").removeClass("ignore");
     $("" + TABLE_ID + " tr[class~='simple']").removeClass("hide").show();
     $("#Staminia_Options_Predictions_Type").slideUp();
+  };
+
+  isOnlySecondHalfEnabled = function() {
+    return $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass("btn-success");
   };
 
   isChartsEnabled = function() {
