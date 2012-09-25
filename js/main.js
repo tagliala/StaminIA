@@ -209,7 +209,7 @@
       }
     },
     submitHandler: function(form) {
-      var bestInFirstHalf, css_classes, dataset, isMax, isMin, minute, minuteObject, newSubstitutionsArray, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list, _i, _len, _ref;
+      var bestInFirstHalf, css_classes, dataset, isMax, isMin, max, minute, minuteObject, newSubstitutionsArray, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, val, warnings_list, _i, _j, _k, _len, _ref;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
@@ -224,8 +224,20 @@
           }
         }
         if (newSubstitutionsArray.length === 0) {
-          newSubstitutionsArray = [46];
           bestInFirstHalf = true;
+          max = -1;
+          for (minute = _j = 46; _j <= 89; minute = ++_j) {
+            val = parseFloat(result.minutes[minute].total);
+            if (val >= max) {
+              max = val;
+            }
+          }
+          for (minute = _k = 46; _k <= 89; minute = ++_k) {
+            val = parseFloat(result.minutes[minute].total);
+            if (val === max) {
+              newSubstitutionsArray.push(minute);
+            }
+          }
         }
         result.substituteAt = newSubstitutionsArray;
       }

@@ -108,11 +108,14 @@
     initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT));
     checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT));
     elapsedCheckpoints = checkpoint - initialCheckpoint + (initialCheckpoint > 0 ? 1 : 0);
-    energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay);
     if (checkpoint < HALF_TIME_CHECKPOINT) {
       energy = initialEnergy - (elapsedCheckpoints * decay);
     } else {
-      secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (initialCheckpoint > 0 ? 1 : 0);
+      if (initialCheckpoint < HALF_TIME_CHECKPOINT) {
+        secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (initialCheckpoint > 0 ? 1 : 0);
+      } else {
+        secondHalfElapsedCheckpoints = elapsedCheckpoints;
+      }
       secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest);
       energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay);
     }
@@ -121,6 +124,8 @@
       console.log("Current Checkpoint: " + checkpoint);
       console.log("Elapsed Checkpoints: " + elapsedCheckpoints);
       console.log("Initial Energy: " + initialEnergy);
+      console.log("Second Half Energy: " + secondHalfEnergy);
+      console.log("Second Half Elapsed Checkpoints: " + secondHalfElapsedCheckpoints);
       console.log("Energy: " + energy);
       console.log("Decay: " + decay);
     }

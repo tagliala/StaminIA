@@ -99,12 +99,13 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
   checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT))
   elapsedCheckpoints = checkpoint - initialCheckpoint + (if initialCheckpoint > 0 then 1 else 0)
 
-  energy = initialEnergy - (elapsedCheckpoints * MINUTES_PER_CHECKPOINT * decay)
-
   if (checkpoint < HALF_TIME_CHECKPOINT)
     energy = initialEnergy - (elapsedCheckpoints * decay)
   else
-    secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (if initialCheckpoint > 0 then 1 else 0)
+    if initialCheckpoint < HALF_TIME_CHECKPOINT
+      secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (if initialCheckpoint > 0 then 1 else 0)
+    else
+      secondHalfElapsedCheckpoints = elapsedCheckpoints
     secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest) 
     energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay)
 
@@ -113,6 +114,8 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
     console.log "Current Checkpoint: " + checkpoint
     console.log "Elapsed Checkpoints: " + elapsedCheckpoints
     console.log "Initial Energy: " + initialEnergy
+    console.log "Second Half Energy: " + secondHalfEnergy
+    console.log "Second Half Elapsed Checkpoints: " + secondHalfElapsedCheckpoints
     console.log "Energy: " + energy
     console.log "Decay: " + decay
 
@@ -333,21 +336,20 @@ Staminia.Engine.start = ->
       player2CurrentContribution = getContribution p2_minute, player2Stamina, p1_minute, pressing
       player2TotalContribution += player2CurrentContribution
       player2LowStamina = FULLTIME - p2_minute if player2LowStamina < 0 and player2CurrentContribution < LOW_STAMINA
-
     player2AVGArray[p1_minute] = player2TotalContribution / p2PlayedMinutes
     player1TotalContribution += player1CurrentContribution
     player1AVGArray[p1_minute] = player1TotalContribution / p1PlayedMinutes
     player1LowStamina = p1_minute if player1LowStamina < 0 and player1CurrentContribution < LOW_STAMINA
-    
+
   player1AVGArray[0] = 0
   player1AVGArray[45] = player1AVGArray[44]
   player1TotalContribution = 0
   player2TotalContribution = 0
-  
+
   max = -Infinity
   min = +Infinity
   totalContributionArray = []
-  
+
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
     p1PlayedMinutes = minute - 1
     --p1PlayedMinutes if minute > HALFTIME

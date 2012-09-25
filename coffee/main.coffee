@@ -161,8 +161,15 @@ $(FORM_ID).validate({
       for minute in result.substituteAt when minute > 45
         newSubstitutionsArray.push minute
       if newSubstitutionsArray.length is 0
-        newSubstitutionsArray = [46]
         bestInFirstHalf = true
+        # Recalculating max
+        max = -1
+        for minute in [46..89]
+          val = parseFloat(result.minutes[minute].total)
+          max = val if val >= max
+        for minute in [46..89]
+          val = parseFloat(result.minutes[minute].total)
+          newSubstitutionsArray.push minute if val is max
       result.substituteAt = newSubstitutionsArray
 
     # Show warnings
