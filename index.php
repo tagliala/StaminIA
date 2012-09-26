@@ -625,7 +625,6 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         </div>
         <div class="modal-body">
           <?= localize("LONG_HELP") ?>
-          <p><br/><?php echo sprintf(localize("Check %s if you need an estimation of stamina sub-levels."),"<a target=\"_blank\" href=\"http://www.nrgjack.altervista.org/wordpress/2008/07/31/percentuale-resistenza/\">Percentuale Resistenza (S43)</a>"); ?></p>
         </div>
         <div class="modal-footer">
           <a href="#" class="btn" data-dismiss="modal"><?= localize("Close") ?></a>
