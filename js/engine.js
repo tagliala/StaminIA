@@ -261,11 +261,13 @@
   };
 
   Staminia.Engine.start = function() {
-    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotDataPartial, plotDataTotal, plotIndex, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _n, _ref;
+    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotDataPartial, plotDataTotal, plotIndex, pressing, secondHalfMax, secondHalfMin, substituteAt, substituteAtSecondHalf, totalContributionArray, _i, _j, _k, _l, _m, _n, _o, _ref, _ref1;
     this.result = {
       minutes: [],
       substituteAt: [],
-      mayNotReplace: false
+      substituteAtSecondHalf: [],
+      mayNotReplace: false,
+      bestInFirstHalf: false
     };
     formReference = $(Staminia.CONFIG.FORM_ID)[0];
     if (Staminia.isAdvancedModeEnabled()) {
@@ -340,6 +342,8 @@
     player2TotalContribution = 0;
     max = -Infinity;
     min = +Infinity;
+    secondHalfMax = -Infinity;
+    secondHalfMin = +Infinity;
     totalContributionArray = [];
     for (minute = _k = KICKOFF; KICKOFF <= FULLTIME ? _k <= FULLTIME : _k >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_k : --_k) {
       if (!(minute !== HALFTIME)) {
@@ -362,12 +366,23 @@
       if (totalContributionArray[minute] < min) {
         min = totalContributionArray[minute];
       }
+      if (minute > HALFTIME && totalContributionArray[minute] > secondHalfMax) {
+        secondHalfMax = totalContributionArray[minute];
+      }
+      if (minute > HALFTIME && totalContributionArray[minute] < secondHalfMin) {
+        secondHalfMin = totalContributionArray[minute];
+      }
     }
     if (max === min) {
       min = -1;
     }
+    if (secondHalfMax === secondHalfMin) {
+      secondHalfMin = -1;
+    }
     this.result.max = Staminia.number_format(max, 2);
     this.result.min = Staminia.number_format(min, 2);
+    this.result.secondHalfMax = Staminia.number_format(secondHalfMax, 2);
+    this.result.secondHalfMin = Staminia.number_format(secondHalfMin, 2);
     if (Staminia.isVerboseModeEnabled()) {
       for (minute = _l = KICKOFF; KICKOFF <= FULLTIME ? _l <= FULLTIME : _l >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_l : --_l) {
         if (!(minute !== HALFTIME)) {
@@ -411,6 +426,16 @@
         }
       }
     }
+    substituteAtSecondHalf = [];
+    for (minute = _n = _ref1 = HALFTIME + 1; _ref1 <= FULLTIME ? _n <= FULLTIME : _n >= FULLTIME; minute = _ref1 <= FULLTIME ? ++_n : --_n) {
+      if (totalContributionArray[minute] === secondHalfMax) {
+        if (minute === FULLTIME) {
+          mayNotReplace = true;
+        } else {
+          substituteAtSecondHalf.push(minute);
+        }
+      }
+    }
     if (Staminia.isChartsEnabled()) {
       plotDataTotal = [];
       plotDataPartial = [];
@@ -418,7 +443,7 @@
       plotDataPartial[0] = [];
       plotDataPartial[1] = [];
       plotIndex = 0;
-      for (minute = _n = KICKOFF; KICKOFF <= FULLTIME ? _n < FULLTIME : _n > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_n : --_n) {
+      for (minute = _o = KICKOFF; KICKOFF <= FULLTIME ? _o < FULLTIME : _o > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_o : --_o) {
         if (!(minute !== HALFTIME)) {
           continue;
         }
@@ -435,8 +460,11 @@
     this.result.player1_low_stamina_se_risk = p1LowStaminaRisk;
     this.result.player2_low_stamina_se_risk = p2LowStaminaRisk;
     this.result.substituteAt = substituteAt;
+    this.result.substituteAtSecondHalf = substituteAtSecondHalf;
     this.result.mayNotReplace = mayNotReplace;
+    this.result.bestInFirstHalf = secondHalfMax < 100;
     if (Staminia.CONFIG.DEBUG) {
+      console.log(this.result);
       printContributionTable();
       $("#tabDebugNav").show();
     }

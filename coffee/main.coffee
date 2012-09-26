@@ -156,22 +156,6 @@ $(FORM_ID).validate({
     $("#AlertsContainer").html ""
     result = Staminia.Engine.start()
 
-    if isOnlySecondHalfEnabled() && result.substituteAt.length > 0
-      newSubstitutionsArray = []
-      for minute in result.substituteAt when minute > 45
-        newSubstitutionsArray.push minute
-      if newSubstitutionsArray.length is 0
-        bestInFirstHalf = true
-        # Recalculating max
-        max = -1
-        for minute in [46..89]
-          val = parseFloat(result.minutes[minute].total)
-          max = val if val >= max
-        for minute in [46..89]
-          val = parseFloat(result.minutes[minute].total)
-          newSubstitutionsArray.push minute if val is max
-      result.substituteAt = newSubstitutionsArray
-
     # Show warnings
     warnings_list = ""
     if result.player2_stronger_than_player1
@@ -180,7 +164,7 @@ $(FORM_ID).validate({
       warnings_list += "<li>#{Staminia.messages.player1_low_stamina_se(result.player1_low_stamina_se)}</li>"
     if result.player2_low_stamina_se_risk
       warnings_list += "<li>#{Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
-    if bestInFirstHalf
+    if result.bestInFirstHalf and isOnlySecondHalfEnabled()
       warnings_list += "<li>#{Staminia.messages.best_in_first_half}</li>"
     $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
 
@@ -310,7 +294,7 @@ $(FORM_ID).validate({
       document.plot2 = $.plot $('#chartPartials'), dataset, plot_options
       $("#tabChartsNav").show()
 
-    createSubstitutionAlert(result.substituteAt, result.mayNotReplace)
+    createSubstitutionAlert((if isOnlySecondHalfEnabled() then result.substituteAtSecondHalf else result.substituteAt), result.mayNotReplace)
 
     # Show the right tab
     if isChartsEnabled()

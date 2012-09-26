@@ -209,38 +209,11 @@
       }
     },
     submitHandler: function(form) {
-      var bestInFirstHalf, css_classes, dataset, isMax, isMin, max, minute, minuteObject, newSubstitutionsArray, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, val, warnings_list, _i, _j, _k, _len, _ref;
+      var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
       $("#calculate").addClass("disabled");
       resetAndHideTabs();
       $("#AlertsContainer").html("");
       result = Staminia.Engine.start();
-      if (isOnlySecondHalfEnabled() && result.substituteAt.length > 0) {
-        newSubstitutionsArray = [];
-        _ref = result.substituteAt;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          minute = _ref[_i];
-          if (minute > 45) {
-            newSubstitutionsArray.push(minute);
-          }
-        }
-        if (newSubstitutionsArray.length === 0) {
-          bestInFirstHalf = true;
-          max = -1;
-          for (minute = _j = 46; _j <= 89; minute = ++_j) {
-            val = parseFloat(result.minutes[minute].total);
-            if (val >= max) {
-              max = val;
-            }
-          }
-          for (minute = _k = 46; _k <= 89; minute = ++_k) {
-            val = parseFloat(result.minutes[minute].total);
-            if (val === max) {
-              newSubstitutionsArray.push(minute);
-            }
-          }
-        }
-        result.substituteAt = newSubstitutionsArray;
-      }
       warnings_list = "";
       if (result.player2_stronger_than_player1) {
         warnings_list += "<li>" + Staminia.messages.player2_stronger_than_player1 + "</li>";
@@ -251,7 +224,7 @@
       if (result.player2_low_stamina_se_risk) {
         warnings_list += "<li>" + (Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)) + "</li>";
       }
-      if (bestInFirstHalf) {
+      if (result.bestInFirstHalf && isOnlySecondHalfEnabled()) {
         warnings_list += "<li>" + Staminia.messages.best_in_first_half + "</li>";
       }
       if (warnings_list !== "") {
@@ -349,7 +322,7 @@
         document.plot2 = $.plot($('#chartPartials'), dataset, plot_options);
         $("#tabChartsNav").show();
       }
-      createSubstitutionAlert(result.substituteAt, result.mayNotReplace);
+      createSubstitutionAlert((isOnlySecondHalfEnabled() ? result.substituteAtSecondHalf : result.substituteAt), result.mayNotReplace);
       if (isChartsEnabled()) {
         $("#tabChartsNav").find("a").tab("show");
         setTimeout(function() {

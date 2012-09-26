@@ -280,7 +280,9 @@ Staminia.Engine.start = ->
   @result =
     minutes: []
     substituteAt: []
+    substituteAtSecondHalf: []
     mayNotReplace: false
+    bestInFirstHalf: false
 
   formReference = $(Staminia.CONFIG.FORM_ID)[0]
   if Staminia.isAdvancedModeEnabled()
@@ -319,7 +321,7 @@ Staminia.Engine.start = ->
   player2TotalContribution = 0
   player1LowStamina = -1
   player2LowStamina = -1
-   
+
   pressing = Staminia.isPressingEnabled()
   player1AVGArray = []
   player2AVGArray = []
@@ -348,6 +350,8 @@ Staminia.Engine.start = ->
 
   max = -Infinity
   min = +Infinity
+  secondHalfMax = -Infinity 
+  secondHalfMin = +Infinity
   totalContributionArray = []
 
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
@@ -360,10 +364,15 @@ Staminia.Engine.start = ->
     totalContributionArray[minute] = (Number) Staminia.number_format totalContributionArray[minute], 2
     max = totalContributionArray[minute] if totalContributionArray[minute] > max
     min = totalContributionArray[minute] if totalContributionArray[minute] < min
+    secondHalfMax = totalContributionArray[minute] if minute > HALFTIME and totalContributionArray[minute] > secondHalfMax
+    secondHalfMin = totalContributionArray[minute] if minute > HALFTIME and totalContributionArray[minute] < secondHalfMin
 
   min = -1 if max is min
+  secondHalfMin = -1 if secondHalfMax is secondHalfMin
   @result.max = Staminia.number_format(max, 2)
   @result.min = Staminia.number_format(min, 2)
+  @result.secondHalfMax = Staminia.number_format(secondHalfMax, 2)
+  @result.secondHalfMin = Staminia.number_format(secondHalfMin, 2)
 
   if Staminia.isVerboseModeEnabled()
     for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
@@ -379,7 +388,7 @@ Staminia.Engine.start = ->
         isMax: (totalContributionArray[minute] is max)
         isMin: (totalContributionArray[minute] is min)
   substituteAt = []
-  
+
   p1LowStaminaRisk = false
   p2LowStaminaRisk = false
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
@@ -390,6 +399,16 @@ Staminia.Engine.start = ->
         substituteAt.push minute
       p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
       p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
+
+  substituteAtSecondHalf = []
+  for minute in [(HALFTIME+1)..FULLTIME]
+    if totalContributionArray[minute] is secondHalfMax
+      if minute is FULLTIME
+        mayNotReplace = true
+      else
+        substituteAtSecondHalf.push minute
+      #p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
+      #p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
 
   if Staminia.isChartsEnabled()
     plotDataTotal = []
@@ -411,9 +430,12 @@ Staminia.Engine.start = ->
   @result.player1_low_stamina_se_risk = p1LowStaminaRisk
   @result.player2_low_stamina_se_risk = p2LowStaminaRisk
   @result.substituteAt = substituteAt
+  @result.substituteAtSecondHalf = substituteAtSecondHalf
   @result.mayNotReplace = mayNotReplace
+  @result.bestInFirstHalf = secondHalfMax < 100
 
   if Staminia.CONFIG.DEBUG
+    console.log @result
     printContributionTable()
     $("#tabDebugNav").show() 
     #$("#tabDebugNav").find("a").tab "show"
