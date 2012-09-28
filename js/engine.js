@@ -132,8 +132,6 @@
     return Math.min(energy / 100, 1);
   };
 
-  window.getContribution = getContribution;
-
   calculateStrength = function(skill, form, stamina, experience, include_stamina) {
     var c_experience, c_form, c_stamina, result, tempHTML;
     skill = Number(skill);
@@ -170,6 +168,9 @@
 
   getPlayerBonus = function(loyalty, motherClubBonus) {
     var playerBonus, tempHTML;
+    if (motherClubBonus) {
+      loyalty = 20;
+    }
     playerBonus = 0;
     if (motherClubBonus) {
       playerBonus += 0.5;

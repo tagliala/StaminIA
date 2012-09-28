@@ -429,14 +429,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <input type="hidden" name="Staminia_Player_1_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="1" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                       <td>
                         <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="2" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                     </tr>

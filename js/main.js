@@ -13,7 +13,7 @@
   $.extend(Staminia.CONFIG, {
     FORM_ID: "#formPlayersInfo",
     TABLE_ID: "#playersInfoTable",
-    DEBUG: true,
+    DEBUG: false,
     DEBUG_STEP: 1,
     AUTOSTART: true,
     PREDICTIONS_ANDREAC: [[0.5036, 0.2310, 0.0, 0.0, 0.0, 0.0], [0.0, 0.3492, 0.1180, 0.0, 0.0, 0.0], [0.0, 0.2514, 0.1590, 0.0, 0.0, 0.0], [0.0, 0.3546, 0.0825, 0.0556, 0.0, 0.0], [0.0, 0.3236, 0.0780, 0.1086, 0.0, 0.0], [0.0, 0.2480, 0.1080, 0.1375, 0.0, 0.0], [0.0, 0.3440, 0.0310, 0.0688, 0.0, 0.0], [0.0, 0.3256, 0.0780, 0.0604, 0.0, 0.0], [0.0, 0.1302, 0.4680, 0.0, 0.1149, 0.0], [0.0, 0.0733, 0.4420, 0.0, 0.1508, 0.0], [0.0, 0.2039, 0.4420, 0.0, 0.0760, 0.0], [0.0, 0.1383, 0.4130, 0.1073, 0.1071, 0.0], [0.0, 0.1314, 0.2180, 0.1848, 0.0669, 0.0], [0.0, 0.0652, 0.1830, 0.2081, 0.0803, 0.0], [0.0, 0.1831, 0.1830, 0.1556, 0.0484, 0.0], [0.0, 0.1341, 0.2760, 0.1350, 0.0671, 0.0], [0.0, 0.0, 0.0, 0.0808, 0.1306, 0.3077], [0.0, 0.0, 0.1950, 0.0550, 0.2189, 0.1778], [0.0, 0.0, 0.1950, 0.0550, 0.2661, 0.1778], [0.0, 0.0, 0.0, 0.0901, 0.1334, 0.2441]],
@@ -501,15 +501,25 @@
 
   checkFormButtonsAppearance = function() {
     $("button[data-checkbox-button]").each(function() {
-      var $status_button, form;
+      var $status_button, form, playerId;
       $status_button = $("#" + ($(this).attr('id')) + "_Status");
       form = $(FORM_ID)[0];
       if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
         $status_button.removeClass("btn-danger").addClass("btn-success");
-        return $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+        $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+        if ($(this).data("motherclubButton") != null) {
+          playerId = $(this).data("motherclubButton");
+          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+        }
       } else {
         $status_button.removeClass("btn-success").addClass("btn-danger");
-        return $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+        $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+        if ($(this).data("motherclubButton") != null) {
+          playerId = $(this).data("motherclubButton");
+          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+        }
       }
     });
     $("button[data-radio-button]").each(function() {
@@ -536,7 +546,7 @@
     } else {
       link += "?";
     }
-    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue().toString().replace(/,/g, "-")));
+    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g, "-")));
     clippy = "&nbsp;<span class=\"clippy\" data-clipboard-text=\"" + link + "\" id=\"staminiaClippy\"></span>";
     body = link;
     if ($("#generatedLinkBody").length) {
@@ -559,12 +569,17 @@
 
   $("#switchPlayers").click(function() {
     $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
-      var form, p1Value, p2Field;
+      var $p2Field, $this, form, p1Disabled, p1Value, p2Field;
       form = $(FORM_ID)[0];
       p2Field = form[this.name.replace("_1", "_2")];
+      $this = $(this);
+      $p2Field = $(p2Field);
       p1Value = this.value;
-      this.value = p2Field.value;
-      return p2Field.value = p1Value;
+      p1Disabled = $this.attr("disabled") != null ? "disabled" : null;
+      $this.val($p2Field.val());
+      $this.attr("disabled", $p2Field.attr("disabled") != null ? "disabled" : null);
+      $p2Field.val(p1Value);
+      return $p2Field.attr("disabled", p1Disabled);
     });
     checkFormButtonsAppearance();
     $('.control-group').removeClass("error");
@@ -576,17 +591,27 @@
   });
 
   $("button[data-checkbox-button]").on("click", function(e) {
-    var $status_button, form;
+    var $status_button, form, playerId;
     form = $(FORM_ID)[0];
     $status_button = $("#" + ($(this).attr('id')) + "_Status");
     if (!$status_button.hasClass("btn-success")) {
       form[$(this).data("linkedTo")].value = true;
       $status_button.removeClass("btn-danger").addClass("btn-success");
       $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+      if ($(this).data("motherclubButton") != null) {
+        playerId = $(this).data("motherclubButton");
+        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+      }
     } else {
       form[$(this).data("linkedTo")].value = false;
       $status_button.removeClass("btn-success").addClass("btn-danger");
       $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+      if ($(this).data("motherclubButton") != null) {
+        playerId = $(this).data("motherclubButton");
+        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+      }
     }
   });
 

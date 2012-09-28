@@ -121,8 +121,6 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
 
   Math.min energy / 100, 1
 
-window.getContribution = getContribution
-
 calculateStrength = (skill, form, stamina, experience, include_stamina) ->
   skill = (Number) skill
   form = Math.max(0.5, (Number) form)
@@ -163,6 +161,7 @@ validateSkill = (skill, type) ->
     parsedSkill
 
 getPlayerBonus = (loyalty, motherClubBonus) ->
+  loyalty = 20 if motherClubBonus
   playerBonus = 0
   playerBonus += 0.5  if motherClubBonus
   playerBonus += Math.max(0, loyalty - 1) / 19
