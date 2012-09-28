@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -119,7 +119,7 @@
       } else {
         title += "" + Staminia.messages.replace + " " + Staminia.messages.at_minutes;
       }
-      body = "<p class=\"minutes\">" + (result.join(", ")) + "</p>";
+      body = "<span class=\"minutes\">" + (result.join(", ")) + "</span>";
       if (mayNotReplace) {
         body += "" + Staminia.messages.may_not_replace;
       }
@@ -224,6 +224,9 @@
       if (result.player2_low_stamina_se_risk) {
         warnings_list += "<li>" + (Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)) + "</li>";
       }
+      if (result.bestInFirstHalf && isOnlySecondHalfEnabled()) {
+        warnings_list += "<li>" + Staminia.messages.best_in_first_half + "</li>";
+      }
       if (warnings_list !== "") {
         $('#AlertsContainer').append(createAlert({
           "id": "formWarnings",
@@ -319,7 +322,7 @@
         document.plot2 = $.plot($('#chartPartials'), dataset, plot_options);
         $("#tabChartsNav").show();
       }
-      createSubstitutionAlert(result.substituteAt, result.mayNotReplace);
+      createSubstitutionAlert((isOnlySecondHalfEnabled() ? result.substituteAtSecondHalf : result.substituteAt), result.mayNotReplace);
       if (isChartsEnabled()) {
         $("#tabChartsNav").find("a").tab("show");
         setTimeout(function() {
@@ -447,6 +450,10 @@
     $("#Staminia_Options_Predictions_Type").slideUp();
   };
 
+  isOnlySecondHalfEnabled = function() {
+    return $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass("btn-success");
+  };
+
   isChartsEnabled = function() {
     return $("#Staminia_Options_ChartsButton_Status").hasClass("btn-success");
   };
@@ -494,15 +501,25 @@
 
   checkFormButtonsAppearance = function() {
     $("button[data-checkbox-button]").each(function() {
-      var $status_button, form;
+      var $status_button, form, playerId;
       $status_button = $("#" + ($(this).attr('id')) + "_Status");
       form = $(FORM_ID)[0];
       if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
         $status_button.removeClass("btn-danger").addClass("btn-success");
-        return $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+        $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+        if ($(this).data("motherclubButton") != null) {
+          playerId = $(this).data("motherclubButton");
+          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+        }
       } else {
         $status_button.removeClass("btn-success").addClass("btn-danger");
-        return $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+        $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+        if ($(this).data("motherclubButton") != null) {
+          playerId = $(this).data("motherclubButton");
+          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+        }
       }
     });
     $("button[data-radio-button]").each(function() {
@@ -529,7 +546,7 @@
     } else {
       link += "?";
     }
-    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue().toString().replace(/,/g, "-")));
+    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g, "-")));
     clippy = "&nbsp;<span class=\"clippy\" data-clipboard-text=\"" + link + "\" id=\"staminiaClippy\"></span>";
     body = link;
     if ($("#generatedLinkBody").length) {
@@ -552,12 +569,17 @@
 
   $("#switchPlayers").click(function() {
     $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
-      var form, p1Value, p2Field;
+      var $p2Field, $this, form, p1Disabled, p1Value, p2Field;
       form = $(FORM_ID)[0];
       p2Field = form[this.name.replace("_1", "_2")];
+      $this = $(this);
+      $p2Field = $(p2Field);
       p1Value = this.value;
-      this.value = p2Field.value;
-      return p2Field.value = p1Value;
+      p1Disabled = $this.attr("disabled") != null ? "disabled" : null;
+      $this.val($p2Field.val());
+      $this.attr("disabled", $p2Field.attr("disabled") != null ? "disabled" : null);
+      $p2Field.val(p1Value);
+      return $p2Field.attr("disabled", p1Disabled);
     });
     checkFormButtonsAppearance();
     $('.control-group').removeClass("error");
@@ -569,17 +591,27 @@
   });
 
   $("button[data-checkbox-button]").on("click", function(e) {
-    var $status_button, form;
+    var $status_button, form, playerId;
     form = $(FORM_ID)[0];
     $status_button = $("#" + ($(this).attr('id')) + "_Status");
     if (!$status_button.hasClass("btn-success")) {
       form[$(this).data("linkedTo")].value = true;
       $status_button.removeClass("btn-danger").addClass("btn-success");
       $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
+      if ($(this).data("motherclubButton") != null) {
+        playerId = $(this).data("motherclubButton");
+        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
+      }
     } else {
       form[$(this).data("linkedTo")].value = false;
       $status_button.removeClass("btn-success").addClass("btn-danger");
       $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
+      if ($(this).data("motherclubButton") != null) {
+        playerId = $(this).data("motherclubButton");
+        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
+      }
     }
   });
 

@@ -150,23 +150,28 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           <div class="staminia-button-panel align-center">
             <h4><?= localize("General settings") ?></h4>
             <div class="btn-group btn-checkbox">
+              <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
+              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
+            </div>
+            <div></div>
+            <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span><?= localize("Show charts") ?></span></button>
+              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span><?= localize("Show contributions table") ?></span></button>
+              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span><?= localize("Pressing") ?></span></button>
+              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span><?= localize("Advanced strength calculation") ?></span></button>
+              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
             </div>
           </div> <!-- Staminia Main Options End -->
 
@@ -225,6 +230,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <!-- Main Form Start -->
 
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="staminiaForm">
+                <input type="hidden" name="Staminia_Options_OnlySecondHalf" value="true"/>
                 <input type="hidden" name="Staminia_Options_Charts" value="true"/>
                 <input type="hidden" name="Staminia_Options_VerboseMode" value="true"/>
                 <input type="hidden" name="Staminia_Options_Pressing" value="false"/>
@@ -423,14 +429,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <input type="hidden" name="Staminia_Player_1_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="1" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                       <td>
                         <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="2" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -619,7 +625,6 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         </div>
         <div class="modal-body">
           <?= localize("LONG_HELP") ?>
-          <p><br/><?php echo sprintf(localize("Check %s if you need an estimation of stamina sub-levels."),"<a target=\"_blank\" href=\"http://www.nrgjack.altervista.org/wordpress/2008/07/31/percentuale-resistenza/\">Percentuale Resistenza (S43)</a>"); ?></p>
         </div>
         <div class="modal-footer">
           <a href="#" class="btn" data-dismiss="modal"><?= localize("Close") ?></a>
