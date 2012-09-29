@@ -463,7 +463,7 @@
     this.result.substituteAt = substituteAt;
     this.result.substituteAtSecondHalf = substituteAtSecondHalf;
     this.result.mayNotReplace = mayNotReplace;
-    this.result.bestInFirstHalf = secondHalfMax < 100;
+    this.result.bestInFirstHalf = secondHalfMax !== max;
     if (Staminia.CONFIG.DEBUG) {
       console.log(this.result);
       printContributionTable();

@@ -1,4 +1,18 @@
 <?php
+// application root
+define('APP_ROOT', '');
+
+// CHPP application ID
+// Leave it empty if your application is not CHPP certified
+define('CHPP_APP_ID', '');
+
+// Facebook Admins IDs array
+// Leave it empty if you don't need facebook integration
+define('FB_ADMINS', '');
+
+// github repository
+define('GH_REPO', 'tagliala/StaminIA');
+
 // google analytics' profile ID
 define('GA_ID', 'UA-XXXXX-X');
 ?>
