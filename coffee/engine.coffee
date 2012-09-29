@@ -431,7 +431,7 @@ Staminia.Engine.start = ->
   @result.substituteAt = substituteAt
   @result.substituteAtSecondHalf = substituteAtSecondHalf
   @result.mayNotReplace = mayNotReplace
-  @result.bestInFirstHalf = secondHalfMax < 100
+  @result.bestInFirstHalf = secondHalfMax isnt max
 
   if Staminia.CONFIG.DEBUG
     console.log @result

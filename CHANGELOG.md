@@ -1,6 +1,15 @@
 Changelog
 =========
 
+12.09.29
+--------
+* New engine
+* New logo
+* Minimal footer
+* Fixed IE Bug
+* Fixed loyalty bug when mother club bonus was enabled
+* Fixed text overflow bug in options buttons
+
 12.09.09
 --------
 * Iframe protection

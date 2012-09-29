@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.09.09" ?>
+<?php $staminia_version = "12.09.29" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -53,6 +53,16 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="keywords" content="Stamin.IA!, CHPP, stamina tool, hattrick, substitutions tool, substitutions"/>
+
+    <?php if (FB_ADMINS != "") { ?>
+      <meta property="fb:admins" content="<?= FB_ADMINS ?>"/>
+      <meta property="og:title" content="Stamin.IA!"/>
+      <meta property="og:description" content="<?php echo localize("SUBTITLE"); ?>"/>
+      <meta property="og:type" content="game"/>
+      <meta property="og:image" content="<?= APP_ROOT ?>img/big_logo.png"/>
+      <meta property="og:url" content="<?= APP_ROOT ?>"/>
+      <meta property="og:site_name" content="Lizardopoli"/>
+    <?php } ?>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -72,6 +82,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   </head>
 <?php flush(); ?>
   <body>
+  <div id="fb-root"></div>
 
   <!-- Navbar
     ================================================== -->
@@ -85,29 +96,31 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
           </a>
           <div class="brand"><i id="staminia-logo"></i><span id="staminia-brand" class="hidden-phone">Stamin.IA!</span></div>
           <ul class="nav pull-right">
-            <li class="dropdown" id="dropdownLogin">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
-                <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu" id="loginDropdown">
-                <li>
-                  <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
-                    <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
-                    <fieldset>
-                      <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
-                      <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
-                    </fieldset>
-                  </form>
-                  <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
-                </li>
-              </ul>
-              <ul class="dropdown-menu hide" id="loggedInDropdown">
-                <li>
-                  <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
-                </li>
-              </ul>
-            </li>
+            <?php if (CHPP_APP_ID != "") { ?>
+              <li class="dropdown" id="dropdownLogin">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
+                  <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" id="loginDropdown">
+                  <li>
+                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                      <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
+                      <fieldset>
+                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                        <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
+                      </fieldset>
+                    </form>
+                    <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                  </li>
+                </ul>
+                <ul class="dropdown-menu hide" id="loggedInDropdown">
+                  <li>
+                    <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
+                  </li>
+                </ul>
+              </li>
+            <?php } ?>
             <li class="dropdown" id="dropdownLanguages">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLanguages">
                 <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
@@ -634,22 +647,15 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       <hr/>
       
       <!-- Footer Start -->
-      <footer class="shy">
-      <!--
-        <div class="row-fluid">
-          <div class="span6">
-              <b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small><br/>
-              <img id="imgMadeInItaly" src="img/transparent.gif" alt="Made In Italy" title="<?php echo $italianFacts[rand(0,sizeof($italianFacts)-1)]; ?>" height="15" width="80" />
-          </div>
-          <div class="span3">
-            <a href="http://www.hattrick.org" target="_blank"><img id="imgCHPPLogo" title="Certified Hattrick Product Provider" src="img/transparent.gif" width="87" height="50"/></a>
-          </div>
-          <div class="span3">
-            <a href="http://validator.w3.org/check?uri=referer" target="_blank"><img id="imgHTML5" src="img/transparent.gif" alt="Valid HTML 5" title="Valid HTML 5" height="30" width="32" /></a> <img id="imgCSS3" src="img/transparent.gif" alt="CSS 3" title="CSS 3" height="24" width="22" /><br/>
-          </div>
-        </div>
-        -->
-        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA"><i class="icon-github"></i> Stamin.IA! @ github</a></p>
+      <footer>
+        <ul class="unstyled">
+          <li><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
+          <li><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
+          <?php if (CHPP_APP_ID != "") { ?>
+            <li><i class="icon-star"></i> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
+          <?php } ?>
+          <li><i class="icon-github"></i> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
+        </ul>
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->

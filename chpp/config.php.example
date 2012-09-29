@@ -1,6 +1,5 @@
 <?php
-// application root
-define('APP_ROOT', '');
+include '../config.php';
 
 // chpp secret keys, KEEP THESE SECRET!
 define('APP_CONSUMERKEY',    '');
