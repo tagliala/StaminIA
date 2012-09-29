@@ -11,7 +11,7 @@ SECONDHALF = 46
 FULLTIME = 90
 SUBTOTALMINUTES = 88
 
-LOW_STAMINA = 0.46
+LOW_STAMINA = 0.51
 
 CHECKPOINT = 5
 CHECKPOINTS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 ]
@@ -73,32 +73,53 @@ $ ->
   AUTOSTART = Staminia.CONFIG.AUTOSTART
   return
 
-minuteToCheckpoint = (minute) ->
-  if minute is 1
-    0
-  else
-    Math.floor( (minute - 1) / CHECKPOINT ) + 1
- 
-getContributionAtMinute = (minute, stamina, startsAtMinute, pressing) ->
+getContribution = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute
   stamina = (Number) stamina
   startsAtMinute = (Number) startsAtMinute
-  
+
   return 1 if stamina >= 9
-  
-  currentCheckpoint = minuteToCheckpoint minute
-  startsAtCheckpoint = minuteToCheckpoint startsAtMinute
-  elapsedCheckpoints = minuteToCheckpoint(minute + startsAtMinute) - startsAtCheckpoint
-  
-  elapsedMinutesAfterCheckpoint = 0
-  
-  tirednessCoefficient = 0.05
-  tirednessCoefficient = 0.05 * (1 + ((9 - stamina) / 9) / 6.5)  if pressing
-  
-  energy = 1 - (tirednessCoefficient * (elapsedCheckpoints + 1)) - (0.01 * elapsedMinutesAfterCheckpoint) + (0.05 * stamina)
-  rest = Math.max(0.15, 0.05 * stamina)
-  energy += rest * (1 - (startsAtMinute / 44))  if (startsAtMinute <= 45) and (minute + startsAtMinute > 45)
-  Math.min energy, 1
+
+  engineStamina = stamina
+
+  # coefficients = [105.3, 1.15, 1.235, 14.25]
+  coefficients = [2.92, 5.14, -0.38, 6.32]
+
+  initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1]
+  decay = coefficients[2] * engineStamina + coefficients[3]
+  rest = 18.75 + (if engineStamina > 7 then Math.pow(engineStamina - 7, 2) else 0)
+
+  # decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
+
+  # Magic Numbers
+  MINUTES_PER_CHECKPOINT = 5
+  HALF_TIME_CHECKPOINT = 10
+
+  initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT))
+  checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT))
+  elapsedCheckpoints = checkpoint - initialCheckpoint + (if initialCheckpoint > 0 then 1 else 0)
+
+  if (checkpoint < HALF_TIME_CHECKPOINT)
+    energy = initialEnergy - (elapsedCheckpoints * decay)
+  else
+    if initialCheckpoint < HALF_TIME_CHECKPOINT
+      secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (if initialCheckpoint > 0 then 1 else 0)
+    else
+      secondHalfElapsedCheckpoints = elapsedCheckpoints
+    secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest) 
+    energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay)
+
+  if Staminia.CONFIG.DEBUG && false
+    console.log "Initial Checkpoint: " + initialCheckpoint
+    console.log "Current Checkpoint: " + checkpoint
+    console.log "Elapsed Checkpoints: " + elapsedCheckpoints
+    console.log "Initial Energy: " + initialEnergy
+    console.log "Second Half Energy: " + secondHalfEnergy
+    console.log "Second Half Elapsed Checkpoints: " + secondHalfElapsedCheckpoints
+    console.log "Energy: " + energy
+    console.log "Decay: " + decay
+
+  Math.min energy / 100, 1
 
 calculateStrength = (skill, form, stamina, experience, include_stamina) ->
   skill = (Number) skill
@@ -140,6 +161,7 @@ validateSkill = (skill, type) ->
     parsedSkill
 
 getPlayerBonus = (loyalty, motherClubBonus) ->
+  loyalty = 20 if motherClubBonus
   playerBonus = 0
   playerBonus += 0.5  if motherClubBonus
   playerBonus += Math.max(0, loyalty - 1) / 19
@@ -238,7 +260,7 @@ printContributionTable = ->
       addBorder = (BAD_STAMINA_SE[j - 1] is i) if j <= 4
       tempHTML += """
         <td #{if addBorder then borderBadStamina}>
-          #{Staminia.number_format(getContributionAtMinute(i, j, 0, false), 2)}
+          #{Staminia.number_format(getContribution(i, j, 0, false), 2)}
         </td>
         """
       j++
@@ -257,7 +279,9 @@ Staminia.Engine.start = ->
   @result =
     minutes: []
     substituteAt: []
+    substituteAtSecondHalf: []
     mayNotReplace: false
+    bestInFirstHalf: false
 
   formReference = $(Staminia.CONFIG.FORM_ID)[0]
   if Staminia.isAdvancedModeEnabled()
@@ -296,7 +320,7 @@ Staminia.Engine.start = ->
   player2TotalContribution = 0
   player1LowStamina = -1
   player2LowStamina = -1
-   
+
   pressing = Staminia.isPressingEnabled()
   player1AVGArray = []
   player2AVGArray = []
@@ -304,30 +328,31 @@ Staminia.Engine.start = ->
   for p1_minute in [KICKOFF..FULLTIME] when p1_minute isnt HALFTIME
     p1PlayedMinutes = p1_minute
     --p1PlayedMinutes if p1_minute > HALFTIME
-    player1CurrentContribution = getContributionAtMinute p1_minute, player1Stamina, 0, pressing
+    player1CurrentContribution = getContribution p1_minute, player1Stamina, 0, pressing
     player2TotalContribution = 0
 
     for p2_minute in [0...(FULLTIME-p1_minute)] when p2_minute isnt HALFTIME
       p2PlayedMinutes = SUBTOTALMINUTES - p1_minute + 1
       ++p2PlayedMinutes if p1_minute > HALFTIME
-      player2CurrentContribution = getContributionAtMinute p2_minute, player2Stamina, p1_minute, pressing
+      player2CurrentContribution = getContribution p2_minute, player2Stamina, p1_minute, pressing
       player2TotalContribution += player2CurrentContribution
       player2LowStamina = FULLTIME - p2_minute if player2LowStamina < 0 and player2CurrentContribution < LOW_STAMINA
-
     player2AVGArray[p1_minute] = player2TotalContribution / p2PlayedMinutes
     player1TotalContribution += player1CurrentContribution
     player1AVGArray[p1_minute] = player1TotalContribution / p1PlayedMinutes
     player1LowStamina = p1_minute if player1LowStamina < 0 and player1CurrentContribution < LOW_STAMINA
-    
+
   player1AVGArray[0] = 0
   player1AVGArray[45] = player1AVGArray[44]
   player1TotalContribution = 0
   player2TotalContribution = 0
-  
+
   max = -Infinity
   min = +Infinity
+  secondHalfMax = -Infinity 
+  secondHalfMin = +Infinity
   totalContributionArray = []
-  
+
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
     p1PlayedMinutes = minute - 1
     --p1PlayedMinutes if minute > HALFTIME
@@ -338,10 +363,15 @@ Staminia.Engine.start = ->
     totalContributionArray[minute] = (Number) Staminia.number_format totalContributionArray[minute], 2
     max = totalContributionArray[minute] if totalContributionArray[minute] > max
     min = totalContributionArray[minute] if totalContributionArray[minute] < min
+    secondHalfMax = totalContributionArray[minute] if minute > HALFTIME and totalContributionArray[minute] > secondHalfMax
+    secondHalfMin = totalContributionArray[minute] if minute > HALFTIME and totalContributionArray[minute] < secondHalfMin
 
   min = -1 if max is min
+  secondHalfMin = -1 if secondHalfMax is secondHalfMin
   @result.max = Staminia.number_format(max, 2)
   @result.min = Staminia.number_format(min, 2)
+  @result.secondHalfMax = Staminia.number_format(secondHalfMax, 2)
+  @result.secondHalfMin = Staminia.number_format(secondHalfMin, 2)
 
   if Staminia.isVerboseModeEnabled()
     for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
@@ -357,7 +387,7 @@ Staminia.Engine.start = ->
         isMax: (totalContributionArray[minute] is max)
         isMin: (totalContributionArray[minute] is min)
   substituteAt = []
-  
+
   p1LowStaminaRisk = false
   p2LowStaminaRisk = false
   for minute in [KICKOFF..FULLTIME] when minute isnt HALFTIME
@@ -368,6 +398,16 @@ Staminia.Engine.start = ->
         substituteAt.push minute
       p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
       p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
+
+  substituteAtSecondHalf = []
+  for minute in [(HALFTIME+1)..FULLTIME]
+    if totalContributionArray[minute] is secondHalfMax
+      if minute is FULLTIME
+        mayNotReplace = true
+      else
+        substituteAtSecondHalf.push minute
+      #p1LowStaminaRisk = true if player1LowStamina > 0 and minute >= player1LowStamina
+      #p2LowStaminaRisk = true if player2LowStamina > 0 and minute <= player2LowStamina
 
   if Staminia.isChartsEnabled()
     plotDataTotal = []
@@ -389,9 +429,12 @@ Staminia.Engine.start = ->
   @result.player1_low_stamina_se_risk = p1LowStaminaRisk
   @result.player2_low_stamina_se_risk = p2LowStaminaRisk
   @result.substituteAt = substituteAt
+  @result.substituteAtSecondHalf = substituteAtSecondHalf
   @result.mayNotReplace = mayNotReplace
+  @result.bestInFirstHalf = secondHalfMax isnt max
 
   if Staminia.CONFIG.DEBUG
+    console.log @result
     printContributionTable()
     $("#tabDebugNav").show() 
     #$("#tabDebugNav").find("a").tab "show"
@@ -445,7 +488,7 @@ Staminia.Engine.start = ->
       j = 1
 
       while j <= 9
-        avgContributionArray[j] = getContributionAtMinute(i, j, 0, false)
+        avgContributionArray[j] = getContribution(i, j, 0, false)
         totalContributionArray[j] += avgContributionArray[j]
         ++j
       tempHTML += "<tr>"
@@ -495,9 +538,9 @@ Staminia.Engine.start = ->
       j = 1
 
       while j <= 9
-        avgContributionArray[j] = getContributionAtMinute(i, j, 0, false)
+        avgContributionArray[j] = getContribution(i, j, 0, false)
         totalContributionArray[j] += avgContributionArray[j]
-        avgContributionArrayPressing[j] = getContributionAtMinute(i, j, 0, true)
+        avgContributionArrayPressing[j] = getContribution(i, j, 0, true)
         totalContributionArrayPressing[j] += avgContributionArrayPressing[j]
         ++j
       unless i % DEBUG_STEP
@@ -519,8 +562,8 @@ Staminia.Engine.start = ->
     
     for i of CHECKPOINTS
       checkpoint = CHECKPOINTS[i]
-      player1CurrentContribution = getContributionAtMinute(checkpoint, player1Stamina, 0, true)
-      player2CurrentContribution = getContributionAtMinute(checkpoint, player2Stamina, 0, true)
+      player1CurrentContribution = getContribution(checkpoint, player1Stamina, 0, true)
+      player2CurrentContribution = getContribution(checkpoint, player2Stamina, 0, true)
       player1TotalContribution += player1CurrentContribution
       player2TotalContribution += player2CurrentContribution
       player1AVGArrayPressing[i] = player1TotalContribution / (parseInt(i) + 1)
@@ -534,8 +577,8 @@ Staminia.Engine.start = ->
         checkpoint = CHECKPOINTS[i]
         tempHTML += "<tr>"
         tempHTML += "<th>" + checkpoint + "</th>"
-        tempHTML += "<td>" + number_format(getContributionAtMinute(checkpoint, player1Stamina, 0, false) * player1StrengthStaminaIndependent) + "</td>"
-        tempHTML += "<td>" + number_format(getContributionAtMinute(checkpoint, player2Stamina, 0, false) * player2StrengthStaminaIndependent) + "</td>"
+        tempHTML += "<td>" + number_format(getContribution(checkpoint, player1Stamina, 0, false) * player1StrengthStaminaIndependent) + "</td>"
+        tempHTML += "<td>" + number_format(getContribution(checkpoint, player2Stamina, 0, false) * player2StrengthStaminaIndependent) + "</td>"
         tempHTML += "</tr>"
         tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
       tempHTML += "</table><br/>"

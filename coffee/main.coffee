@@ -92,7 +92,7 @@ createSubstitutionAlert = (substituteAtArray, mayNotReplace) ->
     else
       title += "#{Staminia.messages.replace} #{Staminia.messages.at_minutes}"
     body = """
-      <p class="minutes">#{result.join ", "}</p>
+      <span class="minutes">#{result.join ", "}</span>
       """
     body += "#{Staminia.messages.may_not_replace}" if mayNotReplace
   else
@@ -121,16 +121,6 @@ $('.dropdown-menu').find('form').click (e) ->
 
 checkIframe = ->
   top.location = self.location if top.location isnt self.location
-
-# Document.ready
-$ ->
-  checkIframe()
-  hasParams = gup("params")?
-  fillForm() if hasParams
-  stripeTable()
-  $(FORM_ID).submit() if hasParams and AUTOSTART
-  $("#imgMadeInItaly").tooltip()
-  $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax
 
 $(FORM_ID).validate({
   ignore: ".ignore"
@@ -174,6 +164,8 @@ $(FORM_ID).validate({
       warnings_list += "<li>#{Staminia.messages.player1_low_stamina_se(result.player1_low_stamina_se)}</li>"
     if result.player2_low_stamina_se_risk
       warnings_list += "<li>#{Staminia.messages.player2_low_stamina_se(result.player2_low_stamina_se)}</li>"
+    if result.bestInFirstHalf and isOnlySecondHalfEnabled()
+      warnings_list += "<li>#{Staminia.messages.best_in_first_half}</li>"
     $('#AlertsContainer').append createAlert "id": "formWarnings", "type": "warning", "title" : Staminia.messages.status_warning, "body": "<ul>#{warnings_list}</ul>" if warnings_list isnt ""
 
     # Render Contributions table
@@ -302,7 +294,7 @@ $(FORM_ID).validate({
       document.plot2 = $.plot $('#chartPartials'), dataset, plot_options
       $("#tabChartsNav").show()
 
-    createSubstitutionAlert(result.substituteAt, result.mayNotReplace)
+    createSubstitutionAlert((if isOnlySecondHalfEnabled() then result.substituteAtSecondHalf else result.substituteAt), result.mayNotReplace)
 
     # Show the right tab
     if isChartsEnabled()
@@ -313,7 +305,6 @@ $(FORM_ID).validate({
       , 500
     else if isVerboseModeEnabled()
       $("#tabContributionsNav").find("a").tab "show"
-
 
     #if Staminia.CONFIG.DEBUG_STEP
     #  printContributionTable()
@@ -421,6 +412,9 @@ disableAdvancedMode =  ->
   $("#Staminia_Options_Predictions_Type").slideUp()
   return
 
+isOnlySecondHalfEnabled = ->
+  $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass "btn-success"
+
 isChartsEnabled = ->
   $("#Staminia_Options_ChartsButton_Status").hasClass "btn-success"
 
@@ -465,9 +459,17 @@ checkFormButtonsAppearance = ->
     if (Boolean) form[$(this).data("linkedTo")].value == "true"
       $status_button.removeClass("btn-danger").addClass "btn-success"
       $status_button.find("i").removeClass("icon-remove").addClass "icon-ok"
+      if $(this).data("motherclubButton")?
+        playerId = $(this).data "motherclubButton"
+        $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
+        $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
     else
       $status_button.removeClass("btn-success").addClass "btn-danger"
       $status_button.find("i").removeClass("icon-ok").addClass "icon-remove"
+      if $(this).data("motherclubButton")?
+        playerId = $(this).data "motherclubButton"
+        $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", null
+        $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", null
   $("button[data-radio-button]").each ->
     form = $(FORM_ID)[0]
     if (Boolean) form[$(this).data("linkedTo")].value == "true"
@@ -490,7 +492,7 @@ $("#getLink").on "click", (e) ->
   else
     link +="?"
 
-  link += "params=#{encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue().toString().replace(/,/g,"-"))}"
+  link += "params=#{encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g,"-"))}"
 
   clippy = """
     &nbsp;<span class="clippy" data-clipboard-text="#{link}" id="staminiaClippy"></span>
@@ -515,9 +517,16 @@ $("#switchPlayers").click ->
   $("#{FORM_ID} *[name*=_Player_1_]").each ->
       form = $(FORM_ID)[0]
       p2Field = form[@name.replace("_1","_2")]
+
+      $this = $(this)
+      $p2Field = $(p2Field)
+
       p1Value = @value
-      @value = p2Field.value
-      p2Field.value = p1Value
+      p1Disabled = if $this.attr("disabled")? then "disabled" else null
+      $this.val $p2Field.val()
+      $this.attr "disabled", if $p2Field.attr("disabled")? then "disabled" else null
+      $p2Field.val p1Value
+      $p2Field.attr "disabled", p1Disabled
   checkFormButtonsAppearance()
   $('.control-group').removeClass "error"
   $(FORM_ID).validate().form()
@@ -533,10 +542,18 @@ $("button[data-checkbox-button]").on "click", (e) ->
     form[$(this).data("linkedTo")].value = true
     $status_button.removeClass("btn-danger").addClass "btn-success"
     $status_button.find("i").removeClass("icon-remove").addClass "icon-ok"
+    if $(this).data("motherclubButton")?
+      playerId = $(this).data "motherclubButton"
+      $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
+      $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
   else
     form[$(this).data("linkedTo")].value = false
     $status_button.removeClass("btn-success").addClass "btn-danger"
     $status_button.find("i").removeClass("icon-ok").addClass "icon-remove"
+    if $(this).data("motherclubButton")?
+      playerId = $(this).data "motherclubButton"
+      $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", null
+      $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", null
   return
 
 $("#Staminia_Options_AdvancedModeButton").on "click", (e) ->
@@ -922,3 +939,13 @@ Staminia.isChartsEnabled = isChartsEnabled
 Staminia.isVerboseModeEnabled = isVerboseModeEnabled
 Staminia.isPressingEnabled = isPressingEnabled
 Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled
+
+# Document.ready
+$ ->
+  checkIframe()
+  hasParams = gup("params")?
+  fillForm() if hasParams
+  stripeTable()
+  $(FORM_ID).submit() if hasParams and AUTOSTART
+  $("#imgMadeInItaly").tooltip()
+  $.ajax { url: "chpp/chpp_retrievedata.php", cache: true } if document.startAjax

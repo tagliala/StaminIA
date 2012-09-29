@@ -1,4 +1,5 @@
 Staminia.messages = {
+  best_in_first_half: "Otterrai il massimo contributo pianificando la sostituzione nel primo tempo.",
   player2_stronger_than_player1: "La riserva è più forte del titolare. Prova ad invertire i giocatori.",
   player1_low_stamina_se: Staminia.format("C'è una remota possibilità che il titolare, schierato come difensore o terzino, possa generare un evento speciale negativo dovuto alla resistenza bassa dopo o durante il minuto {0}."),
   player2_low_stamina_se: Staminia.format("C'è una remota possibilità che la riserva, schierata come difensore o terzino, possa generare un evento speciale negativo dovuto alla resistenza bassa se entra in campo prima o durante il minuto {0}."),

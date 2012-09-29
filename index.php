@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.09.09" ?>
+<?php $staminia_version = "12.09.29" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -53,6 +53,16 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="keywords" content="Stamin.IA!, CHPP, stamina tool, hattrick, substitutions tool, substitutions"/>
+
+    <?php if (FB_ADMINS != "") { ?>
+      <meta property="fb:admins" content="<?= FB_ADMINS ?>"/>
+      <meta property="og:title" content="Stamin.IA!"/>
+      <meta property="og:description" content="<?php echo localize("SUBTITLE"); ?>"/>
+      <meta property="og:type" content="game"/>
+      <meta property="og:image" content="<?= APP_ROOT ?>img/big_logo.png"/>
+      <meta property="og:url" content="<?= APP_ROOT ?>"/>
+      <meta property="og:site_name" content="Lizardopoli"/>
+    <?php } ?>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -72,6 +82,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   </head>
 <?php flush(); ?>
   <body>
+  <div id="fb-root"></div>
 
   <!-- Navbar
     ================================================== -->
@@ -85,29 +96,31 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
           </a>
           <div class="brand"><i id="staminia-logo"></i><span id="staminia-brand" class="hidden-phone">Stamin.IA!</span></div>
           <ul class="nav pull-right">
-            <li class="dropdown" id="dropdownLogin">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
-                <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu" id="loginDropdown">
-                <li>
-                  <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
-                    <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
-                    <fieldset>
-                      <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
-                      <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
-                    </fieldset>
-                  </form>
-                  <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
-                </li>
-              </ul>
-              <ul class="dropdown-menu hide" id="loggedInDropdown">
-                <li>
-                  <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
-                </li>
-              </ul>
-            </li>
+            <?php if (CHPP_APP_ID != "") { ?>
+              <li class="dropdown" id="dropdownLogin">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
+                  <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" id="loginDropdown">
+                  <li>
+                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                      <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
+                      <fieldset>
+                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                        <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
+                      </fieldset>
+                    </form>
+                    <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                  </li>
+                </ul>
+                <ul class="dropdown-menu hide" id="loggedInDropdown">
+                  <li>
+                    <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
+                  </li>
+                </ul>
+              </li>
+            <?php } ?>
             <li class="dropdown" id="dropdownLanguages">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLanguages">
                 <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
@@ -150,23 +163,28 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           <div class="staminia-button-panel align-center">
             <h4><?= localize("General settings") ?></h4>
             <div class="btn-group btn-checkbox">
+              <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
+              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
+            </div>
+            <div></div>
+            <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span><?= localize("Show charts") ?></span></button>
+              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span><?= localize("Show contributions table") ?></span></button>
+              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span><?= localize("Pressing") ?></span></button>
+              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span><?= localize("Advanced strength calculation") ?></span></button>
+              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
             </div>
           </div> <!-- Staminia Main Options End -->
 
@@ -225,6 +243,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <!-- Main Form Start -->
 
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="staminiaForm">
+                <input type="hidden" name="Staminia_Options_OnlySecondHalf" value="true"/>
                 <input type="hidden" name="Staminia_Options_Charts" value="true"/>
                 <input type="hidden" name="Staminia_Options_VerboseMode" value="true"/>
                 <input type="hidden" name="Staminia_Options_Pressing" value="false"/>
@@ -423,14 +442,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <input type="hidden" name="Staminia_Player_1_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="1" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                       <td>
                         <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
                         <div class="btn-group btn-checkbox">
                           <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-default-value="false"><i class="icon-heart"></i></button>
+                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="2" data-default-value="false"><i class="icon-heart"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -619,7 +638,6 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         </div>
         <div class="modal-body">
           <?= localize("LONG_HELP") ?>
-          <p><br/><?php echo sprintf(localize("Check %s if you need an estimation of stamina sub-levels."),"<a target=\"_blank\" href=\"http://www.nrgjack.altervista.org/wordpress/2008/07/31/percentuale-resistenza/\">Percentuale Resistenza (S43)</a>"); ?></p>
         </div>
         <div class="modal-footer">
           <a href="#" class="btn" data-dismiss="modal"><?= localize("Close") ?></a>
@@ -629,22 +647,15 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       <hr/>
       
       <!-- Footer Start -->
-      <footer class="shy">
-      <!--
-        <div class="row-fluid">
-          <div class="span6">
-              <b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small><br/>
-              <img id="imgMadeInItaly" src="img/transparent.gif" alt="Made In Italy" title="<?php echo $italianFacts[rand(0,sizeof($italianFacts)-1)]; ?>" height="15" width="80" />
-          </div>
-          <div class="span3">
-            <a href="http://www.hattrick.org" target="_blank"><img id="imgCHPPLogo" title="Certified Hattrick Product Provider" src="img/transparent.gif" width="87" height="50"/></a>
-          </div>
-          <div class="span3">
-            <a href="http://validator.w3.org/check?uri=referer" target="_blank"><img id="imgHTML5" src="img/transparent.gif" alt="Valid HTML 5" title="Valid HTML 5" height="30" width="32" /></a> <img id="imgCSS3" src="img/transparent.gif" alt="CSS 3" title="CSS 3" height="24" width="22" /><br/>
-          </div>
-        </div>
-        -->
-        <p><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225) <small><i>build <?= $staminia_version ?></i></small> | Certified Hattrick Product Provider | <a href="https://github.com/tagliala/StaminIA"><i class="icon-github"></i> Stamin.IA! @ github</a></p>
+      <footer>
+        <ul class="unstyled">
+          <li><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
+          <li><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
+          <?php if (CHPP_APP_ID != "") { ?>
+            <li><i class="icon-star"></i> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
+          <?php } ?>
+          <li><i class="icon-github"></i> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
+        </ul>
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->

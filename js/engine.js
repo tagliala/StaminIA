@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getContributionAtMinute, getPlayerBonus, getSimpleSkill, minuteToCheckpoint, printContributionTable, validateSkill;
+  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getContribution, getPlayerBonus, getSimpleSkill, printContributionTable, validateSkill;
 
   window.Staminia = window.Staminia || {};
 
@@ -22,7 +22,7 @@
 
   SUBTOTALMINUTES = 88;
 
-  LOW_STAMINA = 0.46;
+  LOW_STAMINA = 0.51;
 
   CHECKPOINT = 5;
 
@@ -90,36 +90,46 @@
     AUTOSTART = Staminia.CONFIG.AUTOSTART;
   });
 
-  minuteToCheckpoint = function(minute) {
-    if (minute === 1) {
-      return 0;
-    } else {
-      return Math.floor((minute - 1) / CHECKPOINT) + 1;
-    }
-  };
-
-  getContributionAtMinute = function(minute, stamina, startsAtMinute, pressing) {
-    var currentCheckpoint, elapsedCheckpoints, elapsedMinutesAfterCheckpoint, energy, rest, startsAtCheckpoint, tirednessCoefficient;
+  getContribution = function(minute, stamina, startsAtMinute, pressing) {
+    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, coefficients, decay, elapsedCheckpoints, energy, engineStamina, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
     minute = Number(minute);
     stamina = Number(stamina);
     startsAtMinute = Number(startsAtMinute);
     if (stamina >= 9) {
       return 1;
     }
-    currentCheckpoint = minuteToCheckpoint(minute);
-    startsAtCheckpoint = minuteToCheckpoint(startsAtMinute);
-    elapsedCheckpoints = minuteToCheckpoint(minute + startsAtMinute) - startsAtCheckpoint;
-    elapsedMinutesAfterCheckpoint = 0;
-    tirednessCoefficient = 0.05;
-    if (pressing) {
-      tirednessCoefficient = 0.05 * (1 + ((9 - stamina) / 9) / 6.5);
+    engineStamina = stamina;
+    coefficients = [2.92, 5.14, -0.38, 6.32];
+    initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1];
+    decay = coefficients[2] * engineStamina + coefficients[3];
+    rest = 18.75 + (engineStamina > 7 ? Math.pow(engineStamina - 7, 2) : 0);
+    MINUTES_PER_CHECKPOINT = 5;
+    HALF_TIME_CHECKPOINT = 10;
+    initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT));
+    checkpoint = Math.max(0, Math.ceil((startsAtMinute + minute) / MINUTES_PER_CHECKPOINT));
+    elapsedCheckpoints = checkpoint - initialCheckpoint + (initialCheckpoint > 0 ? 1 : 0);
+    if (checkpoint < HALF_TIME_CHECKPOINT) {
+      energy = initialEnergy - (elapsedCheckpoints * decay);
+    } else {
+      if (initialCheckpoint < HALF_TIME_CHECKPOINT) {
+        secondHalfElapsedCheckpoints = (checkpoint - HALF_TIME_CHECKPOINT) + (initialCheckpoint > 0 ? 1 : 0);
+      } else {
+        secondHalfElapsedCheckpoints = elapsedCheckpoints;
+      }
+      secondHalfEnergy = Math.min(initialEnergy, initialEnergy - ((HALF_TIME_CHECKPOINT - initialCheckpoint) * decay) + rest);
+      energy = secondHalfEnergy - (secondHalfElapsedCheckpoints * decay);
     }
-    energy = 1 - (tirednessCoefficient * (elapsedCheckpoints + 1)) - (0.01 * elapsedMinutesAfterCheckpoint) + (0.05 * stamina);
-    rest = Math.max(0.15, 0.05 * stamina);
-    if ((startsAtMinute <= 45) && (minute + startsAtMinute > 45)) {
-      energy += rest * (1 - (startsAtMinute / 44));
+    if (Staminia.CONFIG.DEBUG && false) {
+      console.log("Initial Checkpoint: " + initialCheckpoint);
+      console.log("Current Checkpoint: " + checkpoint);
+      console.log("Elapsed Checkpoints: " + elapsedCheckpoints);
+      console.log("Initial Energy: " + initialEnergy);
+      console.log("Second Half Energy: " + secondHalfEnergy);
+      console.log("Second Half Elapsed Checkpoints: " + secondHalfElapsedCheckpoints);
+      console.log("Energy: " + energy);
+      console.log("Decay: " + decay);
     }
-    return Math.min(energy, 1);
+    return Math.min(energy / 100, 1);
   };
 
   calculateStrength = function(skill, form, stamina, experience, include_stamina) {
@@ -158,6 +168,9 @@
 
   getPlayerBonus = function(loyalty, motherClubBonus) {
     var playerBonus, tempHTML;
+    if (motherClubBonus) {
+      loyalty = 20;
+    }
     playerBonus = 0;
     if (motherClubBonus) {
       playerBonus += 0.5;
@@ -235,7 +248,7 @@
         if (j <= 4) {
           addBorder = BAD_STAMINA_SE[j - 1] === i;
         }
-        tempHTML += "<td " + (addBorder ? borderBadStamina : void 0) + ">\n  " + (Staminia.number_format(getContributionAtMinute(i, j, 0, false), 2)) + "\n</td>";
+        tempHTML += "<td " + (addBorder ? borderBadStamina : void 0) + ">\n  " + (Staminia.number_format(getContribution(i, j, 0, false), 2)) + "\n</td>";
         j++;
       }
       tempHTML += "</tr>";
@@ -249,11 +262,13 @@
   };
 
   Staminia.Engine.start = function() {
-    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotDataPartial, plotDataTotal, plotIndex, pressing, substituteAt, totalContributionArray, _i, _j, _k, _l, _m, _n, _ref;
+    var formReference, max, mayNotReplace, min, minute, p1LowStaminaRisk, p1PlayedMinutes, p1_minute, p2LowStaminaRisk, p2PlayedMinutes, p2_minute, player1AVGArray, player1CurrentContribution, player1Experience, player1Form, player1LowStamina, player1Skill, player1Stamina, player1Strength, player1StrengthStaminaIndependent, player1TotalContribution, player2AVGArray, player2CurrentContribution, player2Experience, player2Form, player2LowStamina, player2Skill, player2Stamina, player2Strength, player2StrengthStaminaIndependent, player2TotalContribution, plotDataPartial, plotDataTotal, plotIndex, pressing, secondHalfMax, secondHalfMin, substituteAt, substituteAtSecondHalf, totalContributionArray, _i, _j, _k, _l, _m, _n, _o, _ref, _ref1;
     this.result = {
       minutes: [],
       substituteAt: [],
-      mayNotReplace: false
+      substituteAtSecondHalf: [],
+      mayNotReplace: false,
+      bestInFirstHalf: false
     };
     formReference = $(Staminia.CONFIG.FORM_ID)[0];
     if (Staminia.isAdvancedModeEnabled()) {
@@ -299,7 +314,7 @@
       if (p1_minute > HALFTIME) {
         --p1PlayedMinutes;
       }
-      player1CurrentContribution = getContributionAtMinute(p1_minute, player1Stamina, 0, pressing);
+      player1CurrentContribution = getContribution(p1_minute, player1Stamina, 0, pressing);
       player2TotalContribution = 0;
       for (p2_minute = _j = 0, _ref = FULLTIME - p1_minute; 0 <= _ref ? _j < _ref : _j > _ref; p2_minute = 0 <= _ref ? ++_j : --_j) {
         if (!(p2_minute !== HALFTIME)) {
@@ -309,7 +324,7 @@
         if (p1_minute > HALFTIME) {
           ++p2PlayedMinutes;
         }
-        player2CurrentContribution = getContributionAtMinute(p2_minute, player2Stamina, p1_minute, pressing);
+        player2CurrentContribution = getContribution(p2_minute, player2Stamina, p1_minute, pressing);
         player2TotalContribution += player2CurrentContribution;
         if (player2LowStamina < 0 && player2CurrentContribution < LOW_STAMINA) {
           player2LowStamina = FULLTIME - p2_minute;
@@ -328,6 +343,8 @@
     player2TotalContribution = 0;
     max = -Infinity;
     min = +Infinity;
+    secondHalfMax = -Infinity;
+    secondHalfMin = +Infinity;
     totalContributionArray = [];
     for (minute = _k = KICKOFF; KICKOFF <= FULLTIME ? _k <= FULLTIME : _k >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_k : --_k) {
       if (!(minute !== HALFTIME)) {
@@ -350,12 +367,23 @@
       if (totalContributionArray[minute] < min) {
         min = totalContributionArray[minute];
       }
+      if (minute > HALFTIME && totalContributionArray[minute] > secondHalfMax) {
+        secondHalfMax = totalContributionArray[minute];
+      }
+      if (minute > HALFTIME && totalContributionArray[minute] < secondHalfMin) {
+        secondHalfMin = totalContributionArray[minute];
+      }
     }
     if (max === min) {
       min = -1;
     }
+    if (secondHalfMax === secondHalfMin) {
+      secondHalfMin = -1;
+    }
     this.result.max = Staminia.number_format(max, 2);
     this.result.min = Staminia.number_format(min, 2);
+    this.result.secondHalfMax = Staminia.number_format(secondHalfMax, 2);
+    this.result.secondHalfMin = Staminia.number_format(secondHalfMin, 2);
     if (Staminia.isVerboseModeEnabled()) {
       for (minute = _l = KICKOFF; KICKOFF <= FULLTIME ? _l <= FULLTIME : _l >= FULLTIME; minute = KICKOFF <= FULLTIME ? ++_l : --_l) {
         if (!(minute !== HALFTIME)) {
@@ -399,6 +427,16 @@
         }
       }
     }
+    substituteAtSecondHalf = [];
+    for (minute = _n = _ref1 = HALFTIME + 1; _ref1 <= FULLTIME ? _n <= FULLTIME : _n >= FULLTIME; minute = _ref1 <= FULLTIME ? ++_n : --_n) {
+      if (totalContributionArray[minute] === secondHalfMax) {
+        if (minute === FULLTIME) {
+          mayNotReplace = true;
+        } else {
+          substituteAtSecondHalf.push(minute);
+        }
+      }
+    }
     if (Staminia.isChartsEnabled()) {
       plotDataTotal = [];
       plotDataPartial = [];
@@ -406,7 +444,7 @@
       plotDataPartial[0] = [];
       plotDataPartial[1] = [];
       plotIndex = 0;
-      for (minute = _n = KICKOFF; KICKOFF <= FULLTIME ? _n < FULLTIME : _n > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_n : --_n) {
+      for (minute = _o = KICKOFF; KICKOFF <= FULLTIME ? _o < FULLTIME : _o > FULLTIME; minute = KICKOFF <= FULLTIME ? ++_o : --_o) {
         if (!(minute !== HALFTIME)) {
           continue;
         }
@@ -423,8 +461,11 @@
     this.result.player1_low_stamina_se_risk = p1LowStaminaRisk;
     this.result.player2_low_stamina_se_risk = p2LowStaminaRisk;
     this.result.substituteAt = substituteAt;
+    this.result.substituteAtSecondHalf = substituteAtSecondHalf;
     this.result.mayNotReplace = mayNotReplace;
+    this.result.bestInFirstHalf = secondHalfMax !== max;
     if (Staminia.CONFIG.DEBUG) {
+      console.log(this.result);
       printContributionTable();
       $("#tabDebugNav").show();
     }
@@ -468,7 +509,7 @@
         j = 1
   
         while j <= 9
-          avgContributionArray[j] = getContributionAtMinute(i, j, 0, false)
+          avgContributionArray[j] = getContribution(i, j, 0, false)
           totalContributionArray[j] += avgContributionArray[j]
           ++j
         tempHTML += "<tr>"
@@ -518,9 +559,9 @@
         j = 1
   
         while j <= 9
-          avgContributionArray[j] = getContributionAtMinute(i, j, 0, false)
+          avgContributionArray[j] = getContribution(i, j, 0, false)
           totalContributionArray[j] += avgContributionArray[j]
-          avgContributionArrayPressing[j] = getContributionAtMinute(i, j, 0, true)
+          avgContributionArrayPressing[j] = getContribution(i, j, 0, true)
           totalContributionArrayPressing[j] += avgContributionArrayPressing[j]
           ++j
         unless i % DEBUG_STEP
@@ -542,8 +583,8 @@
       
       for i of CHECKPOINTS
         checkpoint = CHECKPOINTS[i]
-        player1CurrentContribution = getContributionAtMinute(checkpoint, player1Stamina, 0, true)
-        player2CurrentContribution = getContributionAtMinute(checkpoint, player2Stamina, 0, true)
+        player1CurrentContribution = getContribution(checkpoint, player1Stamina, 0, true)
+        player2CurrentContribution = getContribution(checkpoint, player2Stamina, 0, true)
         player1TotalContribution += player1CurrentContribution
         player2TotalContribution += player2CurrentContribution
         player1AVGArrayPressing[i] = player1TotalContribution / (parseInt(i) + 1)
@@ -557,8 +598,8 @@
           checkpoint = CHECKPOINTS[i]
           tempHTML += "<tr>"
           tempHTML += "<th>" + checkpoint + "</th>"
-          tempHTML += "<td>" + number_format(getContributionAtMinute(checkpoint, player1Stamina, 0, false) * player1StrengthStaminaIndependent) + "</td>"
-          tempHTML += "<td>" + number_format(getContributionAtMinute(checkpoint, player2Stamina, 0, false) * player2StrengthStaminaIndependent) + "</td>"
+          tempHTML += "<td>" + number_format(getContribution(checkpoint, player1Stamina, 0, false) * player1StrengthStaminaIndependent) + "</td>"
+          tempHTML += "<td>" + number_format(getContribution(checkpoint, player2Stamina, 0, false) * player2StrengthStaminaIndependent) + "</td>"
           tempHTML += "</tr>"
           tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
         tempHTML += "</table><br/>"
