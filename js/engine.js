@@ -90,6 +90,10 @@
     AUTOSTART = Staminia.CONFIG.AUTOSTART;
   });
 
+  Staminia.estimateStaminaSubskills = function(performanceAt90) {
+    return Math.max(Number(performanceAt90 / 10 - 0.9, 9));
+  };
+
   getContribution = function(minute, stamina, startsAtMinute, pressing) {
     var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, coefficients, decay, elapsedCheckpoints, energy, engineStamina, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
     minute = Number(minute);

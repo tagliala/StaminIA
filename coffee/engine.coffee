@@ -73,6 +73,9 @@ $ ->
   AUTOSTART = Staminia.CONFIG.AUTOSTART
   return
 
+Staminia.estimateStaminaSubskills = (performanceAt90) ->
+  Math.max (Number) performanceAt90 / 10 - 0.9, 9
+
 getContribution = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute
   stamina = (Number) stamina

@@ -456,3 +456,7 @@ footer li + li {
   border-left: 1px solid #eee;
   padding-left: 5px;
 }
+
+.success-text {
+  color: #468847
+}

@@ -47,7 +47,6 @@ $.extend Staminia.CONFIG,
       #  color: "#FAF8F1"
       #]
 
-
 format = (source, params) ->
   if arguments.length is 1
     return ->
@@ -930,6 +929,16 @@ $("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
   else
     $("#flot-tooltip").remove()
     previousPoint = null
+
+$("#performanceAt90").on "change", ->
+  Staminia.estimateStaminaSubskills $(this).val()
+  $("#staminaSubskillsEstimationTarget").text Staminia.estimateStaminaSubskills($(this).val()).toFixed(1)
+
+$("#extraLink").on "click", (e) ->
+  e.preventDefault()
+  $("#tabExtraNav").find("a").tab "show"
+  $('#helpModal').modal 'toggle'
+  false
 
 #export
 Staminia.format = format
