@@ -164,27 +164,27 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <h4><?= localize("General settings") ?></h4>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
+              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
+              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
+              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
+              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
+              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
             </div>
           </div> <!-- Staminia Main Options End -->
 
