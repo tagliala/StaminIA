@@ -284,10 +284,14 @@ table.table-staminia th[colspan] {
   text-align : center;
 }
 
+.btn-checkbox {
+  position: relative;
+}
+
 .btn-status {
   z-index : 1;
   position : absolute;
-  display : table-cell;
+  left: 0;
   width : 28px;
   padding-right : 0;
   padding-left : 0;
@@ -297,17 +301,21 @@ table.table-staminia th[colspan] {
 .btn-checkbox .btn:nth-child(2) {
   z-index : 0;
   position : absolute;
-  top: 0;
   left: 0;
-  height : 28px;
   width : 100%;
   padding-left: 35px;
   overflow: hidden;
   text-align : left;
 }
 
-.btn-checkbox .btn:nth-child(2) > span {
+.btn-text-overflow {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.btn-text-overflow > span {
   display: block;
+  margin: 0 10px 0 35px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -455,4 +463,8 @@ footer li + li {
   margin-left: 5px;
   border-left: 1px solid #eee;
   padding-left: 5px;
+}
+
+.success-text {
+  color: #468847
 }

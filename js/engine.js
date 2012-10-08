@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getContribution, getPlayerBonus, getSimpleSkill, printContributionTable, validateSkill;
+  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getAvgAt90, getContribution, getPlayerBonus, getSimpleSkill, printContributionTable, validateSkill;
 
   window.Staminia = window.Staminia || {};
 
@@ -90,8 +90,12 @@
     AUTOSTART = Staminia.CONFIG.AUTOSTART;
   });
 
+  Staminia.estimateStaminaSubskills = function(performanceAt90) {
+    return Math.min(9, Number(0.10134 * performanceAt90 - 0.9899));
+  };
+
   getContribution = function(minute, stamina, startsAtMinute, pressing) {
-    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, coefficients, decay, elapsedCheckpoints, energy, engineStamina, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
+    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, decay, elapsedCheckpoints, energy, engineStamina, extra_time_rest, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
     minute = Number(minute);
     stamina = Number(stamina);
     startsAtMinute = Number(startsAtMinute);
@@ -99,10 +103,13 @@
       return 1;
     }
     engineStamina = stamina;
-    coefficients = [2.92, 5.14, -0.38, 6.32];
-    initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1];
-    decay = coefficients[2] * engineStamina + coefficients[3];
-    rest = 18.75 + (engineStamina > 7 ? Math.pow(engineStamina - 7, 2) : 0);
+    initialEnergy = 1 + (0.0292 * engineStamina + 0.05);
+    decay = Math.max(0.0325, -0.0039 * engineStamina + 0.0633);
+    rest = 0.1875;
+    extra_time_rest = rest / 3;
+    if (engineStamina > 8) {
+      initialEnergy += 0.15 * (engineStamina - 8);
+    }
     MINUTES_PER_CHECKPOINT = 5;
     HALF_TIME_CHECKPOINT = 10;
     initialCheckpoint = Math.max(0, Math.ceil(startsAtMinute / MINUTES_PER_CHECKPOINT));
@@ -129,7 +136,30 @@
       console.log("Energy: " + energy);
       console.log("Decay: " + decay);
     }
-    return Math.min(energy / 100, 1);
+    return Math.min(energy, 1);
+  };
+
+  getAvgAt90 = function(stamina) {
+    var checkpoint, currentEnergy, decay, initialEnergy, rest, totalEnergy, _i;
+    if (stamina >= 9) {
+      return 1;
+    }
+    totalEnergy = 0;
+    initialEnergy = 1 + (0.0292 * stamina + 0.05);
+    if (stamina > 8) {
+      initialEnergy += 0.15 * (stamina - 8);
+    }
+    decay = Math.max(0.0325, -0.0039 * stamina + 0.0633);
+    rest = 0.1875;
+    for (checkpoint = _i = 1; _i <= 18; checkpoint = ++_i) {
+      currentEnergy = initialEnergy - checkpoint * decay;
+      if (checkpoint > 9) {
+        currentEnergy += rest;
+      }
+      currentEnergy = Math.min(1, currentEnergy);
+      totalEnergy += currentEnergy;
+    }
+    return totalEnergy / 18;
   };
 
   calculateStrength = function(skill, form, stamina, experience, include_stamina) {
