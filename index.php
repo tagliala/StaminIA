@@ -30,23 +30,23 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   if ($start < 0) $start = 0;
   if ($stop > 20) $stop = 20;
   if (($select < 0) || ($select > 20)) $select = -1;
-  
+
   if ($stop < $start) { $start = 0; $stop = 20; }
   if ($select > $stop) { $select = -1; }
-  
+
   for ($i = $start; $i <= $stop; ++$i) {
     echo "<option value=\"$i\"" . (($select == $i)?" selected=\"selected\"":"") . ">$localizedSkills[$i]</option>\n";
   }
 }
 ?>
-<?php $staminia_version = "12.09.29" ?>
+<?php $staminia_version = "12.10.08" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>Stamin.IA! <?php echo localize("SUBTITLE"); ?></title>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="author" content="Lizardopoli"/>
@@ -152,39 +152,39 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
     <!-- Container Fluid Start -->
     <div id="main" class="container-fluid">
-    
+
       <!-- First Row Start -->
       <div class="row-fluid">
-      
+
         <!-- First Column Start -->
         <div class="span3 side-panel" id="side-panel">
-        
+
           <!-- Staminia Main Options Start -->
           <div class="staminia-button-panel align-center">
             <h4><?= localize("General settings") ?></h4>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
+              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
+              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
+              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
+              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
+              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
             </div>
           </div> <!-- Staminia Main Options End -->
 
@@ -195,7 +195,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <button class="btn active" disabled="disabled" data-radio-group="predictions" data-linked-to="Staminia_Options_AdvancedMode_Predictions_HO" data-radio-button="data-radio-button" data-default-value="true">HO</button>
               <button class="btn" disabled="disabled" data-radio-group="predictions" data-linked-to="Staminia_Options_AdvancedMode_Predictions_Andreac" data-radio-button="data-radio-button" data-default-value="false">Andreac</button>
             </div>
-          </div> <!-- Staminia Predictions Type End -->  
+          </div> <!-- Staminia Predictions Type End -->
 
           <!-- Staminia CHPP Options Start -->
           <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
@@ -210,31 +210,32 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             </div>
 
           </div> <!-- Staminia CHPP Options End -->
-          
+
         </div> <!-- First Column End -->
-        
+
         <!-- Second Column Start -->
         <div class="span9">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#tabPlayersInfo" data-toggle="tab"><?= localize("Players Info") ?></a></li>
-            <li class="hide" id="tabChartsNav"><a href="#tabCharts" data-toggle="tab"><?= localize("Charts") ?></a></li>
-            <li class="hide" id="tabContributionsNav"><a href="#tabContributions" data-toggle="tab"><?= localize("Contributions table") ?></a></li>
+            <li class="active"><a href="#tabPlayersInfo" data-toggle="tab"><i class="icon-user"></i> <span class="hidden-phone"><?= localize("Players Info") ?></span></a></li>
+            <li class="hide" id="tabChartsNav"><a href="#tabCharts" data-toggle="tab"><i class="icon-bar-chart"></i> <span class="hidden-phone"><?= localize("Charts") ?></span></a></li>
+            <li class="hide" id="tabContributionsNav"><a href="#tabContributions" data-toggle="tab"><i class="icon-list-alt"></i> <span class="hidden-phone"><?= localize("Contributions table") ?></span></a></li>
             <li class="hide" id="tabDebugNav"><a href="#tabDebug" data-toggle="tab">Debug</a></li>
-            <li class="credits"><a href="#tabCredits" data-toggle="tab"><?= localize("Credits") ?></a></li>
+            <li id="tabExtraNav"><a href="#tabExtra" data-toggle="tab"><i class="icon-plus-sign"></i> <span class="hidden-phone"><?= localize("Extra") ?></span></a></li>
+            <li class="credits"><a href="#tabCredits" data-toggle="tab"><i class="icon-gift"></i> <span class="hidden-phone"><?= localize("Credits") ?></span></a></li>
           </ul>
-          
+
           <!-- Tab Content Start -->
           <div class="tab-content">
-            
+
             <div id="AlertsContainer"></div>
-            
+
             <noscript>
               <div class="alert alert-block alert-error">
                 <h4 class="alert-heading"><?= localize("Error"); ?></h4>
                 <?= localize("You need a browser with JavaScript support") ?>
               </div>
             </noscript>
-            
+
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
               <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
@@ -250,7 +251,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 <input type="hidden" name="Staminia_Options_AdvancedMode" value="false"/>
                 <input type="hidden" name="Staminia_Options_AdvancedMode_Predictions_HO" value="true"/>
                 <input type="hidden" name="Staminia_Options_AdvancedMode_Predictions_Andreac" value="false"/>
-              
+
                 <table class="table table-bordered table-condensed" id="playersInfoTable">
                   <thead>
                     <tr>
@@ -542,7 +543,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
-                    </tr>                   
+                    </tr>
                     <tr class="advanced hide" id="Staminia_Advanced_Skill_Passing">
                       <td><?= localize("Passing (skill)"); ?></td>
                       <td>
@@ -555,7 +556,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
-                    </tr>                   
+                    </tr>
                     <tr class="advanced hide" id="Staminia_Advanced_Skill_Scoring">
                       <td><?= localize("Scoring (skill)"); ?></td>
                       <td>
@@ -568,7 +569,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
-                    </tr>                   
+                    </tr>
                   </tbody>
                 </table>
                 <div class="align-center form-actions">
@@ -579,7 +580,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 </div>
               </form> <!-- Main Form End -->
             </div>
-            
+
             <!-- Charts -->
             <div class="tab-pane" id="tabCharts">
               <div id="charts">
@@ -594,10 +595,29 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <div class="tab-pane" id="tabContributions">
             </div>
 
+            <!-- Extra -->
+            <div class="tab-pane" id="tabExtra">
+              <h3 class="legend-like"><?= localize("Stamina subskills calculation"); ?></h3>
+              <form action="javascript:{}" method="post" class="form-inline">
+                <div class="control-group">
+                  <label for="performanceAt90" class="inline">
+                    <?= localize("Performance at 90'"); ?>:
+                  </label>
+                  <select class="ignore width-auto" id="performanceAt90" name="performanceAt90">
+                    <?php for ($i = 100; $i >= 16; $i--) { ?>
+                      <option value=<?= $i ?>><?= $i ?>%</option>
+                    <?php } ?>
+                  </select>
+                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">9.0</b></span>
+                </div>
+                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear."); ?></p>
+              </form>
+            </div>
+
             <!-- Debug -->
             <div class="tab-pane" id="tabDebug">
             </div>
-            
+
             <!-- Credits -->
             <div class="tab-pane" id="tabCredits">
               <blockquote>
@@ -623,13 +643,13 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
               </p>
             </div>
-            
+
           </div> <!-- Tab Content End -->
-            
+
         </div> <!-- Second Column End -->
-      
+
       </div> <!-- First Row End -->
-      
+
       <!-- Help Modal Start -->
       <div class='modal hide' id='helpModal'>
         <div class='modal-header'>
@@ -643,9 +663,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           <a href="#" class="btn" data-dismiss="modal"><?= localize("Close") ?></a>
         </div>
       </div> <!-- Help Modal End -->
-      
+
       <hr/>
-      
+
       <!-- Footer Start -->
       <footer>
         <ul class="unstyled">
@@ -673,7 +693,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.0.min.js"></script>
+    <script src="js/vendor/jquery-1.8.2.min.js"></script>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
@@ -690,7 +710,7 @@ if (defined('GA_ID')) { ?>
 
     <script>
       document.startAjax = <?php if ($tryAjax) { echo "true"; } else { echo "false"; } ?>;
-<?php 
+<?php
 $file = "js/vendor/jqvalidate/localization/messages_" . localize("validateLang") . ".js";
 if (is_file($file)) { include($file); }
 $file = "js/localization/messages_" . localize("lang") . ".js";

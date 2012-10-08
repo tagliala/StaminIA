@@ -73,6 +73,9 @@ $ ->
   AUTOSTART = Staminia.CONFIG.AUTOSTART
   return
 
+Staminia.estimateStaminaSubskills = (performanceAt90) ->
+  Math.min 9, (Number) 0.10134 * performanceAt90 - 0.9899
+
 getContribution = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute
   stamina = (Number) stamina
@@ -82,14 +85,15 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
 
   engineStamina = stamina
 
-  # coefficients = [105.3, 1.15, 1.235, 14.25]
-  coefficients = [2.92, 5.14, -0.38, 6.32]
+  initialEnergy = 1 + (0.0292 * engineStamina + 0.05)
+  decay = Math.max 0.0325, (-0.0039 * engineStamina + 0.0633)
+  rest = 0.1875
+  extra_time_rest = rest / 3
 
-  initialEnergy = 100 + coefficients[0] * engineStamina + coefficients[1]
-  decay = coefficients[2] * engineStamina + coefficients[3]
-  rest = 18.75 + (if engineStamina > 7 then Math.pow(engineStamina - 7, 2) else 0)
+  # Boost
+  initialEnergy += 0.15 * (engineStamina - 8) if engineStamina > 8
 
-  # decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
+  # decay = decay * (1 + ((9 - engineStamina) / 9) / 6.5) if pressing
 
   # Magic Numbers
   MINUTES_PER_CHECKPOINT = 5
@@ -119,7 +123,21 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
     console.log "Energy: " + energy
     console.log "Decay: " + decay
 
-  Math.min energy / 100, 1
+  Math.min energy, 1
+
+getAvgAt90 = (stamina) ->
+  return 1 if stamina >= 9
+  totalEnergy = 0
+  initialEnergy = 1 + (0.0292 * stamina + 0.05)
+  initialEnergy += 0.15 * (stamina - 8) if stamina > 8
+  decay = Math.max 0.0325, (-0.0039 * stamina + 0.0633)
+  rest = 0.1875
+  for checkpoint in [1..18]
+    currentEnergy = initialEnergy - checkpoint * decay
+    currentEnergy+= rest if checkpoint > 9
+    currentEnergy = Math.min(1, currentEnergy)
+    totalEnergy += currentEnergy
+  totalEnergy / 18
 
 calculateStrength = (skill, form, stamina, experience, include_stamina) ->
   skill = (Number) skill
@@ -440,18 +458,14 @@ Staminia.Engine.start = ->
     #$("#tabDebugNav").find("a").tab "show"
   @result.status = "OK"
   @result
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
 ###
   printAVGContributionTable = ->
     tempHTML = "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">AVG Contribution Table (Minute/Stamina)</th></tr><tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"

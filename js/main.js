@@ -1063,6 +1063,18 @@
     }
   });
 
+  $("#performanceAt90").on("change", function() {
+    Staminia.estimateStaminaSubskills($(this).val());
+    return $("#staminaSubskillsEstimationTarget").text(Staminia.estimateStaminaSubskills($(this).val()).toFixed(1));
+  });
+
+  $("#extraLink").on("click", function(e) {
+    e.preventDefault();
+    $("#tabExtraNav").find("a").tab("show");
+    $('#helpModal').modal('toggle');
+    return false;
+  });
+
   Staminia.format = format;
 
   Staminia.number_format = number_format;

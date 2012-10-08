@@ -1,6 +1,13 @@
 Changelog
 =========
 
+12.10.08
+--------
+* Extra tab with new features
+* Improved engine
+* Fixed firefox buttons
+* Fixed English localization issue
+
 12.09.29
 --------
 * New engine
