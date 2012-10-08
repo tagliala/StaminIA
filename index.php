@@ -604,7 +604,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <?= localize("Performance at 90'"); ?>:
                   </label>
                   <select class="ignore width-auto" id="performanceAt90" name="performanceAt90">
-                    <?php for ($i = 100; $i >= 26; $i--) { ?>
+                    <?php for ($i = 100; $i >= 16; $i--) { ?>
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
@@ -693,7 +693,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.0.min.js"></script>
+    <script src="js/vendor/jquery-1.8.2.min.js"></script>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->

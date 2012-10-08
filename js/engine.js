@@ -91,7 +91,7 @@
   });
 
   Staminia.estimateStaminaSubskills = function(performanceAt90) {
-    return Math.max(Number(performanceAt90 / 10 - 0.9, 9));
+    return Math.min(9, Number(0.10134 * performanceAt90 - 0.9899));
   };
 
   getContribution = function(minute, stamina, startsAtMinute, pressing) {
@@ -107,8 +107,8 @@
     decay = Math.max(0.0325, -0.0039 * engineStamina + 0.0633);
     rest = 0.1875;
     extra_time_rest = rest / 3;
-    if (stamina >= 9) {
-      initialEnergy += 0.2127;
+    if (engineStamina > 8) {
+      initialEnergy += 0.15 * (engineStamina - 8);
     }
     MINUTES_PER_CHECKPOINT = 5;
     HALF_TIME_CHECKPOINT = 10;
@@ -146,6 +146,9 @@
     }
     totalEnergy = 0;
     initialEnergy = 1 + (0.0292 * stamina + 0.05);
+    if (stamina > 8) {
+      initialEnergy += 0.15 * (stamina - 8);
+    }
     decay = Math.max(0.0325, -0.0039 * stamina + 0.0633);
     rest = 0.1875;
     for (checkpoint = _i = 1; _i <= 18; checkpoint = ++_i) {

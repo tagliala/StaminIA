@@ -74,7 +74,7 @@ $ ->
   return
 
 Staminia.estimateStaminaSubskills = (performanceAt90) ->
-  Math.max (Number) performanceAt90 / 10 - 0.9, 9
+  Math.min 9, (Number) 0.10134 * performanceAt90 - 0.9899
 
 getContribution = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute
@@ -90,10 +90,10 @@ getContribution = (minute, stamina, startsAtMinute, pressing) ->
   rest = 0.1875
   extra_time_rest = rest / 3
 
-  # Formidable bonus
-  initialEnergy += 0.2127 if stamina >= 9
+  # Boost
+  initialEnergy += 0.15 * (engineStamina - 8) if engineStamina > 8
 
-  # decay = decay * (1 + ((9 - stamina) / 9) / 6.5) if pressing
+  # decay = decay * (1 + ((9 - engineStamina) / 9) / 6.5) if pressing
 
   # Magic Numbers
   MINUTES_PER_CHECKPOINT = 5
@@ -129,6 +129,7 @@ getAvgAt90 = (stamina) ->
   return 1 if stamina >= 9
   totalEnergy = 0
   initialEnergy = 1 + (0.0292 * stamina + 0.05)
+  initialEnergy += 0.15 * (stamina - 8) if stamina > 8
   decay = Math.max 0.0325, (-0.0039 * stamina + 0.0633)
   rest = 0.1875
   for checkpoint in [1..18]
