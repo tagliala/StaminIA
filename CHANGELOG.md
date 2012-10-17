@@ -1,6 +1,10 @@
 Changelog
 =========
 
+12.10.17
+--------
+* Improved stamina subskill estimation
+
 12.10.08
 --------
 * Extra tab with new features
