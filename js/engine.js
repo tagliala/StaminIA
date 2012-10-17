@@ -91,7 +91,11 @@
   });
 
   Staminia.estimateStaminaSubskills = function(performanceAt90) {
-    return Math.min(9, Number(0.10134 * performanceAt90 - 0.9899));
+    if (performanceAt90 <= 89) {
+      return Math.min(9, Number(0.10134 * performanceAt90 - 0.9899));
+    } else {
+      return 8 + (performanceAt90 - 90) / 15;
+    }
   };
 
   getContribution = function(minute, stamina, startsAtMinute, pressing) {

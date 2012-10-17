@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.10.08" ?>
+<?php $staminia_version = "12.10.17" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -608,9 +608,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
-                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">9.0</b></span>
+                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
                 </div>
-                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear."); ?></p>
+                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
               </form>
             </div>
 
