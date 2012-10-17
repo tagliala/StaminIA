@@ -74,7 +74,10 @@ $ ->
   return
 
 Staminia.estimateStaminaSubskills = (performanceAt90) ->
-  Math.min 9, (Number) 0.10134 * performanceAt90 - 0.9899
+  if performanceAt90 <= 89
+    Math.min 9, (Number) 0.10134 * performanceAt90 - 0.9899
+  else
+    8 + (performanceAt90 - 90) / 15
 
 getContribution = (minute, stamina, startsAtMinute, pressing) ->
   minute = (Number) minute

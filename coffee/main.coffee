@@ -933,6 +933,10 @@ $("#chartTotal, #chartPartials").bind "plothover", (event, pos, item) ->
 $("#performanceAt90").on "change", ->
   Staminia.estimateStaminaSubskills $(this).val()
   $("#staminaSubskillsEstimationTarget").text Staminia.estimateStaminaSubskills($(this).val()).toFixed(1)
+  if $(this).val() is "100"
+    $("#or-higher").show()
+  else
+    $("#or-higher").hide()
 
 $("#extraLink").on "click", (e) ->
   e.preventDefault()

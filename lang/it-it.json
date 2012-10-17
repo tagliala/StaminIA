@@ -121,7 +121,8 @@
   "Stamina subskills calculation": "Calcolo dei sottolivelli di resistenza",
   "Performance at 90'": "Contributo al 90°",
   "The estimate stamina level is": "Il livello di resistenza stimato è",
-  "In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear.": "Per ottenere il contributo al minuto 90', devi guardare nel pannello \"Formazione\" delle valutazioni della partita, cliccare sul bottone \"90\" in alto e lasciare il mouse sull'indicatore di resistenza del giocatore: verrà mostrato un tooltip con la percentuale di resistenza.",
+  "(or higher)": "(o superiore)",
+  "In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation.": "Per ottenere il contributo al minuto 90', devi guardare nel pannello \"Formazione\" delle valutazioni della partita, cliccare sul bottone \"90\" in alto e lasciare il mouse sull'indicatore di resistenza del giocatore: verrà mostrato un tooltip con la percentuale di resistenza. Il giocatore deve aver giocato tutti e 90 i minuti senza confusione nel modulo.",
 
   "Contributions table": "Tabella dei contributi",
 
