@@ -455,14 +455,17 @@ footer a:hover {
   color: #555;
 }
 
-footer li {
-  display: inline-block;
-}
+@media(min-width: 768px) {
 
-footer li + li {
-  margin-left: 5px;
-  border-left: 1px solid #eee;
-  padding-left: 5px;
+  footer li {
+    display: inline-block;
+  }
+
+  footer li + li {
+    margin-left: 5px;
+    border-left: 1px solid #eee;
+    padding-left: 5px;
+  }
 }
 
 .success-text {
