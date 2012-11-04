@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.11.04
+--------
+* Updated Hungarian translation [tnx to dzsoo (9668661)]
+* Improved footer at lower resolutions
+
 12.10.17
 --------
 * Improved stamina subskill estimation
