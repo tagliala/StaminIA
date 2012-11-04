@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "12.09.29" ?>
+<?php $staminia_version = "12.11.04" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -164,27 +164,27 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <h4><?= localize("General settings") ?></h4>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
+              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
+              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
+              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
+              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
             </div>
             <div></div>
             <div class="btn-group btn-checkbox">
               <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
+              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
             </div>
           </div> <!-- Staminia Main Options End -->
 
@@ -604,13 +604,13 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <?= localize("Performance at 90'"); ?>:
                   </label>
                   <select class="ignore width-auto" id="performanceAt90" name="performanceAt90">
-                    <?php for ($i = 100; $i >= 26; $i--) { ?>
+                    <?php for ($i = 100; $i >= 16; $i--) { ?>
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
-                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">9.0</b></span>
+                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
                 </div>
-                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear."); ?></p>
+                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
               </form>
             </div>
 
@@ -693,7 +693,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.0.min.js"></script>
+    <script src="js/vendor/jquery-1.8.2.min.js"></script>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->

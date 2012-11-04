@@ -1065,7 +1065,12 @@
 
   $("#performanceAt90").on("change", function() {
     Staminia.estimateStaminaSubskills($(this).val());
-    return $("#staminaSubskillsEstimationTarget").text(Staminia.estimateStaminaSubskills($(this).val()).toFixed(1));
+    $("#staminaSubskillsEstimationTarget").text(Staminia.estimateStaminaSubskills($(this).val()).toFixed(1));
+    if ($(this).val() === "100") {
+      return $("#or-higher").show();
+    } else {
+      return $("#or-higher").hide();
+    }
   });
 
   $("#extraLink").on("click", function(e) {

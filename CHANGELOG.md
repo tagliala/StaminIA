@@ -1,6 +1,22 @@
 Changelog
 =========
 
+12.11.04
+--------
+* Updated Hungarian translation [tnx to dzsoo (9668661)]
+* Improved footer at lower resolutions
+
+12.10.17
+--------
+* Improved stamina subskill estimation
+
+12.10.08
+--------
+* Extra tab with new features
+* Improved engine
+* Fixed firefox buttons
+* Fixed English localization issue
+
 12.09.29
 --------
 * New engine

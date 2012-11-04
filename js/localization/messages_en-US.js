@@ -1,8 +1,8 @@
 Staminia.messages = {
   best_in_first_half: "You will get the best contribution if you plan the substitution during the first half.",
   player2_stronger_than_player1: "Player 2 is stronger than Player 1. Try to switch the players.",
-  player1_stamina_bad_se: Staminia.format("There is a very little chance that Player 1, playing as a defender, could generate a bad stamina event at or after minute {0}."),
-  player2_stamina_bad_se: Staminia.format("There is a very little chance that Player 2, playing as a defender, could generate a bad stamina event if he enters the field at or before minute {0}."),
+  player1_low_stamina_se: Staminia.format("There is a very little chance that Player 1, playing as a defender, could generate a bad stamina event at or after minute {0}."),
+  player2_low_stamina_se: Staminia.format("There is a very little chance that Player 2, playing as a defender, could generate a bad stamina event if he enters the field at or before minute {0}."),
   replace: "Replace Player 1",
   at_minute:  "at minute",
   at_minutes: "at minutes",
