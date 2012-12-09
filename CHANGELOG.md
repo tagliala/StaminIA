@@ -1,6 +1,14 @@
 Changelog
 =========
 
+12.12.09
+--------
+* Subtle navbar gradient
+* Improved collapsed menu icon
+* Removed ie8/9 icon fix 'cause it's causing issues in IE10
+* Removed firefox dotted focus
+* Recompiled JavaScript assets with CoffeeScript 1.4.0
+
 12.11.04
 --------
 * Updated Hungarian translation [tnx to dzsoo (9668661)]
