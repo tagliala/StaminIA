@@ -3,6 +3,14 @@
 @import url('bootstrap-responsive.css');
 @import url('flags.css');
 
+/* Prevent Firefox outline */
+:focus {
+  outline: none !important;
+}
+::-moz-focus-inner {
+  border: 0 !important;
+}
+
 .navbar .brand {
   top: -4px;
   padding: 0 20px;
