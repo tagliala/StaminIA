@@ -19,7 +19,7 @@
   "Authorize Stamin.IA! to access your data": "",
   "Remember me": "",
   "Login": "",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)." :  "",
+  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)." : "",
   "cookie" : "",
   "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site." : "",
   "Revoke authorization": "",
