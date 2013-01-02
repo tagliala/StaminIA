@@ -1,6 +1,14 @@
 Changelog
 =========
 
+13.01.02
+--------
+* Set main font size to 14px
+* Updated to FontAwesome 3.0
+* Updated Portuguese translation [tnx to bigs_ (5775947)]
+* Fixed English translation [tnx to bigs_ (5775947)]
+* Fixed Hungarian translation
+
 12.12.09
 --------
 * Subtle navbar gradient
