@@ -501,12 +501,13 @@
           $field.val(params[i]);
       }
     }
-    checkMotherClubBonus();
     if (isAdvancedModeEnabled()) {
       enableAdvancedMode();
     } else {
       disableAdvancedMode();
     }
+    checkMotherClubBonus();
+    updatePredictions();
     stripeTable();
   };
 
@@ -518,6 +519,14 @@
       status = $("input[name=Staminia_Player_" + playerId + "_MotherClubBonus]").prop('checked') ? 'disabled' : null;
       $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr('disabled', status);
       $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+    }
+  };
+
+  updatePredictions = function() {
+    if ($('input[name="Staminia_Options_Predictions_Type"]:checked').val() === 'ho') {
+      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
+    } else {
+      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
     }
   };
 
@@ -607,13 +616,9 @@
     checkMotherClubBonus();
   });
 
-  updatePredictions = function() {
-    if ($('input[name="Staminia_Options_Predictions_Type"]:checked').val() === 'ho') {
-      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
-    } else {
-      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
-    }
-  };
+  $('input[name="Staminia_Options_Predictions_Type"]').on('change', function(e) {
+    return updatePredictions();
+  });
 
   $('input[data-validate="range"], select[data-validate="range"]').each(function() {
     return $(this).rules('add', {

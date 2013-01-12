@@ -447,15 +447,15 @@ fillForm = ->
     switch $field.attr('type')
       when 'checkbox', 'radio' then $field.attr 'checked', (if params[i] is 'true' then 'checked' else null)
       else $field.val params[i]
-  checkMotherClubBonus()
   if isAdvancedModeEnabled()
     enableAdvancedMode()
   else
     disableAdvancedMode()
+  checkMotherClubBonus()
+  updatePredictions()
   stripeTable()
   return
 
-#
 checkMotherClubBonus = ->
   for playerId in [1, 2]
     status = if $("input[name=Staminia_Player_#{playerId}_MotherClubBonus]").prop('checked') then 'disabled' else null
@@ -463,7 +463,13 @@ checkMotherClubBonus = ->
     $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr 'disabled', status
   return
 
-# Serialize Stamin.IA! form
+updatePredictions = ->
+  if $('input[name="Staminia_Options_Predictions_Type"]:checked').val() is 'ho'
+    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
+  else
+    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC
+  return
+
 formSerialize = ->
   serializedFields = []
   $('*[name^="Staminia_"]').each ->
@@ -542,12 +548,8 @@ $('.motherclub-bonus-checkbox').on 'change', (e) ->
   checkMotherClubBonus()
   return
 
-updatePredictions = ->
-  if $('input[name="Staminia_Options_Predictions_Type"]:checked').val() is 'ho'
-    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
-  else
-    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC
-  return
+$('input[name="Staminia_Options_Predictions_Type"]').on 'change', (e) ->
+  updatePredictions()
 
 $('input[data-validate="range"], select[data-validate="range"]').each ->
   $(this).rules 'add', { range: [$(this).data('rangeMin'), $(this).data('rangeMax')] }
