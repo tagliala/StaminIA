@@ -590,19 +590,6 @@ footer a:hover {
   margin-left: 22px;
 }
 
-/* FontAwesome FIX */
-[class^="icon-"],
-[class*=" icon-"] {
-  line-height: inherit !important;
-}
-
-[class^="icon-"],
-.btn [class*=" icon-"],
-.nav [class*=" icon-"] {
-  display: inline;
-  line-height: .7em !important;
-}
-
 #CHPP_Refresh_Data_Status {
   width: 28px;
   height: 28px;
