@@ -4,6 +4,7 @@ Staminia = window.Staminia
 Staminia.CONFIG = Staminia.CONFIG || {}
 $.extend Staminia.CONFIG,
   FORM_ID: "#formPlayersInfo"
+  OPTION_FORM_ID: "#optionForm"
   TABLE_ID: "#playersInfoTable"
   DEBUG: false
   DEBUG_STEP: 1
@@ -109,6 +110,7 @@ resetAndHideTabs = ->
   $("#tabDebug").html ""
 
 FORM_ID = Staminia.CONFIG.FORM_ID
+OPTION_FORM_ID = Staminia.CONFIG.OPTION_FORM_ID
 TABLE_ID = Staminia.CONFIG.TABLE_ID
 DEBUG = Staminia.CONFIG.DEBUG
 AUTOSTART = Staminia.CONFIG.AUTOSTART
@@ -412,19 +414,19 @@ disableAdvancedMode =  ->
   return
 
 isOnlySecondHalfEnabled = ->
-  $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass "btn-success"
+  $("#Staminia_Options_OnlySecondHalf").prop 'checked'
 
 isChartsEnabled = ->
-  $("#Staminia_Options_ChartsButton_Status").hasClass "btn-success"
+  $("#Staminia_Options_Charts").prop 'checked'
 
 isVerboseModeEnabled = ->
-  $("#Staminia_Options_VerboseModeButton_Status").hasClass "btn-success"
+  $("#Staminia_Options_VerboseMode").prop 'checked'
 
 isPressingEnabled = ->
-  $("#Staminia_Options_PressingButton_Status").hasClass "btn-success"
+  $("#Staminia_Options_Pressing").prop 'checked'
 
 isAdvancedModeEnabled = ->
-  $("#Staminia_Options_AdvancedModeButton_Status").hasClass "btn-success"
+  $("#Staminia_Options_AdvancedMode").prop 'checked'
 
 enableCHPPMode = ->
   $("#{TABLE_ID} tr[class~='chpp']").removeClass("hide").show()
@@ -442,7 +444,7 @@ fillForm = ->
   fields = $('#formPlayersInfo *[name^=Staminia_]')
   for field, i in fields
     field.value = params[i]
-  checkFormButtonsAppearance()
+  checkMotherClubBonus()
   if isAdvancedModeEnabled()
     enableAdvancedMode()
   else
@@ -450,31 +452,12 @@ fillForm = ->
   stripeTable()
   return
 
-# Check Form Buttons Appearance
-checkFormButtonsAppearance = ->
-  $("button[data-checkbox-button]").each ->
-    $status_button = $("##{$(this).attr 'id'}_Status")
-    form = $(FORM_ID)[0]
-    if (Boolean) form[$(this).data("linkedTo")].value == "true"
-      $status_button.removeClass("btn-danger").addClass "btn-success"
-      $status_button.find("i").removeClass("icon-remove").addClass "icon-ok"
-      if $(this).data("motherclubButton")?
-        playerId = $(this).data "motherclubButton"
-        $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
-        $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
-    else
-      $status_button.removeClass("btn-success").addClass "btn-danger"
-      $status_button.find("i").removeClass("icon-ok").addClass "icon-remove"
-      if $(this).data("motherclubButton")?
-        playerId = $(this).data "motherclubButton"
-        $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", null
-        $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", null
-  $("button[data-radio-button]").each ->
-    form = $(FORM_ID)[0]
-    if (Boolean) form[$(this).data("linkedTo")].value == "true"
-      $(this).addClass "active"
-    else
-      $(this).removeClass "active"
+#
+checkMotherClubBonus = ->
+  for playerId in [1, 2]
+    status = if $("input[name=Staminia_Player_#{playerId}_MotherClubBonus]").prop('checked') then 'disabled' else null
+    $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr 'disabled', status
+    $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr 'disabled', status
   return
 
 # Stamin.IA! Get Link Button
@@ -526,62 +509,32 @@ $("#switchPlayers").click ->
       $this.attr "disabled", if $p2Field.attr("disabled")? then "disabled" else null
       $p2Field.val p1Value
       $p2Field.attr "disabled", p1Disabled
-  checkFormButtonsAppearance()
+  checkMotherClubBonus()
   $('.control-group').removeClass "error"
   $(FORM_ID).validate().form()
   return
 
-$("button.btn-status").on "click", (e) ->
-  $("##{$(this).attr('id').replace(/_Status$/g,'')}").click()
-
-$("button[data-checkbox-button]").on "click", (e) ->
-  form = $(FORM_ID)[0]
-  $status_button = $("##{$(this).attr 'id'}_Status")
-  if !$status_button.hasClass "btn-success"
-    form[$(this).data("linkedTo")].value = true
-    $status_button.removeClass("btn-danger").addClass "btn-success"
-    $status_button.find("i").removeClass("icon-remove").addClass "icon-ok"
-    if $(this).data("motherclubButton")?
-      playerId = $(this).data "motherclubButton"
-      $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
-      $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", "disabled"
-  else
-    form[$(this).data("linkedTo")].value = false
-    $status_button.removeClass("btn-success").addClass "btn-danger"
-    $status_button.find("i").removeClass("icon-ok").addClass "icon-remove"
-    if $(this).data("motherclubButton")?
-      playerId = $(this).data "motherclubButton"
-      $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr "disabled", null
-      $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr "disabled", null
-  return
-
-$("#Staminia_Options_AdvancedModeButton").on "click", (e) ->
-  $status_button = $("##{$(this).attr 'id'}_Status")
-  if $status_button.hasClass "btn-success"
+$('#Staminia_Options_AdvancedMode').on 'change', (e) ->
+  if $(this).prop 'checked'
     enableAdvancedMode()
   else
     disableAdvancedMode()
   stripeTable()
   return
 
-$("button[data-radio-button]").on "click", (e) ->
-  form = $(FORM_ID)[0]
-  $("button[data-radio-button][data-radio-group='#{$(this).data("radioGroup")}']").each ->
-    form[$(this).data("linkedTo")].value = "false"
-  form[$(this).data("linkedTo")].value = !$(this).hasClass "active"
-  updatePredictions()
+$('.motherclub-bonus-checkbox').on 'change', (e) ->
+  checkMotherClubBonus()
   return
 
 updatePredictions = ->
-  if $("#{FORM_ID} input[name=Staminia_Options_AdvancedMode_Predictions_Andreac]").val() == "true"
-    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC
-  else
+  if $('input[name="Staminia_Options_Predictions_Type"]:checked').val() is 'ho'
     Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO
+  else
+    Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC
   return
 
-$("input[data-validate='range'], select[data-validate='range']").each ->
-  $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] })
-  return
+$('input[data-validate="range"], select[data-validate="range"]').each ->
+  $(this).rules 'add', { range: [$(this).data('rangeMin'), $(this).data('rangeMax')] }
 
 # Hide alerts when showing credits and redraw charts if needed
 $('a[data-toggle="tab"]').on 'shown', (e) ->
@@ -596,7 +549,7 @@ $('a[data-toggle="tab"]').on 'shown', (e) ->
 
 # Stamin.IA! Reset Button
 $("#resetApp").on "click", (e) ->
-  $(FORM_ID).each ->
+  $("#{FORM_ID}, #{OPTION_FORM_ID}").each ->
     if (typeof this.reset == 'function' or (typeof this.reset == 'object' and !this.reset.nodeType))
       this.reset()
 
@@ -604,12 +557,7 @@ $("#resetApp").on "click", (e) ->
   $("#AlertsContainer").html ""
   resetAndHideTabs()
 
-  $("button[data-checkbox-button], button[data-radio-button]").each ->
-    form = $(FORM_ID)[0]
-    form[$(this).data("linkedTo")].value = $(this).data "default-value"
-    return
-
-  checkFormButtonsAppearance()
+  checkMotherClubBonus()
   disableAdvancedMode()
   setupCHPPPlayerFields()
   stripeTable()

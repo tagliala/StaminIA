@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, OPTION_FORM_ID, Staminia, TABLE_ID, checkIframe, checkMotherClubBonus, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -12,6 +12,7 @@
 
   $.extend(Staminia.CONFIG, {
     FORM_ID: "#formPlayersInfo",
+    OPTION_FORM_ID: "#optionForm",
     TABLE_ID: "#playersInfoTable",
     DEBUG: false,
     DEBUG_STEP: 1,
@@ -145,6 +146,8 @@
   };
 
   FORM_ID = Staminia.CONFIG.FORM_ID;
+
+  OPTION_FORM_ID = Staminia.CONFIG.OPTION_FORM_ID;
 
   TABLE_ID = Staminia.CONFIG.TABLE_ID;
 
@@ -451,23 +454,23 @@
   };
 
   isOnlySecondHalfEnabled = function() {
-    return $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_OnlySecondHalf").prop('checked');
   };
 
   isChartsEnabled = function() {
-    return $("#Staminia_Options_ChartsButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_Charts").prop('checked');
   };
 
   isVerboseModeEnabled = function() {
-    return $("#Staminia_Options_VerboseModeButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_VerboseMode").prop('checked');
   };
 
   isPressingEnabled = function() {
-    return $("#Staminia_Options_PressingButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_Pressing").prop('checked');
   };
 
   isAdvancedModeEnabled = function() {
-    return $("#Staminia_Options_AdvancedModeButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_AdvancedMode").prop('checked');
   };
 
   enableCHPPMode = function() {
@@ -490,7 +493,7 @@
       field = fields[i];
       field.value = params[i];
     }
-    checkFormButtonsAppearance();
+    checkMotherClubBonus();
     if (isAdvancedModeEnabled()) {
       enableAdvancedMode();
     } else {
@@ -499,38 +502,15 @@
     stripeTable();
   };
 
-  checkFormButtonsAppearance = function() {
-    $("button[data-checkbox-button]").each(function() {
-      var $status_button, form, playerId;
-      $status_button = $("#" + ($(this).attr('id')) + "_Status");
-      form = $(FORM_ID)[0];
-      if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
-        $status_button.removeClass("btn-danger").addClass("btn-success");
-        $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
-        if ($(this).data("motherclubButton") != null) {
-          playerId = $(this).data("motherclubButton");
-          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-        }
-      } else {
-        $status_button.removeClass("btn-success").addClass("btn-danger");
-        $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
-        if ($(this).data("motherclubButton") != null) {
-          playerId = $(this).data("motherclubButton");
-          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-        }
-      }
-    });
-    $("button[data-radio-button]").each(function() {
-      var form;
-      form = $(FORM_ID)[0];
-      if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
-        return $(this).addClass("active");
-      } else {
-        return $(this).removeClass("active");
-      }
-    });
+  checkMotherClubBonus = function() {
+    var playerId, status, _i, _len, _ref;
+    _ref = [1, 2];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      playerId = _ref[_i];
+      status = $("input[name=Staminia_Player_" + playerId + "_MotherClubBonus]").prop('checked') ? 'disabled' : null;
+      $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+      $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+    }
   };
 
   $("#getLink").on("click", function(e) {
@@ -581,44 +561,13 @@
       $p2Field.val(p1Value);
       return $p2Field.attr("disabled", p1Disabled);
     });
-    checkFormButtonsAppearance();
+    checkMotherClubBonus();
     $('.control-group').removeClass("error");
     $(FORM_ID).validate().form();
   });
 
-  $("button.btn-status").on("click", function(e) {
-    return $("#" + ($(this).attr('id').replace(/_Status$/g, ''))).click();
-  });
-
-  $("button[data-checkbox-button]").on("click", function(e) {
-    var $status_button, form, playerId;
-    form = $(FORM_ID)[0];
-    $status_button = $("#" + ($(this).attr('id')) + "_Status");
-    if (!$status_button.hasClass("btn-success")) {
-      form[$(this).data("linkedTo")].value = true;
-      $status_button.removeClass("btn-danger").addClass("btn-success");
-      $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
-      if ($(this).data("motherclubButton") != null) {
-        playerId = $(this).data("motherclubButton");
-        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-      }
-    } else {
-      form[$(this).data("linkedTo")].value = false;
-      $status_button.removeClass("btn-success").addClass("btn-danger");
-      $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
-      if ($(this).data("motherclubButton") != null) {
-        playerId = $(this).data("motherclubButton");
-        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-      }
-    }
-  });
-
-  $("#Staminia_Options_AdvancedModeButton").on("click", function(e) {
-    var $status_button;
-    $status_button = $("#" + ($(this).attr('id')) + "_Status");
-    if ($status_button.hasClass("btn-success")) {
+  $('#Staminia_Options_AdvancedMode').on('change', function(e) {
+    if ($(this).prop('checked')) {
       enableAdvancedMode();
     } else {
       disableAdvancedMode();
@@ -626,27 +575,21 @@
     stripeTable();
   });
 
-  $("button[data-radio-button]").on("click", function(e) {
-    var form;
-    form = $(FORM_ID)[0];
-    $("button[data-radio-button][data-radio-group='" + ($(this).data("radioGroup")) + "']").each(function() {
-      return form[$(this).data("linkedTo")].value = "false";
-    });
-    form[$(this).data("linkedTo")].value = !$(this).hasClass("active");
-    updatePredictions();
+  $('.motherclub-bonus-checkbox').on('change', function(e) {
+    checkMotherClubBonus();
   });
 
   updatePredictions = function() {
-    if ($("" + FORM_ID + " input[name=Staminia_Options_AdvancedMode_Predictions_Andreac]").val() === "true") {
-      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
-    } else {
+    if ($('input[name="Staminia_Options_Predictions_Type"]:checked').val() === 'ho') {
       Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
+    } else {
+      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
     }
   };
 
-  $("input[data-validate='range'], select[data-validate='range']").each(function() {
-    $(this).rules("add", {
-      range: [$(this).data("rangeMin"), $(this).data("rangeMax")]
+  $('input[data-validate="range"], select[data-validate="range"]').each(function() {
+    return $(this).rules('add', {
+      range: [$(this).data('rangeMin'), $(this).data('rangeMax')]
     });
   });
 
@@ -663,7 +606,7 @@
   });
 
   $("#resetApp").on("click", function(e) {
-    $(FORM_ID).each(function() {
+    $("" + FORM_ID + ", " + OPTION_FORM_ID).each(function() {
       if (typeof this.reset === 'function' || (typeof this.reset === 'object' && !this.reset.nodeType)) {
         return this.reset();
       }
@@ -671,12 +614,7 @@
     $('.control-group').removeClass("error");
     $("#AlertsContainer").html("");
     resetAndHideTabs();
-    $("button[data-checkbox-button], button[data-radio-button]").each(function() {
-      var form;
-      form = $(FORM_ID)[0];
-      form[$(this).data("linkedTo")].value = $(this).data("default-value");
-    });
-    checkFormButtonsAppearance();
+    checkMotherClubBonus();
     disableAdvancedMode();
     setupCHPPPlayerFields();
     stripeTable();

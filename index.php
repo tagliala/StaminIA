@@ -159,57 +159,92 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
         <!-- First Column Start -->
         <div class="span3 side-panel" id="side-panel">
 
-          <!-- Staminia Main Options Start -->
-          <div class="staminia-button-panel align-center">
-            <h4><?= localize("General settings") ?></h4>
-            <div class="btn-group btn-checkbox">
-              <button id="Staminia_Options_OnlySecondHalfButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_OnlySecondHalfButton" data-linked-to="Staminia_Options_OnlySecondHalf" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span></button>
-            </div>
-            <div></div>
-            <div class="btn-group btn-checkbox">
-              <button id="Staminia_Options_ChartsButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_ChartsButton" data-linked-to="Staminia_Options_Charts" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span></button>
-            </div>
-            <div></div>
-            <div class="btn-group btn-checkbox">
-              <button id="Staminia_Options_VerboseModeButton_Status" class="btn btn-status btn-success"><i class="icon-white icon-ok"></i></button>
-              <button id="Staminia_Options_VerboseModeButton" data-linked-to="Staminia_Options_VerboseMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="true"><span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span></button>
-            </div>
-            <div></div>
-            <div class="btn-group btn-checkbox">
-              <button id="Staminia_Options_PressingButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_PressingButton" data-linked-to="Staminia_Options_Pressing" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span></button>
-            </div>
-            <div></div>
-            <div class="btn-group btn-checkbox">
-              <button id="Staminia_Options_AdvancedModeButton_Status" class="btn btn-status btn-danger"><i class="icon-white icon-remove"></i></button>
-              <button id="Staminia_Options_AdvancedModeButton" data-linked-to="Staminia_Options_AdvancedMode" class="btn btn-text-overflow" data-checkbox-button="data-checkbox-button" data-default-value="false"><span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span></button>
-            </div>
-          </div> <!-- Staminia Main Options End -->
+          <!-- Staminia Options Start -->
+          <div class="accordion" id="accordion-settings">
+            <form id="optionForm" action="javascript:{}" method="post">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseSettings">
+                    <i class="icon-cog"></i>
+                    <?= localize("Settings") ?>
+                  </a>
+                </div>
+                <div id="collapseSettings" class="accordion-body collapse in">
+                  <div class="accordion-inner">
+                    <div class="staminia-button-panel align-center">
+                      <label class="btn btn-checkbox">
+                        <input type="checkbox" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" checked>
+                        <i class="btn-checkbox-status-icon"></i>
+                        <span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span>
+                      </label>
+                      <label class="btn btn-checkbox">
+                        <input type="checkbox" name="Staminia_Options_Charts" id="Staminia_Options_Charts" checked>
+                        <i class="btn-checkbox-status-icon"></i>
+                        <span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span>
+                      </label>
+                      <label class="btn btn-checkbox">
+                        <input type="checkbox" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" checked>
+                        <i class="btn-checkbox-status-icon"></i>
+                        <span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span>
+                      </label>
+                      <label class="btn btn-checkbox">
+                        <input type="checkbox" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing">
+                        <i class="btn-checkbox-status-icon"></i>
+                        <span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span>
+                      </label>
+                      <label class="btn btn-checkbox">
+                        <input type="checkbox" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode">
+                        <i class="btn-checkbox-status-icon"></i>
+                        <span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span>
+                      </label>
+                    </div>
 
-          <!-- Staminia Predictions Type Start -->
-          <div class="align-center staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
-            <h4><?= localize("Predictions Type") ?></h4>
-            <div id="Staminia_Options_AdvancedMode_Predictions" class="btn-group btn-group-advanced" data-toggle="buttons-radio">
-              <button class="btn active" disabled="disabled" data-radio-group="predictions" data-linked-to="Staminia_Options_AdvancedMode_Predictions_HO" data-radio-button="data-radio-button" data-default-value="true">HO</button>
-              <button class="btn" disabled="disabled" data-radio-group="predictions" data-linked-to="Staminia_Options_AdvancedMode_Predictions_Andreac" data-radio-button="data-radio-button" data-default-value="false">Andreac</button>
-            </div>
-          </div> <!-- Staminia Predictions Type End -->
+                    <!-- Staminia Predictions Type Start -->
+                    <div class="align-center staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
+                      <h4><?= localize("Predictions Type") ?></h4>
+                      <div class="btn-group btn-group-radio">
+                        <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
+                        <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_HO">
+                          HO
+                        </label>
+                        <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac">
+                        <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
+                          AndreaC
+                        </label>
+                      </div>
+                    </div> <!-- Staminia Predictions Type End -->
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div> <!-- Staminia Options End -->
 
-          <!-- Staminia CHPP Options Start -->
-          <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
-            <h4><?= localize("CHPP Mode") ?></h4>
-            <div class="btn-group btn-checkbox">
-              <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
-              <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
-            </div>
+          <!-- Staminia CHPP Start -->
+          <div class="accordion<? if (!$tryAjax) echo " hide"; ?>" id="accordion-chpp">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-chpp" href="#collapseCHPP">
+                  <i class="icon-star"></i>
+                  <?= localize("CHPP Mode") ?>
+                </a>
+              </div>
+              <div id="collapseCHPP" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                  <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
+                    <div class="btn-group btn-checkbox">
+                      <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
+                      <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                    </div>
 
-            <div id="CHPP_Results" class="hide shy align-left">
-              <p id="CHPP_Status_Description"></p>
-            </div>
+                    <div id="CHPP_Results" class="hide shy align-left">
+                      <p id="CHPP_Status_Description"></p>
+                    </div>
 
-          </div> <!-- Staminia CHPP Options End -->
+                  </div> <!-- Staminia CHPP Options End -->
+                </div>
+              </div>
+            </div>
+          </div> <!-- Staminia CHPP End -->
 
         </div> <!-- First Column End -->
 
@@ -244,13 +279,6 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <!-- Main Form Start -->
 
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="staminiaForm">
-                <input type="hidden" name="Staminia_Options_OnlySecondHalf" value="true"/>
-                <input type="hidden" name="Staminia_Options_Charts" value="true"/>
-                <input type="hidden" name="Staminia_Options_VerboseMode" value="true"/>
-                <input type="hidden" name="Staminia_Options_Pressing" value="false"/>
-                <input type="hidden" name="Staminia_Options_AdvancedMode" value="false"/>
-                <input type="hidden" name="Staminia_Options_AdvancedMode_Predictions_HO" value="true"/>
-                <input type="hidden" name="Staminia_Options_AdvancedMode_Predictions_Andreac" value="false"/>
 
                 <table class="table table-bordered table-condensed" id="playersInfoTable">
                   <thead>
@@ -440,18 +468,18 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <tr class="motherClubBonus">
                       <td><?= localize("Mother club bonus") ?></td>
                       <td>
-                        <input type="hidden" name="Staminia_Player_1_MotherClubBonus" value="false"/>
-                        <div class="btn-group btn-checkbox">
-                          <button type="button" id="Button_Player_1_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_1_MotherClubBonus" id="Button_Player_1_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="1" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div>
+                        <label class="btn btn-checkbox btn-motherclub-bonus">
+                          <input type="checkbox" name="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox">
+                          <i class="btn-checkbox-status-icon"></i>
+                          <i class="icon-heart"></i>
+                        </label>
                       </td>
                       <td>
-                        <input type="hidden" name="Staminia_Player_2_MotherClubBonus" value="false"/>
-                        <div class="btn-group btn-checkbox">
-                          <button type="button" id="Button_Player_2_MotherClubBonus_Status" class="btn btn-danger btn-status"><i class="icon-remove icon-white"></i></button>
-                          <button type="button" data-linked-to="Staminia_Player_2_MotherClubBonus" id="Button_Player_2_MotherClubBonus" class="btn width-auto" data-checkbox-button="data-checkbox-button" data-motherclub-button="2" data-default-value="false"><i class="icon-heart"></i></button>
-                        </div>
+                        <label class="btn btn-checkbox btn-motherclub-bonus">
+                          <input type="checkbox" name="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox">
+                          <i class="btn-checkbox-status-icon"></i>
+                          <i class="icon-heart"></i>
+                        </label>
                       </td>
                     </tr>
                     <tr class="advanced hide">
@@ -693,7 +721,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.2.min.js"></script>
+    <script src="js/vendor/jquery-1.8.3.min.js"></script>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
