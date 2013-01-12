@@ -169,7 +169,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <?= localize("Settings") ?>
                   </a>
                 </div>
-                <div id="collapseSettings" class="accordion-body collapse in">
+                <div id="collapseSettings" class="accordion-body collapse">
                   <div class="accordion-inner">
                     <div class="staminia-button-panel align-center">
                       <label class="btn btn-checkbox">
@@ -201,7 +201,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
                     <!-- Staminia Predictions Type Start -->
                     <div class="align-center staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
-                      <h4><?= localize("Predictions Type") ?></h4>
+                      <?= localize("Predictions Type") ?>
                       <div class="btn-group btn-group-radio">
                         <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
                         <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_HO">
@@ -228,7 +228,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                   <?= localize("CHPP Mode") ?>
                 </a>
               </div>
-              <div id="collapseCHPP" class="accordion-body collapse in">
+              <div id="collapseCHPP" class="accordion-body collapse">
                 <div class="accordion-inner">
                   <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">

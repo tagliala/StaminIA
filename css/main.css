@@ -54,6 +54,13 @@
   }
 }
 
+/* Collapse settings on small devices */
+@media (min-width: 768px) {
+  .accordion-body.collapse {
+    height: auto;
+  }
+}
+
 .mainTitle  {
   font-size : 20px;
 }

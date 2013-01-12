@@ -909,6 +909,11 @@ $("#extraLink").on "click", (e) ->
   $('#helpModal').modal 'toggle'
   false
 
+$('a[data-toggle="collapse"]').on 'click', (e) ->
+  $this = $(this)
+  $target = $($this.attr 'href')
+  $target.addClass('in') if $target.css('height') isnt '0px'
+
 #export
 Staminia.format = format
 Staminia.number_format = number_format

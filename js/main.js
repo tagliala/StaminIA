@@ -1047,6 +1047,15 @@
     return false;
   });
 
+  $('a[data-toggle="collapse"]').on('click', function(e) {
+    var $target, $this;
+    $this = $(this);
+    $target = $($this.attr('href'));
+    if ($target.css('height') !== '0px') {
+      return $target.addClass('in');
+    }
+  });
+
   Staminia.format = format;
 
   Staminia.number_format = number_format;
