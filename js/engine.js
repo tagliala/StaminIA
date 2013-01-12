@@ -221,7 +221,7 @@
     var formReference, playerBonus, playerLoyalty, playerMotherClubBonus, playerSkill, tempHTML;
     formReference = $(Staminia.CONFIG.FORM_ID)[0];
     playerLoyalty = validateSkill(formReference["Staminia_Simple_Player_" + player + "_Loyalty"].value, "loyalty");
-    playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].value === "true";
+    playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].checked;
     playerBonus = getPlayerBonus(playerLoyalty, playerMotherClubBonus);
     playerSkill = validateSkill(formReference["Staminia_Simple_Player_" + player + "_MainSkill"].value, "skill");
     playerSkill += playerBonus;

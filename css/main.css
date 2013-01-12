@@ -595,3 +595,34 @@ footer a:hover {
   display: inline;
   line-height: .7em !important;
 }
+
+#CHPP_Refresh_Data_Status {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 16px;
+}
+
+#Staminia_Options_CHPP > .btn-group {
+  width: 100%;
+}
+
+#CHPP_Status_Description {
+  margin: 0;
+}
+
+.btn-chpp {
+  position: relative;
+}
+
+.btn-chpp .btn-status {
+  position: absolute;
+  z-index: 1;
+}
+
+#CHPP_Refresh_Data {
+  z-index: 0;
+  width: 100%;
+  padding-left: 36px;
+}

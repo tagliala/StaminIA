@@ -231,9 +231,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               <div id="collapseCHPP" class="accordion-body collapse in">
                 <div class="accordion-inner">
                   <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
-                    <div class="btn-group btn-checkbox">
+                    <div class="btn-group btn-chpp">
                       <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
-                      <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn align-left" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
                     <div id="CHPP_Results" class="hide shy align-left">
@@ -725,7 +725,6 @@ if (defined('GA_ID')) { ?>
     <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
-    <script src="js/vendor/jqform/jquery.form.min.js"></script>
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
     <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
     <script src="js/jquery.flot.js"></script>

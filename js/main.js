@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, OPTION_FORM_ID, Staminia, TABLE_ID, checkIframe, checkMotherClubBonus, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, OPTION_FORM_ID, Staminia, TABLE_ID, checkIframe, checkMotherClubBonus, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, formSerialize, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -14,7 +14,7 @@
     FORM_ID: "#formPlayersInfo",
     OPTION_FORM_ID: "#optionForm",
     TABLE_ID: "#playersInfoTable",
-    DEBUG: false,
+    DEBUG: true,
     DEBUG_STEP: 1,
     AUTOSTART: true,
     PREDICTIONS_ANDREAC: [[0.5036, 0.2310, 0.0, 0.0, 0.0, 0.0], [0.0, 0.3492, 0.1180, 0.0, 0.0, 0.0], [0.0, 0.2514, 0.1590, 0.0, 0.0, 0.0], [0.0, 0.3546, 0.0825, 0.0556, 0.0, 0.0], [0.0, 0.3236, 0.0780, 0.1086, 0.0, 0.0], [0.0, 0.2480, 0.1080, 0.1375, 0.0, 0.0], [0.0, 0.3440, 0.0310, 0.0688, 0.0, 0.0], [0.0, 0.3256, 0.0780, 0.0604, 0.0, 0.0], [0.0, 0.1302, 0.4680, 0.0, 0.1149, 0.0], [0.0, 0.0733, 0.4420, 0.0, 0.1508, 0.0], [0.0, 0.2039, 0.4420, 0.0, 0.0760, 0.0], [0.0, 0.1383, 0.4130, 0.1073, 0.1071, 0.0], [0.0, 0.1314, 0.2180, 0.1848, 0.0669, 0.0], [0.0, 0.0652, 0.1830, 0.2081, 0.0803, 0.0], [0.0, 0.1831, 0.1830, 0.1556, 0.0484, 0.0], [0.0, 0.1341, 0.2760, 0.1350, 0.0671, 0.0], [0.0, 0.0, 0.0, 0.0808, 0.1306, 0.3077], [0.0, 0.0, 0.1950, 0.0550, 0.2189, 0.1778], [0.0, 0.0, 0.1950, 0.0550, 0.2661, 0.1778], [0.0, 0.0, 0.0, 0.0901, 0.1334, 0.2441]],
@@ -482,16 +482,24 @@
   };
 
   fillForm = function() {
-    var field, fields, i, params, paramsString, _i, _len;
+    var $field, field, fields, i, params, paramsString, _i, _len;
     paramsString = gup("params");
     if (paramsString == null) {
       return;
     }
     params = decodeURI(paramsString).split("-");
-    fields = $('#formPlayersInfo *[name^=Staminia_]');
+    fields = $('*[name^=Staminia_]');
     for (i = _i = 0, _len = fields.length; _i < _len; i = ++_i) {
       field = fields[i];
-      field.value = params[i];
+      $field = $(field);
+      switch ($field.attr('type')) {
+        case 'checkbox':
+        case 'radio':
+          $field.attr('checked', (params[i] === 'true' ? 'checked' : null));
+          break;
+        default:
+          $field.val(params[i]);
+      }
     }
     checkMotherClubBonus();
     if (isAdvancedModeEnabled()) {
@@ -513,6 +521,23 @@
     }
   };
 
+  formSerialize = function() {
+    var serializedFields;
+    serializedFields = [];
+    $('*[name^="Staminia_"]').each(function() {
+      var $this;
+      $this = $(this);
+      switch ($this.attr('type')) {
+        case 'checkbox':
+        case 'radio':
+          return serializedFields.push($this.prop('checked'));
+        default:
+          return serializedFields.push($this.val());
+      }
+    });
+    return encodeURI(serializedFields.join("-"));
+  };
+
   $("#getLink").on("click", function(e) {
     var body, clippy, link, locale;
     if (!$(FORM_ID).validate().form()) {
@@ -526,7 +551,7 @@
     } else {
       link += "?";
     }
-    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g, "-")));
+    link += "params=" + (formSerialize());
     clippy = "&nbsp;<span class=\"clippy\" data-clipboard-text=\"" + link + "\" id=\"staminiaClippy\"></span>";
     body = link;
     if ($("#generatedLinkBody").length) {
@@ -547,22 +572,25 @@
     scrollUpToResults();
   });
 
-  $("#switchPlayers").click(function() {
+  $('#switchPlayers').click(function() {
     $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
-      var $p2Field, $this, form, p1Disabled, p1Value, p2Field;
+      var $p2Field, $this, form, p1Checked, p1Disabled, p1Value, p2Field;
       form = $(FORM_ID)[0];
-      p2Field = form[this.name.replace("_1", "_2")];
+      p2Field = form[this.name.replace('_1', '_2')];
       $this = $(this);
       $p2Field = $(p2Field);
       p1Value = this.value;
-      p1Disabled = $this.attr("disabled") != null ? "disabled" : null;
+      p1Disabled = $this.attr('disabled') != null ? 'disabled' : null;
+      p1Checked = $this.attr('checked') != null ? 'checked' : null;
       $this.val($p2Field.val());
-      $this.attr("disabled", $p2Field.attr("disabled") != null ? "disabled" : null);
+      $this.attr('disabled', $p2Field.attr('disabled') != null ? 'disabled' : null);
+      $this.attr('checked', $p2Field.attr('checked') != null ? 'checked' : null);
       $p2Field.val(p1Value);
-      return $p2Field.attr("disabled", p1Disabled);
+      $p2Field.attr('disabled', p1Disabled);
+      return $p2Field.attr('checked', p1Checked);
     });
     checkMotherClubBonus();
-    $('.control-group').removeClass("error");
+    $('.control-group').removeClass('error');
     $(FORM_ID).validate().form();
   });
 
@@ -912,9 +940,10 @@
     formReference["Staminia_Simple_Player_" + player + "_Form"].value = PlayerData.PlayerForm;
     formReference["Staminia_Simple_Player_" + player + "_MainSkill"].value = PlayerData.MainSkill;
     formReference["Staminia_Simple_Player_" + player + "_Loyalty"].value = PlayerData.Loyalty;
-    if ((PlayerData.MotherClubBonus && !$("#Button_Player_" + player + "_MotherClubBonus_Status").hasClass("btn-success")) || (!PlayerData.MotherClubBonus && $("#Button_Player_" + player + "_MotherClubBonus_Status").hasClass("btn-success"))) {
-      $("#Button_Player_" + player + "_MotherClubBonus").click();
+    if (PlayerData.MotherClubBonus) {
+      $("input[name=Staminia_Player_" + player + "_MotherClubBonus]").attr('checked', 'checked');
     }
+    checkMotherClubBonus();
     formReference["Staminia_Advanced_Player_" + player + "_Experience"].value = number_format(PlayerData.Experience, 2);
     formReference["Staminia_Advanced_Player_" + player + "_Stamina"].value = number_format(PlayerData.StaminaSkill, 2);
     formReference["Staminia_Advanced_Player_" + player + "_Form"].value = number_format(PlayerData.PlayerForm, 2);

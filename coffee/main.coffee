@@ -6,7 +6,7 @@ $.extend Staminia.CONFIG,
   FORM_ID: "#formPlayersInfo"
   OPTION_FORM_ID: "#optionForm"
   TABLE_ID: "#playersInfoTable"
-  DEBUG: false
+  DEBUG: true
   DEBUG_STEP: 1
   AUTOSTART: true
   PREDICTIONS_ANDREAC: [ [ 0.5036, 0.2310, 0.0, 0.0, 0.0, 0.0 ], [ 0.0, 0.3492, 0.1180, 0.0, 0.0, 0.0 ], [ 0.0, 0.2514, 0.1590, 0.0, 0.0, 0.0 ], [ 0.0, 0.3546, 0.0825, 0.0556, 0.0, 0.0 ], [ 0.0, 0.3236, 0.0780, 0.1086, 0.0, 0.0 ], [ 0.0, 0.2480, 0.1080, 0.1375, 0.0, 0.0 ], [ 0.0, 0.3440, 0.0310, 0.0688, 0.0, 0.0 ], [ 0.0, 0.3256, 0.0780, 0.0604, 0.0, 0.0 ], [ 0.0, 0.1302, 0.4680, 0.0, 0.1149, 0.0 ], [ 0.0, 0.0733, 0.4420, 0.0, 0.1508, 0.0 ], [ 0.0, 0.2039, 0.4420, 0.0, 0.0760, 0.0 ], [ 0.0, 0.1383, 0.4130, 0.1073, 0.1071, 0.0 ], [ 0.0, 0.1314, 0.2180, 0.1848, 0.0669, 0.0 ], [ 0.0, 0.0652, 0.1830, 0.2081, 0.0803, 0.0 ], [ 0.0, 0.1831, 0.1830, 0.1556, 0.0484, 0.0 ], [ 0.0, 0.1341, 0.2760, 0.1350, 0.0671, 0.0 ], [ 0.0, 0.0, 0.0, 0.0808, 0.1306, 0.3077 ], [ 0.0, 0.0, 0.1950, 0.0550, 0.2189, 0.1778 ], [ 0.0, 0.0, 0.1950, 0.0550, 0.2661, 0.1778 ], [ 0.0, 0.0, 0.0, 0.0901, 0.1334, 0.2441 ] ]
@@ -441,9 +441,12 @@ fillForm = ->
   paramsString = gup("params")
   return unless paramsString?
   params = decodeURI(paramsString).split "-"
-  fields = $('#formPlayersInfo *[name^=Staminia_]')
+  fields = $('*[name^=Staminia_]')
   for field, i in fields
-    field.value = params[i]
+    $field = $(field)
+    switch $field.attr('type')
+      when 'checkbox', 'radio' then $field.attr 'checked', (if params[i] is 'true' then 'checked' else null)
+      else $field.val params[i]
   checkMotherClubBonus()
   if isAdvancedModeEnabled()
     enableAdvancedMode()
@@ -460,6 +463,16 @@ checkMotherClubBonus = ->
     $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr 'disabled', status
   return
 
+# Serialize Stamin.IA! form
+formSerialize = ->
+  serializedFields = []
+  $('*[name^="Staminia_"]').each ->
+    $this = $(this)
+    switch $this.attr('type')
+      when 'checkbox', 'radio' then serializedFields.push $this.prop('checked')
+      else serializedFields.push $this.val()
+  encodeURI serializedFields.join("-")
+
 # Stamin.IA! Get Link Button
 $("#getLink").on "click", (e) ->
   unless $(FORM_ID).validate().form()
@@ -474,7 +487,7 @@ $("#getLink").on "click", (e) ->
   else
     link +="?"
 
-  link += "params=#{encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g,"-"))}"
+  link += "params=#{formSerialize()}"
 
   clippy = """
     &nbsp;<span class="clippy" data-clipboard-text="#{link}" id="staminiaClippy"></span>
@@ -495,22 +508,25 @@ $("#getLink").on "click", (e) ->
   return
 
 # Stamin.IA! Switch Players Button
-$("#switchPlayers").click ->
+$('#switchPlayers').click ->
   $("#{FORM_ID} *[name*=_Player_1_]").each ->
-      form = $(FORM_ID)[0]
-      p2Field = form[@name.replace("_1","_2")]
+    form = $(FORM_ID)[0]
+    p2Field = form[@name.replace('_1', '_2')]
 
-      $this = $(this)
-      $p2Field = $(p2Field)
+    $this = $(this)
+    $p2Field = $(p2Field)
 
-      p1Value = @value
-      p1Disabled = if $this.attr("disabled")? then "disabled" else null
-      $this.val $p2Field.val()
-      $this.attr "disabled", if $p2Field.attr("disabled")? then "disabled" else null
-      $p2Field.val p1Value
-      $p2Field.attr "disabled", p1Disabled
+    p1Value = @value
+    p1Disabled = if $this.attr('disabled')? then 'disabled' else null
+    p1Checked = if $this.attr('checked')? then 'checked' else null
+    $this.val $p2Field.val()
+    $this.attr 'disabled', if $p2Field.attr('disabled')? then 'disabled' else null
+    $this.attr 'checked', if $p2Field.attr('checked')? then 'checked' else null
+    $p2Field.val p1Value
+    $p2Field.attr 'disabled', p1Disabled
+    $p2Field.attr 'checked', p1Checked
   checkMotherClubBonus()
-  $('.control-group').removeClass "error"
+  $('.control-group').removeClass 'error'
   $(FORM_ID).validate().form()
   return
 
@@ -811,7 +827,8 @@ setPlayerFormFields = (player, checkUrlParameter = false) ->
   formReference["Staminia_Simple_Player_#{player}_Loyalty"].value = PlayerData.Loyalty;
 
   # Mother Club Bonus
-  $("#Button_Player_#{player}_MotherClubBonus").click() if (PlayerData.MotherClubBonus and !$("#Button_Player_#{player}_MotherClubBonus_Status").hasClass("btn-success")) or (!PlayerData.MotherClubBonus and $("#Button_Player_#{player}_MotherClubBonus_Status").hasClass("btn-success"))
+  $("input[name=Staminia_Player_#{player}_MotherClubBonus]").attr 'checked', 'checked' if PlayerData.MotherClubBonus
+  checkMotherClubBonus()
 
   # Advanced Mode
   formReference["Staminia_Advanced_Player_#{player}_Experience"].value       = number_format(PlayerData.Experience,     2);
