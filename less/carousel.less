@@ -1,5 +1,7 @@
-// CAROUSEL
-// --------
+//
+// Carousel
+// --------------------------------------------------
+
 
 .carousel {
   position: relative;
@@ -13,76 +15,53 @@
   position: relative;
 }
 
-.carousel {
+.carousel-inner {
 
-  .item {
+  > .item {
     display: none;
     position: relative;
     .transition(.6s ease-in-out left);
   }
 
   // Account for jankitude on images
-  .item > img {
+  > .item > img {
     display: block;
     line-height: 1;
   }
 
-  .active,
-  .next,
-  .prev { display: block; }
+  > .active,
+  > .next,
+  > .prev { display: block; }
 
-  .active {
+  > .active {
     left: 0;
   }
 
-  .next,
-  .prev {
+  > .next,
+  > .prev {
     position: absolute;
     top: 0;
     width: 100%;
   }
 
-  .next {
+  > .next {
     left: 100%;
   }
-  .prev {
+  > .prev {
     left: -100%;
   }
-  .next.left,
-  .prev.right {
+  > .next.left,
+  > .prev.right {
     left: 0;
   }
 
-  .active.left {
+  > .active.left {
     left: -100%;
   }
-  .active.right {
+  > .active.right {
     left: 100%;
   }
 
-  // Fade effect
-  &.carousel-fade {
-    .item {
-     .transition(opacity 2s ease-in-out);
-    }
-
-    .active {
-      &.left, &.right {
-        left: 0;
-        z-index: 2;
-        .opacity(0);
-      }
-    }
-
-    .next, .prev {
-      left: 0;
-      z-index: 1;
-    }
-
-    .carousel-control {
-      z-index : 3;
-    }
-  }
 }
 
 // Left/right controls for nav
@@ -102,7 +81,6 @@
   text-align: center;
   background: @grayDarker;
   border: 3px solid @white;
-  .border-radius(23px);
   .opacity(50);
 
   // we can't have this transition here
@@ -126,6 +104,7 @@
   }
 }
 
+
 // Caption for text below images
 // -----------------------------
 
@@ -134,11 +113,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 10px 15px 5px;
+  padding: 15px;
   background: @grayDark;
   background: rgba(0,0,0,.75);
 }
 .carousel-caption h4,
 .carousel-caption p {
   color: @white;
+  line-height: @baseLineHeight;
+}
+.carousel-caption h4 {
+  margin: 0 0 5px;
+}
+.carousel-caption p {
+  margin-bottom: 0;
 }

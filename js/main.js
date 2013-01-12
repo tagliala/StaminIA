@@ -1047,9 +1047,10 @@
     return false;
   });
 
-  $('a[data-toggle="collapse"]').on('click', function(e) {
+  $('a.accordion-toggle[data-toggle="collapse"]').on('click', function(e) {
     var $target, $this;
     $this = $(this);
+    console.log('ciao');
     $target = $($this.attr('href'));
     if ($target.css('height') !== '0px') {
       return $target.addClass('in');

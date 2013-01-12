@@ -909,8 +909,9 @@ $("#extraLink").on "click", (e) ->
   $('#helpModal').modal 'toggle'
   false
 
-$('a[data-toggle="collapse"]').on 'click', (e) ->
+$('a.accordion-toggle[data-toggle="collapse"]').on 'click', (e) ->
   $this = $(this)
+  console.log 'ciao'
   $target = $($this.attr 'href')
   $target.addClass('in') if $target.css('height') isnt '0px'
 

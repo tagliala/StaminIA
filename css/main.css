@@ -471,9 +471,9 @@ footer a:hover {
   display: block;
   top: -1px;
   left: -1px;
-  width: 26px;
+  width: 28px;
   height: 22px;
-  padding-top: 4px;
+  padding-top: 6px;
   line-height: 16px;
   font-family: 'FontAwesome';
   font-weight: normal;
@@ -591,8 +591,8 @@ footer a:hover {
 }
 
 #CHPP_Refresh_Data_Status {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   font-size: 18px;
   line-height: 16px;

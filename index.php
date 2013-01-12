@@ -202,7 +202,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <!-- Staminia Predictions Type Start -->
                     <div class="align-center staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
                       <?= localize("Predictions Type") ?>
-                      <div class="btn-group btn-group-radio">
+                      <div class="btn-group btn-group-radio btn-block">
                         <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
                         <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_HO">
                           HO
@@ -722,7 +722,7 @@ if (defined('GA_ID')) { ?>
     </script>
 <? } ?>
     <script src="js/vendor/jquery-1.8.3.min.js"></script>
-    <script src="js/vendor/bootstrap-2.0.4.min.js"></script>
+    <script src="js/vendor/bootstrap-2.2.2.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
