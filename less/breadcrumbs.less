@@ -1,21 +1,22 @@
-// BREADCRUMBS
-// -----------
+//
+// Breadcrumbs
+// --------------------------------------------------
+
 
 .breadcrumb {
-  padding: 7px 14px;
+  padding: 8px 15px;
   margin: 0 0 @baseLineHeight;
   list-style: none;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  li {
+  background-color: #f5f5f5;
+  > li {
     display: inline-block;
     .ie7-inline-block();
+    > .divider {
+      padding: 0 5px;
+      color: #ccc;
+    }
   }
-  .divider {
-    padding: 0 5px;
+  > .active {
     color: @grayLight;
-  }
-  .active a {
-    color: @grayDark;
   }
 }

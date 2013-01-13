@@ -8,8 +8,8 @@ RD /S /Q ..\publish > nul
 echo.
 
 echo # Compiling assets
-cmd /c lessc ..\less\bootstrap.less ..\css\bootstrap.css
-cmd /c lessc ..\less\responsive.less ..\css\bootstrap-responsive.css
+cmd /c recess --compile ..\less\bootstrap.less > ..\css\bootstrap.css
+cmd /c recess --compile ..\less\responsive.less > ..\css\bootstrap-responsive.css
 cmd /c coffee -o ..\js -c ..\coffee
 echo.
 

@@ -1,5 +1,6 @@
-// PROGRESS BARS
-// -------------
+//
+// Progress bars
+// --------------------------------------------------
 
 
 // ANIMATIONS
@@ -43,20 +44,27 @@
 // Outer container
 .progress {
   overflow: hidden;
-  height: 18px;
-  margin-bottom: 18px;
-  background-color: #f9f9f9;
+  height: @baseLineHeight;
+  margin-bottom: @baseLineHeight;
+  #gradient > .vertical(#f5f5f5, #f9f9f9);
+  .box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
 }
 
 // Bar of progress
 .progress .bar {
   width: 0%;
-  height: 18px;
+  height: 100%;
   color: @white;
+  float: left;
   font-size: 12px;
   text-align: center;
-  background-color: #0480be;
+  #gradient > .vertical(#149bdf, #0480be);
+  .box-shadow(inset 0 -1px 0 rgba(0,0,0,.15));
   .box-sizing(border-box);
+  .transition(width .6s ease);
+}
+.progress .bar + .bar {
+  .box-shadow(~"inset 1px 0 0 rgba(0,0,0,.15), inset 0 -1px 0 rgba(0,0,0,.15)");
 }
 
 // Striped bars
@@ -80,33 +88,33 @@
 // ------
 
 // Danger (red)
-.progress-danger .bar {
-  background-color: #c43c35;
+.progress-danger .bar, .progress .bar-danger {
+  #gradient > .vertical(#ee5f5b, #c43c35);
 }
-.progress-danger.progress-striped .bar {
+.progress-danger.progress-striped .bar, .progress-striped .bar-danger {
   #gradient > .striped(#ee5f5b);
 }
 
 // Success (green)
-.progress-success .bar {
-  background-color: #57a957;
+.progress-success .bar, .progress .bar-success {
+  #gradient > .vertical(#62c462, #57a957);
 }
-.progress-success.progress-striped .bar {
+.progress-success.progress-striped .bar, .progress-striped .bar-success {
   #gradient > .striped(#62c462);
 }
 
 // Info (teal)
-.progress-info .bar {
-  background-color: #339bb9;
+.progress-info .bar, .progress .bar-info {
+  #gradient > .vertical(#5bc0de, #339bb9);
 }
-.progress-info.progress-striped .bar {
+.progress-info.progress-striped .bar, .progress-striped .bar-info {
   #gradient > .striped(#5bc0de);
 }
 
 // Warning (orange)
-.progress-warning .bar {
-  background-color: @orange;
+.progress-warning .bar, .progress .bar-warning {
+  #gradient > .vertical(lighten(@orange, 15%), @orange);
 }
-.progress-warning.progress-striped .bar {
+.progress-warning.progress-striped .bar, .progress-striped .bar-warning {
   #gradient > .striped(lighten(@orange, 15%));
 }

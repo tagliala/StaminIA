@@ -15,4 +15,7 @@ define('GH_REPO', 'tagliala/StaminIA');
 
 // google analytics' profile ID
 define('GA_ID', 'UA-XXXXX-X');
+
+// google adsense' profile ID
+define('GOOGLE_AD_CLIENT', 'ca-pub-XXXXXXXXXXXXXXXX');
 ?>

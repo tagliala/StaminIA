@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var AUTOSTART, DEBUG, FORM_ID, Staminia, TABLE_ID, checkFormButtonsAppearance, checkIframe, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
+  var AUTOSTART, DEBUG, FORM_ID, OPTION_FORM_ID, Staminia, TABLE_ID, checkIframe, checkMotherClubBonus, createAlert, createSubstitutionAlert, disableAdvancedMode, disableCHPPMode, enableAdvancedMode, enableCHPPMode, fillForm, formSerialize, format, gup, isAdvancedModeEnabled, isChartsEnabled, isOnlySecondHalfEnabled, isPressingEnabled, isVerboseModeEnabled, loginMenuHide, loginMenuShow, number_format, plot_redraw, previousPoint, resetAndHideTabs, scrollUpToResults, setPlayerFormFields, setupCHPPPlayerFields, showSkillsByPosition, showTooltip, sortCHPPPlayerFields, sort_by, stripeTable, updateCHPPPlayerFields, updatePredictions;
 
   window.Staminia = window.Staminia || {};
 
@@ -12,8 +12,9 @@
 
   $.extend(Staminia.CONFIG, {
     FORM_ID: "#formPlayersInfo",
+    OPTION_FORM_ID: "#optionForm",
     TABLE_ID: "#playersInfoTable",
-    DEBUG: false,
+    DEBUG: true,
     DEBUG_STEP: 1,
     AUTOSTART: true,
     PREDICTIONS_ANDREAC: [[0.5036, 0.2310, 0.0, 0.0, 0.0, 0.0], [0.0, 0.3492, 0.1180, 0.0, 0.0, 0.0], [0.0, 0.2514, 0.1590, 0.0, 0.0, 0.0], [0.0, 0.3546, 0.0825, 0.0556, 0.0, 0.0], [0.0, 0.3236, 0.0780, 0.1086, 0.0, 0.0], [0.0, 0.2480, 0.1080, 0.1375, 0.0, 0.0], [0.0, 0.3440, 0.0310, 0.0688, 0.0, 0.0], [0.0, 0.3256, 0.0780, 0.0604, 0.0, 0.0], [0.0, 0.1302, 0.4680, 0.0, 0.1149, 0.0], [0.0, 0.0733, 0.4420, 0.0, 0.1508, 0.0], [0.0, 0.2039, 0.4420, 0.0, 0.0760, 0.0], [0.0, 0.1383, 0.4130, 0.1073, 0.1071, 0.0], [0.0, 0.1314, 0.2180, 0.1848, 0.0669, 0.0], [0.0, 0.0652, 0.1830, 0.2081, 0.0803, 0.0], [0.0, 0.1831, 0.1830, 0.1556, 0.0484, 0.0], [0.0, 0.1341, 0.2760, 0.1350, 0.0671, 0.0], [0.0, 0.0, 0.0, 0.0808, 0.1306, 0.3077], [0.0, 0.0, 0.1950, 0.0550, 0.2189, 0.1778], [0.0, 0.0, 0.1950, 0.0550, 0.2661, 0.1778], [0.0, 0.0, 0.0, 0.0901, 0.1334, 0.2441]],
@@ -145,6 +146,8 @@
   };
 
   FORM_ID = Staminia.CONFIG.FORM_ID;
+
+  OPTION_FORM_ID = Staminia.CONFIG.OPTION_FORM_ID;
 
   TABLE_ID = Staminia.CONFIG.TABLE_ID;
 
@@ -451,23 +454,23 @@
   };
 
   isOnlySecondHalfEnabled = function() {
-    return $("#Staminia_Options_OnlySecondHalfButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_OnlySecondHalf").prop('checked');
   };
 
   isChartsEnabled = function() {
-    return $("#Staminia_Options_ChartsButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_Charts").prop('checked');
   };
 
   isVerboseModeEnabled = function() {
-    return $("#Staminia_Options_VerboseModeButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_VerboseMode").prop('checked');
   };
 
   isPressingEnabled = function() {
-    return $("#Staminia_Options_PressingButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_Pressing").prop('checked');
   };
 
   isAdvancedModeEnabled = function() {
-    return $("#Staminia_Options_AdvancedModeButton_Status").hasClass("btn-success");
+    return $("#Staminia_Options_AdvancedMode").prop('checked');
   };
 
   enableCHPPMode = function() {
@@ -479,58 +482,69 @@
   };
 
   fillForm = function() {
-    var field, fields, i, params, paramsString, _i, _len;
+    var $field, field, fields, i, params, paramsString, _i, _len;
     paramsString = gup("params");
     if (paramsString == null) {
       return;
     }
     params = decodeURI(paramsString).split("-");
-    fields = $('#formPlayersInfo *[name^=Staminia_]');
+    fields = $('*[name^=Staminia_]');
     for (i = _i = 0, _len = fields.length; _i < _len; i = ++_i) {
       field = fields[i];
-      field.value = params[i];
+      $field = $(field);
+      switch ($field.attr('type')) {
+        case 'checkbox':
+        case 'radio':
+          $field.attr('checked', (params[i] === 'true' ? 'checked' : null));
+          break;
+        default:
+          $field.val(params[i]);
+      }
     }
-    checkFormButtonsAppearance();
     if (isAdvancedModeEnabled()) {
       enableAdvancedMode();
     } else {
       disableAdvancedMode();
     }
+    checkMotherClubBonus();
+    updatePredictions();
     stripeTable();
   };
 
-  checkFormButtonsAppearance = function() {
-    $("button[data-checkbox-button]").each(function() {
-      var $status_button, form, playerId;
-      $status_button = $("#" + ($(this).attr('id')) + "_Status");
-      form = $(FORM_ID)[0];
-      if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
-        $status_button.removeClass("btn-danger").addClass("btn-success");
-        $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
-        if ($(this).data("motherclubButton") != null) {
-          playerId = $(this).data("motherclubButton");
-          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-        }
-      } else {
-        $status_button.removeClass("btn-success").addClass("btn-danger");
-        $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
-        if ($(this).data("motherclubButton") != null) {
-          playerId = $(this).data("motherclubButton");
-          $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-          return $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-        }
+  checkMotherClubBonus = function() {
+    var playerId, status, _i, _len, _ref;
+    _ref = [1, 2];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      playerId = _ref[_i];
+      status = $("input[name=Staminia_Player_" + playerId + "_MotherClubBonus]").prop('checked') ? 'disabled' : null;
+      $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+      $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+    }
+  };
+
+  updatePredictions = function() {
+    if ($('input[name="Staminia_Options_Predictions_Type"]:checked').val() === 'ho') {
+      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
+    } else {
+      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
+    }
+  };
+
+  formSerialize = function() {
+    var serializedFields;
+    serializedFields = [];
+    $('*[name^="Staminia_"]').each(function() {
+      var $this;
+      $this = $(this);
+      switch ($this.attr('type')) {
+        case 'checkbox':
+        case 'radio':
+          return serializedFields.push($this.prop('checked'));
+        default:
+          return serializedFields.push($this.val());
       }
     });
-    $("button[data-radio-button]").each(function() {
-      var form;
-      form = $(FORM_ID)[0];
-      if (Boolean(form[$(this).data("linkedTo")].value === "true")) {
-        return $(this).addClass("active");
-      } else {
-        return $(this).removeClass("active");
-      }
-    });
+    return encodeURI(serializedFields.join("-"));
   };
 
   $("#getLink").on("click", function(e) {
@@ -546,7 +560,7 @@
     } else {
       link += "?";
     }
-    link += "params=" + (encodeURI($('#formPlayersInfo *[name^=Staminia_]').fieldValue(false).toString().replace(/,/g, "-")));
+    link += "params=" + (formSerialize());
     clippy = "&nbsp;<span class=\"clippy\" data-clipboard-text=\"" + link + "\" id=\"staminiaClippy\"></span>";
     body = link;
     if ($("#generatedLinkBody").length) {
@@ -567,58 +581,30 @@
     scrollUpToResults();
   });
 
-  $("#switchPlayers").click(function() {
+  $('#switchPlayers').click(function() {
     $("" + FORM_ID + " *[name*=_Player_1_]").each(function() {
-      var $p2Field, $this, form, p1Disabled, p1Value, p2Field;
+      var $p2Field, $this, form, p1Checked, p1Disabled, p1Value, p2Field;
       form = $(FORM_ID)[0];
-      p2Field = form[this.name.replace("_1", "_2")];
+      p2Field = form[this.name.replace('_1', '_2')];
       $this = $(this);
       $p2Field = $(p2Field);
       p1Value = this.value;
-      p1Disabled = $this.attr("disabled") != null ? "disabled" : null;
+      p1Disabled = $this.attr('disabled') != null ? 'disabled' : null;
+      p1Checked = $this.attr('checked') != null ? 'checked' : null;
       $this.val($p2Field.val());
-      $this.attr("disabled", $p2Field.attr("disabled") != null ? "disabled" : null);
+      $this.attr('disabled', $p2Field.attr('disabled') != null ? 'disabled' : null);
+      $this.attr('checked', $p2Field.attr('checked') != null ? 'checked' : null);
       $p2Field.val(p1Value);
-      return $p2Field.attr("disabled", p1Disabled);
+      $p2Field.attr('disabled', p1Disabled);
+      return $p2Field.attr('checked', p1Checked);
     });
-    checkFormButtonsAppearance();
-    $('.control-group').removeClass("error");
+    checkMotherClubBonus();
+    $('.control-group').removeClass('error');
     $(FORM_ID).validate().form();
   });
 
-  $("button.btn-status").on("click", function(e) {
-    return $("#" + ($(this).attr('id').replace(/_Status$/g, ''))).click();
-  });
-
-  $("button[data-checkbox-button]").on("click", function(e) {
-    var $status_button, form, playerId;
-    form = $(FORM_ID)[0];
-    $status_button = $("#" + ($(this).attr('id')) + "_Status");
-    if (!$status_button.hasClass("btn-success")) {
-      form[$(this).data("linkedTo")].value = true;
-      $status_button.removeClass("btn-danger").addClass("btn-success");
-      $status_button.find("i").removeClass("icon-remove").addClass("icon-ok");
-      if ($(this).data("motherclubButton") != null) {
-        playerId = $(this).data("motherclubButton");
-        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", "disabled");
-      }
-    } else {
-      form[$(this).data("linkedTo")].value = false;
-      $status_button.removeClass("btn-success").addClass("btn-danger");
-      $status_button.find("i").removeClass("icon-ok").addClass("icon-remove");
-      if ($(this).data("motherclubButton") != null) {
-        playerId = $(this).data("motherclubButton");
-        $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-        $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr("disabled", null);
-      }
-    }
-  });
-
-  $("#Staminia_Options_AdvancedModeButton").on("click", function(e) {
-    var $status_button;
-    $status_button = $("#" + ($(this).attr('id')) + "_Status");
-    if ($status_button.hasClass("btn-success")) {
+  $('#Staminia_Options_AdvancedMode').on('change', function(e) {
+    if ($(this).prop('checked')) {
       enableAdvancedMode();
     } else {
       disableAdvancedMode();
@@ -626,27 +612,17 @@
     stripeTable();
   });
 
-  $("button[data-radio-button]").on("click", function(e) {
-    var form;
-    form = $(FORM_ID)[0];
-    $("button[data-radio-button][data-radio-group='" + ($(this).data("radioGroup")) + "']").each(function() {
-      return form[$(this).data("linkedTo")].value = "false";
-    });
-    form[$(this).data("linkedTo")].value = !$(this).hasClass("active");
-    updatePredictions();
+  $('.motherclub-bonus-checkbox').on('change', function(e) {
+    checkMotherClubBonus();
   });
 
-  updatePredictions = function() {
-    if ($("" + FORM_ID + " input[name=Staminia_Options_AdvancedMode_Predictions_Andreac]").val() === "true") {
-      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
-    } else {
-      Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
-    }
-  };
+  $('input[name="Staminia_Options_Predictions_Type"]').on('change', function(e) {
+    return updatePredictions();
+  });
 
-  $("input[data-validate='range'], select[data-validate='range']").each(function() {
-    $(this).rules("add", {
-      range: [$(this).data("rangeMin"), $(this).data("rangeMax")]
+  $('input[data-validate="range"], select[data-validate="range"]').each(function() {
+    return $(this).rules('add', {
+      range: [$(this).data('rangeMin'), $(this).data('rangeMax')]
     });
   });
 
@@ -663,7 +639,7 @@
   });
 
   $("#resetApp").on("click", function(e) {
-    $(FORM_ID).each(function() {
+    $("" + FORM_ID + ", " + OPTION_FORM_ID).each(function() {
       if (typeof this.reset === 'function' || (typeof this.reset === 'object' && !this.reset.nodeType)) {
         return this.reset();
       }
@@ -671,12 +647,7 @@
     $('.control-group').removeClass("error");
     $("#AlertsContainer").html("");
     resetAndHideTabs();
-    $("button[data-checkbox-button], button[data-radio-button]").each(function() {
-      var form;
-      form = $(FORM_ID)[0];
-      form[$(this).data("linkedTo")].value = $(this).data("default-value");
-    });
-    checkFormButtonsAppearance();
+    checkMotherClubBonus();
     disableAdvancedMode();
     setupCHPPPlayerFields();
     stripeTable();
@@ -974,9 +945,10 @@
     formReference["Staminia_Simple_Player_" + player + "_Form"].value = PlayerData.PlayerForm;
     formReference["Staminia_Simple_Player_" + player + "_MainSkill"].value = PlayerData.MainSkill;
     formReference["Staminia_Simple_Player_" + player + "_Loyalty"].value = PlayerData.Loyalty;
-    if ((PlayerData.MotherClubBonus && !$("#Button_Player_" + player + "_MotherClubBonus_Status").hasClass("btn-success")) || (!PlayerData.MotherClubBonus && $("#Button_Player_" + player + "_MotherClubBonus_Status").hasClass("btn-success"))) {
-      $("#Button_Player_" + player + "_MotherClubBonus").click();
+    if (PlayerData.MotherClubBonus) {
+      $("input[name=Staminia_Player_" + player + "_MotherClubBonus]").attr('checked', 'checked');
     }
+    checkMotherClubBonus();
     formReference["Staminia_Advanced_Player_" + player + "_Experience"].value = number_format(PlayerData.Experience, 2);
     formReference["Staminia_Advanced_Player_" + player + "_Stamina"].value = number_format(PlayerData.StaminaSkill, 2);
     formReference["Staminia_Advanced_Player_" + player + "_Form"].value = number_format(PlayerData.PlayerForm, 2);
@@ -1078,6 +1050,16 @@
     $("#tabExtraNav").find("a").tab("show");
     $('#helpModal').modal('toggle');
     return false;
+  });
+
+  $('a.accordion-toggle[data-toggle="collapse"]').on('click', function(e) {
+    var $target, $this;
+    $this = $(this);
+    console.log('ciao');
+    $target = $($this.attr('href'));
+    if ($target.css('height') !== '0px') {
+      return $target.addClass('in');
+    }
   });
 
   Staminia.format = format;
