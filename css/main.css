@@ -63,11 +63,18 @@
 
 .mainTitle  {
   font-size : 20px;
+  margin: 0;
 }
 
 .mainTitle .sub {
   font-size : 16px;
   font-weight : normal;
+}
+
+h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 27px; 
 }
 
 .staminia-button-panel .btn, .staminia-button-panel .btn-group-advanced {
@@ -80,6 +87,7 @@
 
 form.staminiaForm {
   display : block;
+  margin-bottom: 0;
 }
 
 form.staminiaForm table {
@@ -106,10 +114,10 @@ form.staminiaForm select, form.staminiaForm input {
 }
 
 form.staminiaForm input {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
+  -webkit-box-sizing : border-box;
+     -moz-box-sizing : border-box;
+      -ms-box-sizing : border-box;
+          box-sizing : border-box;
   height : auto;
 }
 
@@ -120,34 +128,6 @@ form.staminiaForm input {
 
 tr.motherClubBonus td {
   text-align : center;
-}
-
-#imgCHPPLogo {
-  height: 50px;
-  width: 87px;
-  background : url("../img/css_sprite.png") no-repeat -65px 0;
-}
-
-#imgValidHTML {
-  background : url("../img/css_sprite.png") no-repeat -153px 0;
-}
-
-#imgHTML5 {
-  height: 32px; 
-  width: 30px;
-  background : url("../img/css_sprite.png") no-repeat -68px -52px;
-}
-
-#imgCSS3 {
-  height: 22px; 
-  width: 24px;
-  background : url("../img/css_sprite.png") no-repeat -98px -52px;
-}
-
-#imgMadeInItaly {
-  height: 15px; 
-  width: 80px;
-  background : url("../img/css_sprite.png") no-repeat -153px -52px;
 }
 
 #generatedLinkBody {
@@ -210,7 +190,11 @@ tr.motherClubBonus td {
   line-height: 1px;
 }
 
-div.form-actions .btn {
+.form-actions {
+  margin-bottom: 0;
+}
+
+.form-actions .btn {
   margin-bottom : 5px;
 }
 
@@ -255,10 +239,6 @@ option.isSuspended {
   color : #555;
 }
 
-#CHPP_Status {
-  font-weight : bold;
-}
-
 table.table-staminia th, table.table-staminia td {
   text-align : right;
 }
@@ -291,10 +271,6 @@ table.table-staminia th[colspan] {
   text-align : center;
 }
 
-.btn-group > .btn {
-  margin-left: 0px;
-}
-
 .btn-warning {
   color: black !important;
 }
@@ -319,6 +295,13 @@ table.table-staminia th[colspan] {
   animation: progress-bar-stripes 2s linear infinite;
 }
 
+.border-box {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 .align-left {
   text-align: left !important;
 }
@@ -341,7 +324,7 @@ table.table-staminia th[colspan] {
 
 .legend-like {
   border-bottom: 1px solid #ddd;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   font-weight: normal;
 }
 
@@ -362,10 +345,6 @@ span.minutes {
 
 @media (max-width: 767px) {
   .modal {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
     position: absolute;
     top: 0 !important;
     left: 0 !important;
@@ -437,10 +416,6 @@ footer a:hover {
     border-left: 1px solid #eee;
     padding-left: 5px;
   }
-}
-
-.success-text {
-  color: #468847
 }
 
 .btn-checkbox {
@@ -619,4 +594,27 @@ footer a:hover {
   z-index: 0;
   width: 100%;
   padding-left: 36px;
+}
+
+.spacer {
+  margin-bottom: 20px;
+}
+
+.advertising {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid #e5e5e5;
+  padding: 5px;
+}
+
+@media (max-width: 1023px) {
+  .advertising-leaderboard {
+    display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .advertising {
+    text-align: center;
+  }
 }

@@ -246,6 +246,35 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             </div>
           </div> <!-- Staminia CHPP End -->
 
+<? if (defined('GOOGLE_AD_CLIENT')) { ?>
+          <!-- Advertising -->
+          <div class="advertising border-box">
+            <script type="text/javascript">
+              google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
+              if (window.innerWidth <= 360) {
+                /* Stamin.IA! 236x60 */
+                google_ad_slot = "6526500219";
+                google_ad_width = 234;
+                google_ad_height = 60;
+              } else if (window.innerWidth >= 1024) {
+                /* Stamin.IA! 200x200 */
+                google_ad_slot = "9120039814";
+                google_ad_width = 200;
+                google_ad_height = 200;
+              } else {
+                /* Stamin.IA! 160x90 */
+                google_ad_slot = "6005123019";
+                google_ad_width = 160;
+                google_ad_height = 90;
+              }
+            </script>
+            <script type="text/javascript"
+             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+            </script>
+          </div>
+<? } else { ?>
+          <div class="spacer"></div>
+<? } ?>
         </div> <!-- First Column End -->
 
         <!-- Second Column Start -->
@@ -600,6 +629,22 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </tr>
                   </tbody>
                 </table>
+<? if (defined('GOOGLE_AD_CLIENT')) { ?>
+                <!-- Advertising -->
+                <div class="advertising border-box advertising-leaderboard">
+                  <script type="text/javascript">
+                    google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
+                    /* Stamin.IA! 728x90 */
+                    google_ad_slot = "5365994614";
+                    google_ad_width = 728;
+                    google_ad_height = 90;
+                    //-->
+                    </script>
+                    <script type="text/javascript"
+                    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+                    </script>
+                </div>
+<? } ?>
                 <div class="align-center form-actions">
                   <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-large icon-magic"></i> <?= localize("Calculate") ?></button>
                   <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-large icon-random"></i> <?= localize("Switch players") ?></button>
@@ -636,7 +681,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
-                  <span class="help-inline success-text"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
+                  <span class="help-inline"><span class="text-success"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span></span>
                 </div>
                 <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
               </form>
@@ -679,7 +724,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </div> <!-- First Row End -->
 
       <!-- Help Modal Start -->
-      <div class='modal hide' id='helpModal'>
+      <div class='modal border-box hide' id='helpModal'>
         <div class='modal-header'>
           <button type='button' class='close' data-dismiss='modal'>&times;</button>
           <h3><?= localize("Help") ?></h3>
