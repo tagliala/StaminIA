@@ -1,6 +1,16 @@
 Changelog
 =========
 
+13.01.13
+--------
+* Advertising
+* New sidebar
+* Updated Bootstrap
+* Updated jquery
+* Updated flot
+* Rewrited checkboxes in pure html
+* Removed jquery form plugin
+
 13.01.02
 --------
 * Set main font size to 14px
