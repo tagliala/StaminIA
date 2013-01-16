@@ -213,7 +213,7 @@
     },
     submitHandler: function(form) {
       var css_classes, dataset, isMax, isMin, minute, minuteObject, note, p1Contribution, p2Contribution, percentContribution, player1LowStamina, player2LowStamina, plot_options, result, tableHeader, tableSeparator, tempHTML, totalContribution, warnings_list;
-      $("#calculate").addClass("disabled");
+      $("#calculate").addClass('disabled');
       resetAndHideTabs();
       $("#AlertsContainer").html("");
       result = Staminia.Engine.start();
@@ -336,7 +336,7 @@
         $("#tabContributionsNav").find("a").tab("show");
       }
       scrollUpToResults();
-      $("#calculate").removeClass("disabled");
+      $("#calculate").removeClass('disabled');
     },
     highlight: function(element, errorClass, validClass) {
       $(element).closest("div").addClass(errorClass).removeClass(validClass);
@@ -436,7 +436,7 @@
   };
 
   enableAdvancedMode = function() {
-    $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").removeAttr("disabled");
+    $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop('disabled', false);
     $("" + TABLE_ID + " tr[class~='simple']").addClass("hide").hide();
     $("" + FORM_ID + " *[name*=_Simple_]").addClass("ignore");
     $("" + TABLE_ID + " tr[class~=advanced]:not([id*=_Advanced_])").removeClass("hide").show();
@@ -445,7 +445,7 @@
   };
 
   disableAdvancedMode = function() {
-    $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").attr("disabled", "disabled");
+    $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop('disabled', false);
     $("" + TABLE_ID + " tr[class~='advanced']").addClass("hide").hide();
     $("" + FORM_ID + " *[name*=_Advanced_]").addClass("ignore");
     $("" + FORM_ID + " *[name*=_Simple_]").removeClass("ignore");
@@ -495,7 +495,7 @@
       switch ($field.attr('type')) {
         case 'checkbox':
         case 'radio':
-          $field.attr('checked', (params[i] === 'true' ? 'checked' : null));
+          $field.prop('checked', params[i] === 'true');
           break;
         default:
           $field.val(params[i]);
@@ -516,9 +516,9 @@
     _ref = [1, 2];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       playerId = _ref[_i];
-      status = $("input[name=Staminia_Player_" + playerId + "_MotherClubBonus]").prop('checked') ? 'disabled' : null;
-      $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").attr('disabled', status);
-      $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").attr('disabled', status);
+      status = $("input[name=Staminia_Player_" + playerId + "_MotherClubBonus]").prop('checked');
+      $("select[name=Staminia_Simple_Player_" + playerId + "_Loyalty]").prop('disabled', status);
+      $("input[name=Staminia_Advanced_Player_" + playerId + "_Loyalty]").prop('disabled', status);
     }
   };
 
@@ -589,14 +589,14 @@
       $this = $(this);
       $p2Field = $(p2Field);
       p1Value = this.value;
-      p1Disabled = $this.attr('disabled') != null ? 'disabled' : null;
-      p1Checked = $this.attr('checked') != null ? 'checked' : null;
+      p1Disabled = $this.prop('disabled');
+      p1Checked = $this.prop('checked');
       $this.val($p2Field.val());
-      $this.attr('disabled', $p2Field.attr('disabled') != null ? 'disabled' : null);
-      $this.attr('checked', $p2Field.attr('checked') != null ? 'checked' : null);
+      $this.prop('disabled', $p2Field.prop('disabled'));
+      $this.prop('checked', $p2Field.prop('checked'));
       $p2Field.val(p1Value);
-      $p2Field.attr('disabled', p1Disabled);
-      return $p2Field.attr('checked', p1Checked);
+      $p2Field.prop('disabled', p1Disabled);
+      return $p2Field.prop('checked', p1Checked);
     });
     checkMotherClubBonus();
     $('.control-group').removeClass('error');
@@ -679,7 +679,7 @@
       $("#CHPP_Refresh_Data").button('loading');
       $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-time");
       $("#CHPP_Refresh_Data_Status").find("i").attr("title", "");
-      $("#CHPP_Refresh_Data_Status").attr("disabled", "disabled");
+      $("#CHPP_Refresh_Data_Status").prop('disabled', true);
       $("#CHPP_Refresh_Data_Status").removeClass("btn-danger btn-success btn-warning").addClass("btn-progress");
       $("#CHPP_Results").hide();
       return $("#CHPP_Status_Description").html("");
@@ -735,7 +735,7 @@
           loginMenuShow();
           $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
       }
-      $("#CHPP_Refresh_Data_Status").removeAttr("disabled");
+      $("#CHPP_Refresh_Data_Status").prop('disabled', false);
     },
     error: function(jqXHR, textStatus, thrownError) {
       var description_message, error_message;
@@ -758,7 +758,7 @@
       $("#CHPP_Status_Description").html("" + error_message + "<br/>\n" + description_message);
       loginMenuShow();
       $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
-      $("#CHPP_Refresh_Data_Status").removeAttr("disabled");
+      $("#CHPP_Refresh_Data_Status").prop('disabled', false);
     },
     complete: function(jqXHR, textStatus) {
       $("#CHPP_Results").show();
@@ -884,10 +884,10 @@
       name = optionElement.text("" + (number = player.PlayerNumber != null ? player.PlayerNumber + '.' : '') + " " + player.PlayerName + " " + (mc = player.MotherClubBonus ? '\u2665' : ''));
       select.append(optionElement);
     }
-    selectP1 = select.clone("true");
-    selectP2 = select.clone("true");
-    selectP1.attr("id", "CHPP_Player_1");
-    selectP2.attr("id", "CHPP_Player_2");
+    selectP1 = select.clone(true);
+    selectP2 = select.clone(true);
+    selectP1.attr('id', 'CHPP_Player_1');
+    selectP2.attr('id', 'CHPP_Player_2');
     $("#CHPP_Player_1").html(selectP1.html());
     $("#CHPP_Player_2").html(selectP2.html());
   };
@@ -897,27 +897,27 @@
       checkUrlParameter = false;
     }
     updateCHPPPlayerFields();
-    if ($("#CHPP_Player_1 option").length > 2 && $("#CHPP_Player_2 option").length > 2) {
-      $("#CHPP_Player_1 option:eq(0)").attr("selected", "selected");
-      $("#CHPP_Player_2 option:eq(1)").attr("selected", "selected");
+    if ($('#CHPP_Player_1 option').length > 2 && $('#CHPP_Player_2 option').length > 2) {
+      $('#CHPP_Player_1 option:eq(0)').prop('selected', true);
+      $('#CHPP_Player_2 option:eq(1)').prop('selected', true);
       setPlayerFormFields(1, checkUrlParameter);
       setPlayerFormFields(2, checkUrlParameter);
     }
   };
 
-  $("" + FORM_ID + " select[id=CHPP_Player_1]").on("change", function() {
+  $("" + FORM_ID + " select[id=CHPP_Player_1]").on('change', function() {
     setPlayerFormFields(1);
   });
 
-  $("" + FORM_ID + " select[id=CHPP_Player_2]").on("change", function() {
+  $("" + FORM_ID + " select[id=CHPP_Player_2]").on('change', function() {
     setPlayerFormFields(2);
   });
 
   $("" + FORM_ID + " select[id=CHPP_Players_SortBy]").on("change", function() {
     updateCHPPPlayerFields();
     if ($("#CHPP_Player_1 option").length > 2 && $("#CHPP_Player_2 option").length > 2) {
-      $("#CHPP_Player_1 option:eq(0)").attr("selected", "selected");
-      $("#CHPP_Player_2 option:eq(1)").attr("selected", "selected");
+      $("#CHPP_Player_1 option:eq(0)").prop('selected', true);
+      $("#CHPP_Player_2 option:eq(1)").prop('selected', true);
       setPlayerFormFields(1);
       setPlayerFormFields(2);
     }
@@ -945,9 +945,7 @@
     formReference["Staminia_Simple_Player_" + player + "_Form"].value = PlayerData.PlayerForm;
     formReference["Staminia_Simple_Player_" + player + "_MainSkill"].value = PlayerData.MainSkill;
     formReference["Staminia_Simple_Player_" + player + "_Loyalty"].value = PlayerData.Loyalty;
-    if (PlayerData.MotherClubBonus) {
-      $("input[name=Staminia_Player_" + player + "_MotherClubBonus]").attr('checked', 'checked');
-    }
+    $("input[name=Staminia_Player_" + player + "_MotherClubBonus]").prop('checked', PlayerData.MotherClubBonus);
     checkMotherClubBonus();
     formReference["Staminia_Advanced_Player_" + player + "_Experience"].value = number_format(PlayerData.Experience, 2);
     formReference["Staminia_Advanced_Player_" + player + "_Stamina"].value = number_format(PlayerData.StaminaSkill, 2);

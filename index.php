@@ -766,7 +766,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.3.min.js"></script>
+    <script src="js/vendor/jquery-1.9.0.min.js"></script>
     <script src="js/vendor/bootstrap-2.2.2.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->

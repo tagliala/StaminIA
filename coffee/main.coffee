@@ -152,7 +152,7 @@ $(FORM_ID).validate({
       validator.focusInvalid()
       return
   submitHandler: (form) ->
-    $("#calculate").addClass "disabled"
+    $("#calculate").addClass 'disabled'
     resetAndHideTabs()
     $("#AlertsContainer").html ""
     result = Staminia.Engine.start()
@@ -316,7 +316,7 @@ $(FORM_ID).validate({
     scrollUpToResults()
 
     # Reset button status
-    $("#calculate").removeClass "disabled"
+    $("#calculate").removeClass 'disabled'
 
     return
   highlight: (element, errorClass, validClass) ->
@@ -395,7 +395,7 @@ showSkillsByPosition = ->
 
 # Enable Advanced Mode
 enableAdvancedMode =  ->
-  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").removeAttr "disabled"
+  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop 'disabled', false
   $("#{TABLE_ID} tr[class~='simple']").addClass("hide").hide()
   $("#{FORM_ID} *[name*=_Simple_]").addClass "ignore"
   $("#{TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])").removeClass("hide").show()
@@ -405,7 +405,7 @@ enableAdvancedMode =  ->
 
 # Disable Advanced Mode
 disableAdvancedMode =  ->
-  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").attr "disabled", "disabled"
+  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop 'disabled', false
   $("#{TABLE_ID} tr[class~='advanced']").addClass("hide").hide()
   $("#{FORM_ID} *[name*=_Advanced_]").addClass "ignore"
   $("#{FORM_ID} *[name*=_Simple_]").removeClass "ignore"
@@ -445,7 +445,7 @@ fillForm = ->
   for field, i in fields
     $field = $(field)
     switch $field.attr('type')
-      when 'checkbox', 'radio' then $field.attr 'checked', (if params[i] is 'true' then 'checked' else null)
+      when 'checkbox', 'radio' then $field.prop 'checked', (params[i] is 'true')
       else $field.val params[i]
   if isAdvancedModeEnabled()
     enableAdvancedMode()
@@ -458,9 +458,9 @@ fillForm = ->
 
 checkMotherClubBonus = ->
   for playerId in [1, 2]
-    status = if $("input[name=Staminia_Player_#{playerId}_MotherClubBonus]").prop('checked') then 'disabled' else null
-    $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").attr 'disabled', status
-    $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").attr 'disabled', status
+    status = $("input[name=Staminia_Player_#{playerId}_MotherClubBonus]").prop('checked')
+    $("select[name=Staminia_Simple_Player_#{playerId}_Loyalty]").prop 'disabled', status
+    $("input[name=Staminia_Advanced_Player_#{playerId}_Loyalty]").prop 'disabled', status
   return
 
 updatePredictions = ->
@@ -523,14 +523,14 @@ $('#switchPlayers').click ->
     $p2Field = $(p2Field)
 
     p1Value = @value
-    p1Disabled = if $this.attr('disabled')? then 'disabled' else null
-    p1Checked = if $this.attr('checked')? then 'checked' else null
+    p1Disabled = $this.prop 'disabled'
+    p1Checked = $this.prop 'checked'
     $this.val $p2Field.val()
-    $this.attr 'disabled', if $p2Field.attr('disabled')? then 'disabled' else null
-    $this.attr 'checked', if $p2Field.attr('checked')? then 'checked' else null
+    $this.prop 'disabled', $p2Field.prop('disabled')
+    $this.prop 'checked', $p2Field.prop('checked')
     $p2Field.val p1Value
-    $p2Field.attr 'disabled', p1Disabled
-    $p2Field.attr 'checked', p1Checked
+    $p2Field.prop 'disabled', p1Disabled
+    $p2Field.prop 'checked', p1Checked
   checkMotherClubBonus()
   $('.control-group').removeClass 'error'
   $(FORM_ID).validate().form()
@@ -601,7 +601,7 @@ $.ajaxSetup {
     $("#CHPP_Refresh_Data").button('loading')
     $("#CHPP_Refresh_Data_Status").find("i").attr "class", "icon-white icon-time"
     $("#CHPP_Refresh_Data_Status").find("i").attr "title", ""
-    $("#CHPP_Refresh_Data_Status").attr "disabled", "disabled"
+    $("#CHPP_Refresh_Data_Status").prop 'disabled', true
     $("#CHPP_Refresh_Data_Status").removeClass("btn-danger btn-success btn-warning").addClass "btn-progress"
     $("#CHPP_Results").hide()
     $("#CHPP_Status_Description").html ""
@@ -654,7 +654,7 @@ $.ajaxSetup {
           """
         loginMenuShow()
         $("#CHPP_Refresh_Data").data "completeText", $("#CHPP_Refresh_Data").data("errorText")
-    $("#CHPP_Refresh_Data_Status").removeAttr "disabled"
+    $("#CHPP_Refresh_Data_Status").prop 'disabled', false
     return
 
   error : (jqXHR, textStatus, thrownError) ->
@@ -677,7 +677,7 @@ $.ajaxSetup {
       """
     loginMenuShow()
     $("#CHPP_Refresh_Data").data "completeText", $("#CHPP_Refresh_Data").data("errorText")
-    $("#CHPP_Refresh_Data_Status").removeAttr "disabled"
+    $("#CHPP_Refresh_Data_Status").prop 'disabled', false
     return
 
   complete : (jqXHR, textStatus) ->
@@ -772,11 +772,11 @@ updateCHPPPlayerFields = ->
     name = optionElement.text "#{ number = if player.PlayerNumber? then player.PlayerNumber + '.' else '' } #{player.PlayerName} #{ mc = if player.MotherClubBonus then '\u2665' else '' }"
     select.append optionElement
 
-  selectP1 = select.clone("true")
-  selectP2 = select.clone("true")
+  selectP1 = select.clone true
+  selectP2 = select.clone true
 
-  selectP1.attr("id","CHPP_Player_1")
-  selectP2.attr("id","CHPP_Player_2")
+  selectP1.attr 'id', 'CHPP_Player_1'
+  selectP2.attr 'id', 'CHPP_Player_2'
 
   $("#CHPP_Player_1").html selectP1.html()
   $("#CHPP_Player_2").html selectP2.html()
@@ -786,18 +786,18 @@ updateCHPPPlayerFields = ->
 setupCHPPPlayerFields = (checkUrlParameter = false) ->
   updateCHPPPlayerFields()
 
-  if ($("#CHPP_Player_1 option").length > 2 and $("#CHPP_Player_2 option").length > 2)
-    $("#CHPP_Player_1 option:eq(0)").attr "selected", "selected"
-    $("#CHPP_Player_2 option:eq(1)").attr "selected", "selected"
+  if ($('#CHPP_Player_1 option').length > 2 and $('#CHPP_Player_2 option').length > 2)
+    $('#CHPP_Player_1 option:eq(0)').prop 'selected', true
+    $('#CHPP_Player_2 option:eq(1)').prop 'selected', true
     setPlayerFormFields 1, checkUrlParameter
     setPlayerFormFields 2, checkUrlParameter
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_1]").on "change", ->
+$("#{FORM_ID} select[id=CHPP_Player_1]").on 'change', ->
   setPlayerFormFields 1
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_2]").on "change", ->
+$("#{FORM_ID} select[id=CHPP_Player_2]").on 'change', ->
   setPlayerFormFields 2
   return
 
@@ -805,8 +805,8 @@ $("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
   updateCHPPPlayerFields()
 
   if ($("#CHPP_Player_1 option").length > 2 and $("#CHPP_Player_2 option").length > 2)
-    $("#CHPP_Player_1 option:eq(0)").attr "selected", "selected"
-    $("#CHPP_Player_2 option:eq(1)").attr "selected", "selected"
+    $("#CHPP_Player_1 option:eq(0)").prop 'selected', true
+    $("#CHPP_Player_2 option:eq(1)").prop 'selected', true
     setPlayerFormFields 1
     setPlayerFormFields 2
 
@@ -829,7 +829,7 @@ setPlayerFormFields = (player, checkUrlParameter = false) ->
   formReference["Staminia_Simple_Player_#{player}_Loyalty"].value = PlayerData.Loyalty;
 
   # Mother Club Bonus
-  $("input[name=Staminia_Player_#{player}_MotherClubBonus]").attr 'checked', 'checked' if PlayerData.MotherClubBonus
+  $("input[name=Staminia_Player_#{player}_MotherClubBonus]").prop 'checked', PlayerData.MotherClubBonus
   checkMotherClubBonus()
 
   # Advanced Mode
