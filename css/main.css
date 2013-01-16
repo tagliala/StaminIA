@@ -474,7 +474,9 @@ footer a:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 
+.btn-group-radio input[type=radio],
 .btn-checkbox input[type=checkbox] {
+  visibility: hidden;
   position: absolute !important;
   top: -9999px !important;
   left: -9999px !important;
@@ -515,13 +517,6 @@ footer a:hover {
   background-color: #51a351;
   *background-color: #499249;
 }
-
-.btn-group-radio input[type=radio] {
-   position: absolute !important;
-   top: -9999px !important;
-   left: -9999px !important;
-}
-
 
 .btn-group-radio input[type=radio]:checked + .btn {
   color: #333333;

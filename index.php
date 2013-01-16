@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "13.01.13" ?>
+<?php $staminia_version = "13.01.16" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -766,7 +766,7 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.8.3.min.js"></script>
+    <script src="js/vendor/jquery-1.9.0.min.js"></script>
     <script src="js/vendor/bootstrap-2.2.2.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
