@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.01.16
+--------
+* Updated jQuery
+* Fixed checkbox issues in Opera and Firefox
+
 13.01.13
 --------
 * Advertising
