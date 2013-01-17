@@ -1,6 +1,10 @@
 Changelog
 =========
 
+13.01.17
+--------
+* Improved player table on small display devices
+
 13.01.16
 --------
 * Updated jQuery

@@ -77,7 +77,8 @@ h3 {
   line-height: 27px; 
 }
 
-.staminia-button-panel .btn, .staminia-button-panel .btn-group-advanced {
+.staminia-button-panel .btn,
+.staminia-button-panel .btn-group-advanced {
   margin : 6px 0;
 }
 
@@ -92,6 +93,7 @@ form.staminiaForm {
 
 form.staminiaForm table {
   width : auto;
+  max-width: 100%;
   margin-right: auto;
   margin-left: auto;
 }
@@ -113,7 +115,8 @@ form.staminiaForm select, form.staminiaForm input {
   min-width : 100px;
 }
 
-form.staminiaForm input {
+form.staminiaForm input,
+form.staminiaForm select {
   -webkit-box-sizing : border-box;
      -moz-box-sizing : border-box;
       -ms-box-sizing : border-box;
@@ -124,10 +127,6 @@ form.staminiaForm input {
 .table tbody tr:not(:hover) td.stripe,
 .table tbody tr:not(:hover) th.stripe {
   background-color: #f9f9f9;
-}
-
-tr.motherClubBonus td {
-  text-align : center;
 }
 
 #generatedLinkBody {
@@ -195,7 +194,34 @@ tr.motherClubBonus td {
 }
 
 .form-actions .btn {
-  margin-bottom : 5px;
+  margin-bottom: 5px;
+}
+
+.field-caption {
+  display: none;
+}
+
+/* Responsive table */
+@media (max-width: 479px) {
+  .form-actions .btn {
+    width: 100% !important;
+  }
+  #playersInfoTable th:first-child,
+  #playersInfoTable td:first-child {
+    display: none !important;
+  }
+  #playersInfoTable td {
+    vertical-align: bottom !important;
+  }
+  .field-caption {
+    display: block;
+    margin-bottom: 2px;
+    line-height: 14px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+  }
 }
 
 .navbar li.hide {
