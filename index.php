@@ -309,7 +309,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
 
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="staminiaForm">
 
-                <table class="table table-bordered table-condensed" id="playersInfoTable">
+                <table class="table table-bordered table-condensed border-box" id="playersInfoTable">
                   <thead>
                     <tr>
                       <th></th>
@@ -337,6 +337,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Sort by"); ?></td>
                       <td colspan="2">
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Sort by"); ?></span>
                           <select class="ignore" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
                             <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
                             <option value="Name"><?php echo localize("Name"); ?></option>
@@ -361,6 +362,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Form"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Form"); ?></span>
                           <select name="Staminia_Simple_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>">
                             <? optionSkills(1, 8) ?>
                           </select>
@@ -368,6 +370,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       </td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"></span>
                           <select name="Staminia_Simple_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>">
                             <? optionSkills(1, 8) ?>
                           </select>
@@ -378,6 +381,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Stamina"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Stamina"); ?></span>
                           <select name="Staminia_Simple_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>">
                             <? optionSkills(1, 9) ?>
                           </select>
@@ -395,6 +399,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Experience"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Experience"); ?></span>
                           <select name="Staminia_Simple_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>">
                             <? optionSkills() ?>
                           </select>
@@ -412,6 +417,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Main Skill"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Main Skill"); ?></span>
                           <select name="Staminia_Simple_Player_1_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Main Skill"); ?>">
                             <? optionSkills() ?>
                           </select>
@@ -429,6 +435,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Loyalty"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Loyalty"); ?></span>
                           <select name="Staminia_Simple_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>">
                             <? optionSkills(1,20,1) ?>
                           </select>
@@ -446,6 +453,8 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Form"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"></span>
+                          <span class="field-caption"><?= localize("Form"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -459,6 +468,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Stamina"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Stamina"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -472,6 +482,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Experience"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Experience"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="30" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -485,6 +496,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Loyalty"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Loyalty"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>" value="1.00"/>
                         </div>
                       </td>
@@ -497,6 +509,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     <tr class="motherClubBonus">
                       <td><?= localize("Mother club bonus") ?></td>
                       <td>
+                        <span class="field-caption"><?= localize("Mother club bonus"); ?></span>
                         <label class="btn btn-checkbox btn-motherclub-bonus">
                           <input type="checkbox" name="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox">
                           <i class="btn-checkbox-status-icon"></i>
@@ -515,6 +528,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Position"); ?></td>
                       <td colspan="2">
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Position"); ?></span>
                           <select class="ignore" id="Staminia_Advanced_Position" name="Staminia_Advanced_Position" data-field-name="<?php echo localize("Position"); ?>">
                             <option value="0"><?php echo localize("Keeper"); ?></option>
                             <optgroup label="<?= localize("Defender"); ?>">
@@ -553,6 +567,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Keeper (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Keeper (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Keeper" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Keeper (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -566,6 +581,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Defending (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Defending (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Defending" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Defending (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -579,6 +595,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Playmaking (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Playmaking (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Playmaking" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Playmaking (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -592,6 +609,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Winger (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Winger (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -605,6 +623,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Passing (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Passing (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -618,6 +637,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                       <td><?= localize("Scoring (skill)"); ?></td>
                       <td>
                         <div class="control-group">
+                          <span class="field-caption"><?= localize("Scoring (skill)"); ?></span>
                           <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
@@ -646,10 +666,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 </div>
 <? } ?>
                 <div class="align-center form-actions">
-                  <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-large icon-magic"></i> <?= localize("Calculate") ?></button>
-                  <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-large icon-random"></i> <?= localize("Switch players") ?></button>
-                  <button type="button" id="getLink" class="btn btn-large"><i class="icon-large icon-link"></i> <?= localize("Get link") ?></button>
-                  <button type="reset" id="resetApp" class="btn btn-large btn-warning"><i class="icon-large icon-undo"></i> <?= localize("Reset") ?></button>
+                  <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-magic"></i> <?= localize("Calculate") ?></button>
+                  <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-random"></i> <?= localize("Switch players") ?></button>
+                  <button type="button" id="getLink" class="btn btn-large"><i class="icon-link"></i> <?= localize("Get link") ?></button>
+                  <button type="reset" id="resetApp" class="btn btn-large btn-warning"><i class="icon-undo"></i> <?= localize("Reset") ?></button>
                 </div>
               </form> <!-- Main Form End -->
             </div>
