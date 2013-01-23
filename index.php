@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "13.01.17" ?>
+<?php $staminia_version = "13.01.23" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -744,7 +744,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </div> <!-- First Row End -->
 
       <!-- Help Modal Start -->
-      <div class='modal border-box hide' id='helpModal'>
+      <div class='modal border-box hide' tabindex="-1" id='helpModal'>
         <div class='modal-header'>
           <button type='button' class='close' data-dismiss='modal'>&times;</button>
           <h3><?= localize("Help") ?></h3>
