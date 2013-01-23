@@ -64,11 +64,6 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
       <meta property="og:site_name" content="Lizardopoli"/>
     <?php } ?>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     <!-- Le styles -->
     <link href="css/main.css" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Telex" rel="stylesheet" type="text/css">
@@ -87,65 +82,63 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   <!-- Navbar
     ================================================== -->
     <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <div class="brand"><i id="staminia-logo"></i><span id="staminia-brand" class="hidden-phone">Stamin.IA!</span></div>
-          <ul class="nav pull-right">
-            <?php if (CHPP_APP_ID != "") { ?>
-              <li class="dropdown" id="dropdownLogin">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
-                  <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" id="loginDropdown">
-                  <li>
-                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
-                      <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
-                      <fieldset>
-                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
-                        <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
-                      </fieldset>
-                    </form>
-                    <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
-                  </li>
-                </ul>
-                <ul class="dropdown-menu hide" id="loggedInDropdown">
-                  <li>
-                    <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
-                  </li>
-                </ul>
-              </li>
-            <?php } ?>
-            <li class="dropdown" id="dropdownLanguages">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLanguages">
-                <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
-                <span class="hidden-phone">
-                  <?= $lang_array[strtolower(localize("lang"))]["lang-name"] ?>
-                </span>
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <div class="brand"><i id="staminia-logo"></i><span id="staminia-brand" class="hidden-phone">Stamin.IA!</span></div>
+        <ul class="nav pull-right">
+          <?php if (CHPP_APP_ID != "") { ?>
+            <li class="dropdown" id="dropdownLogin">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
+                <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
                 <b class="caret"></b>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" id="loginDropdown">
+                <li>
+                  <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                    <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
+                    <fieldset>
+                      <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                      <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
+                    </fieldset>
+                  </form>
+                  <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                </li>
+              </ul>
+              <ul class="dropdown-menu hide" id="loggedInDropdown">
+                <li>
+                  <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
+                </li>
+              </ul>
+            </li>
+          <?php } ?>
+          <li class="dropdown" id="dropdownLanguages">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLanguages">
+              <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
+              <span class="hidden-phone">
+                <?= $lang_array[strtolower(localize("lang"))]["lang-name"] ?>
+              </span>
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
 <?php
 foreach ($lang_array as $key => $val) {
 if (strtolower(localize("lang")) === $key) { continue; }
 echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
 }
 ?>
-                </ul>
-              </li>
+              </ul>
+            </li>
+        </ul>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li><a href="#helpModal" data-toggle="modal"><?= localize("Help") ?></a></li>
           </ul>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li><a href="#helpModal" data-toggle="modal"><?= localize("Help") ?></a></li>
-            </ul>
-            <ul class="nav pull-right">
-            </ul>
-          </div>
+          <ul class="nav pull-right">
+          </ul>
         </div>
       </div>
     </div>
@@ -787,7 +780,7 @@ if (defined('GA_ID')) { ?>
     </script>
 <? } ?>
     <script src="js/vendor/jquery-1.9.0.min.js"></script>
-    <script src="js/vendor/bootstrap-2.2.2.min.js"></script>
+    <script src="js/vendor/bootstrap-3.0.0-wip.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
