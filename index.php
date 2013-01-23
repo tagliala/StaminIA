@@ -744,7 +744,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </div> <!-- First Row End -->
 
       <!-- Help Modal Start -->
-      <div class='modal border-box hide' id='helpModal'>
+      <div class='modal border-box hide' tabindex="-1" id='helpModal'>
         <div class='modal-header'>
           <button type='button' class='close' data-dismiss='modal'>&times;</button>
           <h3><?= localize("Help") ?></h3>
