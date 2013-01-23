@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.01.23
+--------
+* Fixed ESC key not working in modal
+* Better style for quote
+
 13.01.17
 --------
 * Improved player table on small display devices
