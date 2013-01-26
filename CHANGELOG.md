@@ -1,6 +1,10 @@
 Changelog
 =========
 
+13.01.26
+--------
+* Get webfonts in a single request
+
 13.01.23
 --------
 * Fixed ESC key not working in modal
