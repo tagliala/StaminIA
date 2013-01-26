@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "13.01.23" ?>
+<?php $staminia_version = "13.01.26" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -71,8 +71,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <!-- Le styles -->
     <link href="css/main.css" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Telex" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet" type="text/css">
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="img/staminia_favicon.png">
