@@ -250,7 +250,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           <div class="advertising border-box">
             <script type="text/javascript">
               google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
-              if (window.innerWidth <= 360) {
+              if (window.innerWidth <= 767) {
                 /* Stamin.IA! 236x60 */
                 google_ad_slot = "6526500219";
                 google_ad_width = 234;
@@ -261,10 +261,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 google_ad_width = 200;
                 google_ad_height = 200;
               } else {
-                /* Stamin.IA! 160x90 */
-                google_ad_slot = "6005123019";
-                google_ad_width = 160;
-                google_ad_height = 90;
+                /* Stamin.IA! 125x125 */
+                google_ad_slot = "2912055810";
+                google_ad_width = 125;
+                google_ad_height = 125;
               }
             </script>
             <script type="text/javascript"
