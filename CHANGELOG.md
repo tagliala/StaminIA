@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.01.29
+--------
+* Improved CHPP data retriever
+* Improved advertising
+
 13.01.26
 --------
 * Get webfonts in a single request
