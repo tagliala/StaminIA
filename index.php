@@ -170,7 +170,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                 </div>
                 <div id="collapseSettings" class="accordion-body collapse">
                   <div class="accordion-inner">
-                    <div class="staminia-button-panel align-center">
+                    <div class="staminia-button-panel">
                       <label class="btn btn-checkbox">
                         <input type="checkbox" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" checked>
                         <i class="btn-checkbox-status-icon"></i>
@@ -199,7 +199,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </div>
 
                     <!-- Staminia Predictions Type Start -->
-                    <div class="align-center staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
+                    <div class="staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
                       <?= localize("Predictions Type") ?>
                       <div class="btn-group btn-group-radio btn-block">
                         <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
@@ -229,7 +229,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               </div>
               <div id="collapseCHPP" class="accordion-body collapse">
                 <div class="accordion-inner">
-                  <div class="align-center staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
+                  <div class="staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
                       <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
                       <button class="btn align-left" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
