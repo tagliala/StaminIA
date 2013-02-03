@@ -2,7 +2,7 @@
 (function() {
   "use strict";
 
-  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, getAdvancedSkill, getAvgAt90, getContribution, getPlayerBonus, getSimpleSkill, printContributionTable, validateSkill;
+  var BAD_STAMINA_SE, CHECKPOINT, CHECKPOINTS, CHECKPOINTS_LENGTH, CHECKPOINT_FIRSTHALF, CHECKPOINT_SECONDHALF, FULLTIME, HALFTIME, KICKOFF, LOW_STAMINA, PR_ENUM_ROLE, SECONDHALF, SKILL_VALIDATION, SUBTOTALMINUTES, Staminia, VERSION, calculateStrength, debugTableAddCell, debugTableHeader, getAdvancedSkill, getAvgAt90, getContribution, getPlayerBonus, getSimpleSkill, printContributionTables, validateSkill;
 
   window.Staminia = window.Staminia || {};
 
@@ -99,7 +99,7 @@
   };
 
   getContribution = function(minute, stamina, startsAtMinute, pressing) {
-    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, decay, elapsedCheckpoints, energy, engineStamina, extra_time_rest, initialCheckpoint, initialEnergy, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
+    var HALF_TIME_CHECKPOINT, MINUTES_PER_CHECKPOINT, checkpoint, decay, elapsedCheckpoints, energy, engineStamina, extra_time_rest, initialCheckpoint, initialEnergy, pressingDecay, rest, secondHalfElapsedCheckpoints, secondHalfEnergy;
     minute = Number(minute);
     stamina = Number(stamina);
     startsAtMinute = Number(startsAtMinute);
@@ -108,7 +108,8 @@
     }
     engineStamina = stamina;
     initialEnergy = 1 + (0.0292 * engineStamina + 0.05);
-    decay = Math.max(0.0325, -0.0039 * engineStamina + 0.0633);
+    pressingDecay = pressing ? 0.00055 * (9 - engineStamina) : 0;
+    decay = Math.max(0.0325, -0.0039 * engineStamina + 0.0633 + pressingDecay);
     rest = 0.1875;
     extra_time_rest = rest / 3;
     if (engineStamina > 8) {
@@ -262,37 +263,6 @@
       $("#tabDebug").append(tempHTML);
     }
     return total;
-  };
-
-  printContributionTable = function() {
-    var DEBUG_STEP, addBorder, borderBadStamina, i, j, tableHeader, tempHTML;
-    tableHeader = function(header) {
-      return "<table class=\"table table-striped table-bordered table-condensed table-staminia table-staminia-debug width-auto\">\n  <thead>\n    <tr>\n      <th colspan=\"10\">\n        Contribution Table (" + header + "Minute/Stamina)\n      </th>\n    </tr>\n    <tr>\n      <th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>\n    </tr>\n  </thead>\n  <tbody>";
-    };
-    tempHTML = tableHeader("");
-    i = KICKOFF;
-    borderBadStamina = "style=\"background: #e0cccc\"";
-    DEBUG_STEP = Staminia.CONFIG.DEBUG_STEP;
-    while (i <= FULLTIME) {
-      tempHTML += "<tr>";
-      tempHTML += "  <td><b>" + i + "</b></td>";
-      j = 1;
-      while (j <= 9) {
-        addBorder = false;
-        if (j <= 4) {
-          addBorder = BAD_STAMINA_SE[j - 1] === i;
-        }
-        tempHTML += "<td " + (addBorder ? borderBadStamina : void 0) + ">\n  " + (Staminia.number_format(getContribution(i, j, 0, false), 2)) + "\n</td>";
-        j++;
-      }
-      tempHTML += "</tr>";
-      if (i === HALFTIME) {
-        tempHTML += "<tr class=\"separator\">\n  <td colspan=\"10\"></td>\n</tr>";
-      }
-      i += DEBUG_STEP;
-    }
-    tempHTML += "</tbody></table>";
-    return $("#tabDebug").append(tempHTML);
   };
 
   Staminia.Engine.start = function() {
@@ -500,202 +470,66 @@
     this.result.bestInFirstHalf = secondHalfMax !== max;
     if (Staminia.CONFIG.DEBUG) {
       console.log(this.result);
-      printContributionTable();
+      printContributionTables();
+      printContributionTables(true);
       $("#tabDebugNav").show();
     }
     this.result.status = "OK";
     return this.result;
   };
 
+  debugTableHeader = function(header) {
+    return "<table class=\"table table-striped table-bordered table-condensed table-staminia table-staminia-debug width-auto\">\n  <thead>\n    <tr>\n      <th colspan=\"10\">\n        " + header + " (Minute/Stamina)\n      </th>\n    </tr>\n    <tr>\n      <th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>\n    </tr>\n  </thead>\n  <tbody>";
+  };
+
+  debugTableAddCell = function(content, bad_stamina_minute) {
+    return "<td " + (bad_stamina_minute ? 'style="background: #e0cccc"' : void 0) + ">" + content + "</td>";
+  };
+
+  printContributionTables = function(pressing) {
+    var currentContribution, delta, minute, stamina_level, tempAVGHTML, tempHTML, totalContributionArray, totalContributionPressingArray, _i, _j, _ref;
+    if (pressing == null) {
+      pressing = false;
+    }
+    tempHTML = debugTableHeader("Contribution Table" + (pressing ? ' (Pressing)' : ''));
+    tempAVGHTML = debugTableHeader("AVG Contribution Table" + (pressing ? ' (Pressing)' : ''));
+    totalContributionArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    totalContributionPressingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (minute = _i = KICKOFF, _ref = Staminia.CONFIG.DEBUG_STEP; KICKOFF <= FULLTIME ? _i <= FULLTIME : _i >= FULLTIME; minute = _i += _ref) {
+      tempHTML += "<tr><td><b>" + minute + "</b></td>";
+      tempAVGHTML += "<tr><td><b>" + minute + "</b></td>";
+      for (stamina_level = _j = 1; _j <= 9; stamina_level = ++_j) {
+        currentContribution = getContribution(minute, stamina_level, 0, pressing);
+        totalContributionArray[stamina_level] += getContribution(minute, stamina_level, 0, false);
+        totalContributionPressingArray[stamina_level] += getContribution(minute, stamina_level, 0, true);
+        tempHTML += debugTableAddCell(Staminia.number_format(currentContribution, 2), (BAD_STAMINA_SE[stamina_level - 1] === minute) && stamina_level <= 4);
+        if (pressing) {
+          delta = 1 - (totalContributionArray[stamina_level] / minute) / (totalContributionPressingArray[stamina_level] / minute);
+          tempAVGHTML += debugTableAddCell("" + (Staminia.number_format(totalContributionPressingArray[stamina_level] / minute, 2)) + " (" + (Staminia.number_format(delta * 100, 2)) + "%)", (BAD_STAMINA_SE[stamina_level - 1] === minute) && stamina_level <= 4);
+        } else {
+          tempAVGHTML += debugTableAddCell(Staminia.number_format(totalContributionArray[stamina_level] / minute, 2), (BAD_STAMINA_SE[stamina_level - 1] === minute) && stamina_level <= 4);
+        }
+      }
+      tempHTML += '</tr>';
+      tempAVGHTML += '</tr>';
+      if (minute === HALFTIME) {
+        tempHTML += '<tr class="separator"><td colspan="10"></td></tr>';
+        tempAVGHTML += '<tr class="separator"><td colspan="10"></td></tr>';
+      }
+    }
+    tempHTML += '</tbody></table>';
+    tempAVGHTML += '</tbody></table>';
+    $('#tabDebug').append(tempHTML);
+    return $('#tabDebug').append(tempAVGHTML);
+  };
+
   /*
-    printAVGContributionTable = ->
-      tempHTML = "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">AVG Contribution Table (Minute/Stamina)</th></tr><tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
-      avgContributionArray = []
-      totalContributionArray = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-      playedMinutes = 1
-      i = KICKOFF
-  
-      while i <= FULLTIME
-        if i is HALFTIME
-          tempHTML += "<tr>"
-          tempHTML += "<th>E</th>"
-          engel = [ 0.79, 0.79, 0.86, 0.91, 0.96, 0.95, 0, 0, 0 ]
-          lizard = [ 0.0, 0.0, 0.87, 0.0, 0.94, 0.97, 0.99, 1, 0 ]
-          j = 0
-  
-          while j <= 8
-            tempHTML += "<td>"
-            tempHTML += number_format(engel[j], 2, ",")
-            tempHTML += "</td>"
-            j++
-          tempHTML += "</tr>"
-          tempHTML += "<tr>"
-          tempHTML += "<th>L</th>"
-          j = 0
-  
-          while j <= 8
-            tempHTML += "<td>"
-            tempHTML += number_format(lizard[j], 2, ",")
-            tempHTML += "</td>"
-            j++
-          tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"
-          continue
-        j = 1
-  
-        while j <= 9
-          avgContributionArray[j] = getContribution(i, j, 0, false)
-          totalContributionArray[j] += avgContributionArray[j]
-          ++j
-        tempHTML += "<tr>"
-        tempHTML += "<th>" + i + "</th>"
-        j = 1
-  
-        while j <= 9
-          tempHTML += "<td>"
-          tempHTML += number_format(totalContributionArray[j] / playedMinutes, 3, ",")
-          tempHTML += "</td>"
-          j++
-        tempHTML += "</tr>"
-        ++playedMinutes
-        i += DEBUG_STEP
-      tempHTML += "<tr>"
-      tempHTML += "<th>E</th>"
-      engel = [ 0.65, 0.68, 0.73, 0.80, 0.90, 0.91, 0, 0, 0 ]
-      lizard = [ 0.0, 0.67, 0.73, 0.82, 0.85, 0.91, 0.95, 0.98, 1 ]
-      j = 0
-  
-      while j <= 8
-        tempHTML += "<td>"
-        tempHTML += number_format(engel[j], 2, ",")
-        tempHTML += "</td>"
-        j++
-      tempHTML += "</tr>"
-      tempHTML += "<tr>"
-      tempHTML += "<th>L</th>"
-      j = 0
-  
-      while j <= 8
-        tempHTML += "<td>"
-        tempHTML += number_format(lizard[j], 2, ",")
-        tempHTML += "</td>"
-        j++
-      tempHTML += "</tr>"
-      tempHTML += "</table><br/>"
-      $("#tabDebug").append tempHTML
-      tempHTML = "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">Pressing impact (Minute/Stamina)</th></tr><tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
-      avgContributionArray = []
-      avgContributionArrayPressing = []
-      totalContributionArray = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-      totalContributionArrayPressing = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-      i = KICKOFF
-  
-      while i <= FULLTIME
-        j = 1
-  
-        while j <= 9
-          avgContributionArray[j] = getContribution(i, j, 0, false)
-          totalContributionArray[j] += avgContributionArray[j]
-          avgContributionArrayPressing[j] = getContribution(i, j, 0, true)
-          totalContributionArrayPressing[j] += avgContributionArrayPressing[j]
-          ++j
-        unless i % DEBUG_STEP
-          tempHTML += "<tr>"
-          tempHTML += "<th>" + i + "</th>"
-          j = 1
-  
-          while j <= 9
-            tempHTML += "<td>"
-            tempHTML += number_format((totalContributionArray[j] / (i)) - (totalContributionArrayPressing[j] / (i)) * 100) + "%"
-            tempHTML += "</td>"
-            j++
-        tempHTML += "</tr>"
-        tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if i is HALFTIME
-        ++i
-      tempHTML += "</table><br/>"
-      $("#tabDebug").append tempHTML
-      
-      
-      for i of CHECKPOINTS
-        checkpoint = CHECKPOINTS[i]
-        player1CurrentContribution = getContribution(checkpoint, player1Stamina, 0, true)
-        player2CurrentContribution = getContribution(checkpoint, player2Stamina, 0, true)
-        player1TotalContribution += player1CurrentContribution
-        player2TotalContribution += player2CurrentContribution
-        player1AVGArrayPressing[i] = player1TotalContribution / (parseInt(i) + 1)
-        player2AVGArrayPressing[i] = player2TotalContribution / (parseInt(i) + 1)
-      if DEBUG
-        tempHTML = ""
-        printContributionTable()
-        printAVGContributionTable()
-        tempHTML += "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">Contribution at minute</th></tr><tr><td></td><th>Player 1</th><th>Player 2</th></tr>"
-        for i of CHECKPOINTS
-          checkpoint = CHECKPOINTS[i]
-          tempHTML += "<tr>"
-          tempHTML += "<th>" + checkpoint + "</th>"
-          tempHTML += "<td>" + number_format(getContribution(checkpoint, player1Stamina, 0, false) * player1StrengthStaminaIndependent) + "</td>"
-          tempHTML += "<td>" + number_format(getContribution(checkpoint, player2Stamina, 0, false) * player2StrengthStaminaIndependent) + "</td>"
-          tempHTML += "</tr>"
-          tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
-        tempHTML += "</table><br/>"
-        tempHTML += "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">AVG contribution at minute</th></tr><tr><td></td><th>Player 1</th><th>Player 2</th></tr>"
-        for i of CHECKPOINTS
-          checkpoint = CHECKPOINTS[i]
-          tempHTML += "<tr>"
-          tempHTML += "<th>" + checkpoint + "</th>"
-          tempHTML += "<td>" + number_format(player1AVGArray[i] * player1StrengthStaminaIndependent) + "</td>"
-          tempHTML += "<td>" + number_format(player2AVGArray[i] * player2StrengthStaminaIndependent) + "</td>"
-          tempHTML += "</tr>"
-          tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
-        tempHTML += "</table><br/>"
-        tempHTML += "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">Pressing AVG contribution at minute</th></tr><tr><td></td><th>Player 1</th><th>Player 2</th></tr>"
-        for i of CHECKPOINTS
-          checkpoint = CHECKPOINTS[i]
-          tempHTML += "<tr>"
-          tempHTML += "<th>" + checkpoint + "</th>"
-          tempHTML += "<td>" + number_format(player1AVGArrayPressing[i] * player1StrengthStaminaIndependent) + "</td>"
-          tempHTML += "<td>" + number_format(player2AVGArrayPressing[i] * player2StrengthStaminaIndependent) + "</td>"
-          tempHTML += "</tr>"
-          tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
-        tempHTML += "</table><br/>"
-        tempHTML += "<table class=\"StaminiaTable hAlignCenter vAlignCenter zebra\"><tr><th colspan=\"10\">Pressing Difference</th></tr><tr><td></td><th>Player 1</th><th>Player 2</th></tr>"
-        for i of CHECKPOINTS
-          checkpoint = CHECKPOINTS[i]
-          tempHTML += "<tr>"
-          tempHTML += "<th>" + checkpoint + "</th>"
-          tempHTML += "<td>" + number_format((player1AVGArrayPressing[i] * player1StrengthStaminaIndependent) / (player1AVGArray[i] * player1StrengthStaminaIndependent) * 100) + "%</td>"
-          tempHTML += "<td>" + number_format((player2AVGArrayPressing[i] * player2StrengthStaminaIndependent) / (player2AVGArray[i] * player2StrengthStaminaIndependent) * 100) + "%</td>"
-          tempHTML += "</tr>"
-          tempHTML += "<tr class=\"separator\"><th colspan=\"10\"></th></tr>"  if checkpoint is CHECKPOINT_FIRSTHALF
-        tempHTML += "</table><br/>"
-        tempHTML += "<b>Debug color scale:</b><br/>MIN "
-        i = 127
-  
         while i < 256
           tempHTML += "<span style=\"background: #" + (382 - i).toString(16) + i.toString(16) + "00;\">&nbsp;</span>"
           i += 5
         tempHTML += " MAX<br/><br/>"
         $("#tabDebug").append tempHTML
       i = KICKOFF
-  
-      while i <= FULLTIME
-        continue  if i is HALFTIME
-        p1PlayedMinutes = i - 1
-        --p1PlayedMinutes  if i > HALFTIME
-        p2PlayedMinutes = SUBTOTALMINUTES - i + 1
-        ++p2PlayedMinutes  if i > HALFTIME
-        totalContributionArray[i] = player1AVGArray[i - 1] * player1StrengthStaminaIndependent * (p1PlayedMinutes / SUBTOTALMINUTES)
-        totalContributionArray[i] += player2AVGArray[i] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES)
-        totalContributionArray[i] = parseFloat(number_format(totalContributionArray[i]))
-        max = totalContributionArray[i]  if totalContributionArray[i] > max
-        min = totalContributionArray[i]  if totalContributionArray[i] < min
-        ++i
-      min = -1  if max is min
-      if verbose
-        tableHeader = "<tr><td class=\"hidden\"></td><th>" + STRINGS["TOTAL_CONTRIBUTION"] + "</th><th>" + STRINGS["CONTRIBUTION_%"] + "</th><th class=\"player1\">" + STRINGS["P1_CONTRIB"] + "</th><th class=\"player2\">" + STRINGS["P2_CONTRIB"] + "</th><th>" + STRINGS["NOTES"] + "</th></tr>"
-        tableSeparator = "<tr class=\"separator\"><th colspan=\"6\"></th></tr>"
-        tempHTML = "<table class=\"StaminiaTable vAlignCenter hAlignCenter zebra\"><tr><th colspan=\"6\">" + STRINGS["CONTRIBUTION_TABLE"] + "</th></tr>" + tableHeader
-        graphBar = ""
-        i = KICKOFF
   
         while i <= FULLTIME
           if i is HALFTIME
@@ -722,56 +556,6 @@
           tempHTML += "<td>" + number_format(player2AVGArray[i] * player2StrengthStaminaIndependent * (p2PlayedMinutes / SUBTOTALMINUTES)) + "</td>"
           tempHTML += "<td>" + (if isMax then "MAX" else (if isMin then "MIN" else (if 100 - contributionPercent < 1 then "~ 1%" else ""))) + (if i is player1LowStamina then " " + STRINGS["P1_BAD_STAMINA"] else "") + (if i is player2LowStamina then " " + STRINGS["P2_BAD_STAMINA"] else "") + "</td></tr>"
           ++i
-        tempHTML += "</td></tr></table><br/>"
-        $("#verbose").append tempHTML
-      lowStaminaSERiskP1 = false
-      lowStaminaSERiskP2 = false
-      i = KICKOFF
-  
-      while i <= FULLTIME
-        continue  if i is HALFTIME
-        if totalContributionArray[i] is max
-          if i is FULLTIME
-            mayNotReplace = true
-          else
-            substituteAtArray.push i
-          lowStaminaSERiskP1 = true  if player1LowStamina > 0 and i >= player1LowStamina
-          lowStaminaSERiskP2 = true  if player2LowStamina > 0 and i <= player2LowStamina
-        ++i
-      if lowStaminaSERiskP1
-        warning = document.createElement("span")
-        warning.setAttribute "class", "notice"
-        warning.innerHTML = sprintf(STRINGS["WARNING_P1_STAMINA"], player1LowStamina)
-        warningArray.push warning
-      if lowStaminaSERiskP2
-        warning = document.createElement("span")
-        warning.setAttribute "class", "notice"
-        warning.innerHTML = sprintf(STRINGS["WARNING_P2_STAMINA"], player2LowStamina)
-        warningArray.push warning
-      for i of warningArray
-        $("#result").append warningArray[i]
-      resultString = ""
-      if substituteAtArray.length > 0
-        resultString = STRINGS["REPLACE"] + " " + (if substituteAtArray.length is 1 then STRINGS["AT_MINUTE"] else STRINGS["AT_MINUTES"]) + " "
-        resultString += ArrayToString(substituteAtArray)
-        if doNotReplace
-          resultString += " "
-          resultString += STRINGS["MAY_NOT_REPLACE"]
-      else
-        resultString = STRINGS["DO_NOT_REPLACE"]
-      $(resultSpan).addClass "success"
-      $(resultSpan).text resultString
-      $("#result").append resultSpan
-      $("#result").fadeIn()
-      $("#warnings").show()
-      $("#tabDebug").show()  if DEBUG
-      $("#verbose").show()  if verbose
-      $("#calculate").removeAttr "disabled"
-      timerEnd = new Date()
-      elapsedTime = timerEnd - timerStart
-      $("#elapsedTime").html "Elapsed Time: <b>" + elapsedTime + "</b>ms"
-      $("#elapsedTime").show()
-      return
   */
 
 
