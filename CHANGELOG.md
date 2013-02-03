@@ -1,6 +1,10 @@
 Changelog
 =========
 
+13.02.03
+--------
+* Pressing is working again
+
 13.01.29
 --------
 * Improved CHPP data retriever
