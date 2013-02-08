@@ -4,6 +4,7 @@ Changelog
 13.02.08
 --------
 * Bootstrap 2.3
+* Fixed Mother Club Bonus in Advanced Mode
 
 13.02.03
 --------

@@ -212,7 +212,7 @@ getAdvancedSkill = (player) ->
   return 0 if position < 0
 
   playerLoyalty = validateSkill formReference["Staminia_Advanced_Player_" + player + "_Loyalty"].value, "loyalty"
-  playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].value is "true"
+  playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].checked
   playerBonus = getPlayerBonus(playerLoyalty, playerMotherClubBonus)
 
   keeper = validateSkill(formReference["Staminia_Advanced_Player_" + player + "_Skill_Keeper"].value, "skill") + playerBonus
