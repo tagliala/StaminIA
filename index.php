@@ -232,10 +232,10 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                   <div class="staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
                       <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
-                      <button class="btn align-left" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
-                    <div id="CHPP_Results" class="hide shy align-left">
+                    <div id="CHPP_Results" class="hide shy">
                       <p id="CHPP_Status_Description"></p>
                     </div>
 
@@ -664,7 +664,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </script>
                 </div>
 <? } ?>
-                <div class="align-center form-actions">
+                <div class="text-center form-actions">
                   <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-magic"></i> <?= localize("Calculate") ?></button>
                   <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-random"></i> <?= localize("Switch players") ?></button>
                   <button type="button" id="getLink" class="btn btn-large"><i class="icon-link"></i> <?= localize("Get link") ?></button>
@@ -785,8 +785,9 @@ if (defined('GA_ID')) { ?>
       })();
     </script>
 <? } ?>
-    <script src="js/vendor/jquery-1.9.0.min.js"></script>
-    <script src="js/vendor/bootstrap-2.2.2.min.js"></script>
+    <!-- Bootstrap and jQuery from CDN for better performance -->
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
 
     <!-- scripts concatenated and minified via build script -->
     <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>

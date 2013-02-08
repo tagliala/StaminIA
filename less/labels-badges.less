@@ -16,6 +16,7 @@
   white-space: nowrap;
   background-color: @grayLight;
 }
+// Set unique padding and border-radii
 .badge {
   padding-left: 9px;
   padding-right: 9px;
@@ -29,10 +30,12 @@
   }
 }
 
-// Hover state, but only for links
+// Hover/focus state, but only for links
 a {
   &.label:hover,
-  &.badge:hover {
+  &.label:focus,
+  &.badge:hover,
+  &.badge:focus {
     color: @white;
     text-decoration: none;
     cursor: pointer;

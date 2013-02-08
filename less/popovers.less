@@ -9,7 +9,7 @@
   left: 0;
   z-index: @zindexPopover;
   display: none;
-  width: 236px;
+  max-width: 276px;
   padding: 1px;
   text-align: left; // Reset given new insertion method
   background-color: @popoverBackground;
@@ -38,6 +38,10 @@
   line-height: 18px;
   background-color: @popoverTitleBackground;
   border-bottom: 1px solid darken(@popoverTitleBackground, 5%);
+
+  &:empty {
+    display: none;
+  }
 }
 
 .popover-content {
