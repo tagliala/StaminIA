@@ -328,19 +328,7 @@ table.table-staminia th[colspan] {
           box-sizing: border-box;
 }
 
-.align-left {
-  text-align: left !important;
-}
-
-.align-center {
-  text-align: center !important;
-}
-
-.align-right { 
-  text-align: right !important;
-}
-
-.align-justify { 
+.text-justify { 
   text-align: justify !important;
 }
 
@@ -613,6 +601,7 @@ footer a:hover {
   z-index: 0;
   width: 100%;
   padding-left: 36px;
+  text-align: left;
 }
 
 .spacer {
