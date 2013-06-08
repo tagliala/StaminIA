@@ -609,9 +609,8 @@ $.ajaxSetup {
     switch jsonObject.Status
       when "OK"
         try
-          $("#menuLoginTitle").text jsonObject.TeamName
-          PlayersData = jsonObject.PlayersData
-          Staminia.PlayersData = PlayersData
+          Staminia.Teams = jsonObject.Teams
+          $("#menuLoginTitle").text Staminia.Teams[0].TeamName
           setupCHPPPlayerFields(true)
           loginMenuHide()
           enableCHPPMode()
@@ -701,7 +700,7 @@ sort_by = (field, reverse, primer) ->
     0
 
 sortCHPPPlayerFields = ->
-  PlayersData = Staminia.PlayersData
+  PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData
   return unless PlayersData?
 
   field = "PlayerNumber"
@@ -753,7 +752,7 @@ sortCHPPPlayerFields = ->
   return
 
 updateCHPPPlayerFields = ->
-  PlayersData = Staminia.PlayersData
+  PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData
   return unless PlayersData?
 
   sortCHPPPlayerFields()
@@ -784,6 +783,19 @@ updateCHPPPlayerFields = ->
   return
 
 setupCHPPPlayerFields = (checkUrlParameter = false) ->
+  Teams = Staminia.Teams
+  return if !Teams? or Teams.length is 0
+
+  select = $(document.createElement("select"))
+  for team, index in Teams
+    optionElement = $(document.createElement("option"))
+    optionElement.attr "value", index
+    optionElement.text team.TeamName
+    select.append optionElement
+
+  $("#CHPP_Team").html select.html()
+  $("#CHPP_Team").closest("tr").show() if Teams.length > 1
+
   updateCHPPPlayerFields()
 
   if ($('#CHPP_Player_1 option').length > 2 and $('#CHPP_Player_2 option').length > 2)
@@ -793,15 +805,15 @@ setupCHPPPlayerFields = (checkUrlParameter = false) ->
     setPlayerFormFields 2, checkUrlParameter
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_1]").on 'change', ->
+$("#CHPP_Player_1").on 'change', ->
   setPlayerFormFields 1
   return
 
-$("#{FORM_ID} select[id=CHPP_Player_2]").on 'change', ->
+$("#CHPP_Player_2").on 'change', ->
   setPlayerFormFields 2
   return
 
-$("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
+$("#CHPP_Players_SortBy, #CHPP_Team").on "change", ->
   updateCHPPPlayerFields()
 
   if ($("#CHPP_Player_1 option").length > 2 and $("#CHPP_Player_2 option").length > 2)
@@ -812,10 +824,14 @@ $("#{FORM_ID} select[id=CHPP_Players_SortBy]").on "change", ->
 
   return
 
+$("#CHPP_Team").on "change", ->
+  $("#menuLoginTitle").text Staminia.Teams[$(this).val()].TeamName
+  return
+
 setPlayerFormFields = (player, checkUrlParameter = false) ->
   return if checkUrlParameter && gup("params")?
 
-  PlayersData = Staminia.PlayersData
+  PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData
   formReference = $(FORM_ID)[0]
   return unless PlayersData?
   PlayerData = PlayersData[formReference["CHPP_Player_" + player].value]

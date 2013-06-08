@@ -299,6 +299,7 @@ table.table-staminia th[colspan] {
 
 .btn-warning {
   color: black !important;
+  text-shadow: none;
 }
 
 .btn-progress:disabled {

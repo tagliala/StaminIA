@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "13.02.08" ?>
+<?php $staminia_version = "13.06.08" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -321,6 +321,13 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </tr>
                   </thead>
                   <tbody>
+                    <tr class="hide">
+                      <td><?= localize("Team"); ?></td>
+                      <td colspan="2">
+                        <select class="ignore" id="CHPP_Team" name="CHPP_Team">
+                        </select>
+                      </td>
+                    </tr>
                     <tr class="chpp hide">
                       <td><?= localize("Player"); ?></td>
                       <td>

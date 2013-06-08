@@ -1,6 +1,14 @@
 Changelog
 =========
 
+13.06.08
+--------
+* Secondary Team Support
+* Added es-CA to repository [tnx to Baler0 (335181)]
+* Updated PHT library
+* Updated Font Awesome
+* Minor CSS fixes
+
 13.02.08
 --------
 * Bootstrap 2.3
