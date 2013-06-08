@@ -322,6 +322,13 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                   </thead>
                   <tbody>
                     <tr class="chpp hide">
+                      <td><?= localize("Team"); ?></td>
+                      <td colspan="2">
+                        <select class="ignore" id="CHPP_Team" name="CHPP_Team">
+                        </select>
+                      </td>
+                    </tr>
+                    <tr class="chpp hide">
                       <td><?= localize("Player"); ?></td>
                       <td>
                         <select class="ignore" id="CHPP_Player_1" name="CHPP_Player_1_Name">
