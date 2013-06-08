@@ -685,13 +685,12 @@
       return $("#CHPP_Status_Description").html("");
     },
     success: function(jsonObject, textStatus, xhr) {
-      var PlayersData, description_message, error_message;
+      var description_message, error_message;
       switch (jsonObject.Status) {
         case "OK":
           try {
-            $("#menuLoginTitle").text(jsonObject.TeamName);
-            PlayersData = jsonObject.PlayersData;
-            Staminia.PlayersData = PlayersData;
+            Staminia.Teams = jsonObject.Teams;
+            $("#menuLoginTitle").text(Staminia.Teams[0].TeamName);
             setupCHPPPlayerFields(true);
             loginMenuHide();
             enableCHPPMode();
@@ -793,7 +792,7 @@
 
   sortCHPPPlayerFields = function() {
     var PlayersData, field, primer, reverse;
-    PlayersData = Staminia.PlayersData;
+    PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -857,7 +856,7 @@
 
   updateCHPPPlayerFields = function() {
     var PlayersData, index, mc, name, number, optionElement, player, select, selectP1, selectP2, _i, _len;
-    PlayersData = Staminia.PlayersData;
+    PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
     if (PlayersData == null) {
       return;
     }
@@ -893,8 +892,25 @@
   };
 
   setupCHPPPlayerFields = function(checkUrlParameter) {
+    var Teams, index, optionElement, select, team, _i, _len;
     if (checkUrlParameter == null) {
       checkUrlParameter = false;
+    }
+    Teams = Staminia.Teams;
+    if (!(Teams != null) || Teams.length === 0) {
+      return;
+    }
+    select = $(document.createElement("select"));
+    for (index = _i = 0, _len = Teams.length; _i < _len; index = ++_i) {
+      team = Teams[index];
+      optionElement = $(document.createElement("option"));
+      optionElement.attr("value", index);
+      optionElement.text(team.TeamName);
+      select.append(optionElement);
+    }
+    $("#CHPP_Team").html(select.html());
+    if (Teams.length > 1) {
+      $("#CHPP_Team").closest("tr").show();
     }
     updateCHPPPlayerFields();
     if ($('#CHPP_Player_1 option').length > 2 && $('#CHPP_Player_2 option').length > 2) {
@@ -905,15 +921,15 @@
     }
   };
 
-  $("" + FORM_ID + " select[id=CHPP_Player_1]").on('change', function() {
+  $("#CHPP_Player_1").on('change', function() {
     setPlayerFormFields(1);
   });
 
-  $("" + FORM_ID + " select[id=CHPP_Player_2]").on('change', function() {
+  $("#CHPP_Player_2").on('change', function() {
     setPlayerFormFields(2);
   });
 
-  $("" + FORM_ID + " select[id=CHPP_Players_SortBy]").on("change", function() {
+  $("#CHPP_Players_SortBy, #CHPP_Team").on("change", function() {
     updateCHPPPlayerFields();
     if ($("#CHPP_Player_1 option").length > 2 && $("#CHPP_Player_2 option").length > 2) {
       $("#CHPP_Player_1 option:eq(0)").prop('selected', true);
@@ -921,6 +937,10 @@
       setPlayerFormFields(1);
       setPlayerFormFields(2);
     }
+  });
+
+  $("#CHPP_Team").on("change", function() {
+    $("#menuLoginTitle").text(Staminia.Teams[$(this).val()].TeamName);
   });
 
   setPlayerFormFields = function(player, checkUrlParameter) {
@@ -931,7 +951,7 @@
     if (checkUrlParameter && (gup("params") != null)) {
       return;
     }
-    PlayersData = Staminia.PlayersData;
+    PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
     formReference = $(FORM_ID)[0];
     if (PlayersData == null) {
       return;
