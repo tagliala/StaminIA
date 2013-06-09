@@ -1,6 +1,10 @@
 Changelog
 =========
 
+13.06.09
+--------
+* Fix for Secondary Team
+
 13.06.08
 --------
 * Secondary Team Support

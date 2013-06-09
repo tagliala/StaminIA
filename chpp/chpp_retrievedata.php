@@ -24,7 +24,7 @@ function getTeamDetails($HT, $team) {
   $teamArray["TeamId"]    = $team->getTeamId();
   $teamArray["TeamName"]    = $team->getTeamName();
 
-  $teamPlayers = $HT->getTeamPlayers();
+  $teamPlayers = $HT->getTeamPlayers($team->getTeamId());
   $teamPlayersArray = array();
 
   for ($i = 1; $i <= $teamPlayers->getNumberPlayers(); $i++) {
