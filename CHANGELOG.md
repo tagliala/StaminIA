@@ -1,6 +1,12 @@
 Changelog
 =========
 
+13.09.29
+--------
+* Improved Portuguese translation
+* Using FontAwesome from CDN
+* Fixed links in Thanks
+
 13.06.09
 --------
 * Fix for Secondary Team

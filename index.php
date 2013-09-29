@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
   }
 }
 ?>
-<?php $staminia_version = "13.06.09" ?>
+<?php $staminia_version = "13.09.29" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -71,7 +71,8 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
 
     <!-- Le styles -->
     <link href="css/main.css" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="img/staminia_favicon.png">
@@ -733,12 +734,12 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               </p>
               <h3><?= localize("Nerd thanks"); ?>:</h3>
               <p>
-                <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's team</a>,
+                <a href="http://getbootstrap.com/">Twitter Bootstrap's team</a>,
                 <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
                 <a href="http://github.com/mojombo/clippy">mojombo/clippy</a>,
                 <a href="http://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
                 <a href="http://github.com/flot/flot">flot/flot</a>,
-                <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>,
+                <a href="http://fontawesome.io">Font Awesome</a>,
                 <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
               </p>
             </div>
