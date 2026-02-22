@@ -16,6 +16,9 @@ vendor/
 # PHP-CS-Fixer cache
 .php-cs-fixer.cache
 
+# Build output
+dist/
+
 # Legacy build system
 build/apache-ant-1.8.3
 build/tools

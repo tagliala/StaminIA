@@ -1,0 +1,552 @@
+// StaminIA — SCSS bundle entry point
+// Import Bootstrap SCSS source (variables, mixins, then full framework)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/bootstrap";
+
+// Vendored flags
+@import "../css/flags.css";
+
+// ============================================================
+// Staminia Icon (.si) — inline SVG icon base
+// ============================================================
+.si {
+  width: 1em;
+  height: 1em;
+  fill: currentcolor;
+  vertical-align: -0.125em;
+  display: inline-block;
+}
+
+.si-status {
+  width: 14px;
+  height: 14px;
+}
+
+// ============================================================
+// Theme toggle icons
+// ============================================================
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: inline-block; }
+html.dark-mode .theme-icon-sun { display: inline-block; }
+html.dark-mode .theme-icon-moon { display: none; }
+
+#staminia-logo {
+  display: inline-block;
+  height: 27px;
+  width: 27px;
+  vertical-align: middle;
+  background: url("../img/logo-A99BEC36.png") no-repeat;
+  background-size: 27px 27px;
+}
+
+#staminia-brand {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// ============================================================
+// Layout
+// ============================================================
+@include media-breakpoint-up(lg) {
+  body {
+    padding-top: 56px;
+  }
+
+  #main {
+    padding: $spacer * .625;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  #main {
+    padding-top: 66px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .accordion-button::after {
+    display: none;
+  }
+}
+
+// ============================================================
+// Typography
+// ============================================================
+.mainTitle {
+  font-size: $h5-font-size;
+  margin: 0;
+  line-height: $h5-font-size * 1.2;
+}
+
+.mainTitle .sub {
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+}
+
+h3 {
+  margin: 0;
+  font-size: $h5-font-size;
+  line-height: $h5-font-size * 1.5;
+}
+
+// ============================================================
+// Settings panel
+// ============================================================
+.staminia-button-panel .form-check {
+  margin: ($spacer * .375) 0;
+}
+
+.staminia-button-panel .btn-group-advanced .btn {
+  width: 50%;
+}
+
+// Custom green for checked switches — preserve Staminia green
+$staminia-green: #51a351;
+$staminia-green-light: #62c462;
+
+.form-check-input:checked {
+  background-color: $staminia-green;
+  border-color: $staminia-green;
+}
+
+.form-check-input:focus {
+  border-color: $staminia-green-light;
+  box-shadow: 0 0 0 $focus-ring-width rgba($staminia-green, .25);
+}
+
+// ============================================================
+// Form
+// ============================================================
+form.staminiaForm {
+  display: block;
+  margin-bottom: 0;
+}
+
+form.staminiaForm table {
+  width: auto;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+form.staminiaForm td,
+form.staminiaForm th {
+  vertical-align: middle;
+}
+
+form.staminiaForm select,
+form.staminiaForm input {
+  width: 100%;
+  margin: 0;
+}
+
+#Staminia_Player_1,
+#Staminia_Player_2 {
+  min-width: 100px;
+}
+
+// ============================================================
+// Table stripe
+// ============================================================
+.table tbody tr:not(:hover) td.stripe,
+.table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($black, .02);
+}
+
+[data-bs-theme="dark"] .table tbody tr:not(:hover) td.stripe,
+[data-bs-theme="dark"] .table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($white, .02);
+}
+
+// ============================================================
+// Generated link
+// ============================================================
+#generatedLinkBody {
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+// ============================================================
+// Login dropdown
+// ============================================================
+#loginDropdown {
+  width: 280px;
+  padding: $spacer;
+}
+
+#loginDropdown fieldset {
+  display: block;
+  text-align: right;
+}
+
+#loginDropdown .form-check {
+  display: block;
+  float: left;
+  margin: 0;
+  line-height: $line-height-base * $font-size-base * 2;
+  cursor: pointer;
+}
+
+#loginDropdown input[type="checkbox"] {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+#loginDropdown button {
+  margin: 0;
+}
+
+#loginDropdown small {
+  font-size: $small-font-size;
+}
+
+// ============================================================
+// Form actions
+// ============================================================
+.form-actions {
+  margin-bottom: 0;
+  padding: $spacer ($spacer * 1.25);
+  background-color: var(--bs-tertiary-bg);
+  border-top: $border-width solid var(--bs-border-color);
+  border-radius: 0 0 $border-radius $border-radius;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer * .5;
+  justify-content: center;
+}
+
+.form-actions .btn {
+  margin-bottom: 0;
+}
+
+.field-caption {
+  display: none;
+}
+
+// ============================================================
+// Responsive table
+// ============================================================
+@media (max-width: 479px) {
+  .form-actions .btn {
+    width: 100% !important;
+  }
+
+  #playersInfoTable th:first-child,
+  #playersInfoTable td:first-child {
+    display: none !important;
+  }
+
+  #playersInfoTable td {
+    vertical-align: bottom !important;
+  }
+
+  .field-caption {
+    display: block;
+    margin-bottom: ($spacer * .125);
+    line-height: $line-height-sm;
+    font-weight: $font-weight-bold;
+    color: var(--bs-secondary-color);
+    text-transform: uppercase;
+  }
+}
+
+// ============================================================
+// Player option states
+// ============================================================
+option.isTransferListed {
+  color: #00b400;
+}
+
+option.isBruised {
+  color: #640000;
+}
+
+option.isInjured {
+  color: #c80000;
+}
+
+option.isSuspended {
+  color: #c81414;
+}
+
+// ============================================================
+// Side panel
+// ============================================================
+.side-panel > form {
+  margin-bottom: 0;
+}
+
+// ============================================================
+// Tabs
+// ============================================================
+.nav-tabs > li.credits {
+  margin-left: auto;
+}
+
+.shy {
+  color: var(--bs-secondary-color);
+}
+
+// ============================================================
+// Staminia tables
+// ============================================================
+table.table-staminia th,
+table.table-staminia td {
+  text-align: right;
+}
+
+table.table-staminia th:first-child,
+table.table-staminia td:first-child {
+  text-align: left;
+}
+
+table.table-staminia-debug th {
+  text-align: center;
+}
+
+table.table-staminia-debug th:first-child,
+table.table-staminia-debug td:first-child {
+  text-align: center;
+}
+
+table.table-staminia-contributions td:first-child {
+  text-align: center;
+}
+
+table.table-staminia-contributions th:not(:first-child),
+table.table-staminia-contributions td:not(:first-child) {
+  padding-left: $spacer * 1.25;
+}
+
+table.table-staminia-contributions td:nth-child(2) {
+  font-weight: $font-weight-bold;
+}
+
+table.table-staminia th[colspan] {
+  text-align: center;
+}
+
+// ============================================================
+// CHPP Button group
+// ============================================================
+.btn-progress:disabled {
+  color: $white;
+  background-color: #149bdf;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba($white, .15) 10px,
+    rgba($white, .15) 20px
+  );
+  background-size: 40px 40px;
+  animation: progress-bar-stripes 2s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  from { background-position: 40px 0; }
+  to { background-position: 0 0; }
+}
+
+.legend-like {
+  border-bottom: $border-width solid var(--bs-border-color);
+  margin-bottom: $spacer * 1.25;
+  font-weight: $font-weight-normal;
+}
+
+ul.nav.nav-tabs {
+  background: var(--bs-tertiary-bg);
+}
+
+span.minutes {
+  display: block;
+  margin-bottom: $spacer * .375;
+  font-size: $h4-font-size;
+  line-height: $h4-font-size * 1.1;
+}
+
+.min-width {
+  width: 1px;
+}
+
+// ============================================================
+// Charts
+// ============================================================
+#chartTotal,
+#chartPartials {
+  height: 250px;
+  width: 100% !important;
+  margin: ($spacer * 1.125) 0 ($spacer * .5625);
+}
+
+#charts .legendColorBox,
+#charts .legendLabel {
+  color: var(--bs-secondary-color);
+  background: var(--bs-secondary-bg)
+}
+
+#charts .legend table {
+  border: $border-width solid var(--bs-border-color);
+  border-collapse: separate;
+  border-spacing: 2px;
+  cursor: default;
+}
+
+#flot-tooltip {
+  position: absolute;
+  display: block;
+  visibility: hidden;
+  top: 0;
+  left: 0;
+  border: $border-width solid var(--bs-border-color);
+  padding: 2px;
+  font-size: $font-size-sm * .77;
+  background-color: var(--bs-tertiary-bg);
+  opacity: 0.90;
+  z-index: $zindex-tooltip;
+}
+
+// ============================================================
+// Credits
+// ============================================================
+#tabCredits > p,
+#tabCredits > blockquote {
+  margin-bottom: $spacer * 1.125;
+}
+
+// ============================================================
+// Footer
+// ============================================================
+footer {
+  color: var(--bs-secondary-color);
+
+  a {
+    color: var(--bs-secondary-color);
+
+    &:hover {
+      color: var(--bs-body-color);
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  footer li {
+    display: inline-block;
+  }
+
+  footer li + li {
+    margin-left: $spacer * .3125;
+    border-left: $border-width solid var(--bs-border-color);
+    padding-left: $spacer * .3125;
+  }
+}
+
+// ============================================================
+// Mother club bonus
+// ============================================================
+.btn-motherclub-bonus {
+  width: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacer * .25;
+}
+
+// ============================================================
+// CHPP status button
+// ============================================================
+#CHPP_Refresh_Data_Status {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: $h5-font-size;
+  line-height: $font-size-base;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#Staminia_Options_CHPP > .btn-group {
+  width: 100%;
+}
+
+#CHPP_Status_Description {
+  margin: 0;
+}
+
+.btn-chpp {
+  position: relative;
+}
+
+.btn-chpp .btn-status {
+  position: absolute;
+  z-index: 1;
+}
+
+#CHPP_Refresh_Data {
+  z-index: 0;
+  width: 100%;
+  padding-left: 36px;
+  text-align: left;
+}
+
+// ============================================================
+// Button group radio
+// ============================================================
+.btn-group-radio input[type="radio"] {
+  visibility: hidden;
+  position: absolute !important;
+}
+
+.btn-group-radio input[type="radio"]:checked + .btn {
+  color: var(--bs-btn-active-color, #{$gray-700});
+  background-color: var(--bs-btn-active-bg, #{$gray-200});
+  box-shadow: inset 0 2px 4px rgba($black, .15), 0 1px 2px rgba($black, .05);
+}
+
+.btn-group-radio > input:first-child + .btn {
+  margin-left: 0;
+}
+
+.btn-group-radio > .btn {
+  margin-left: -$border-width;
+}
+
+#Staminia_Options_Predictions_Type .btn {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+// ============================================================
+// Spacer / Advertising
+// ============================================================
+.spacer {
+  margin-bottom: $spacer * 1.25;
+}
+
+.advertising {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: $spacer * 1.25;
+  border: $border-width solid var(--bs-border-color);
+  padding: $spacer * .3125;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1023px) {
+  .advertising-leaderboard {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .advertising {
+    text-align: center;
+  }
+}

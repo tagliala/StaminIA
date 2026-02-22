@@ -85,8 +85,8 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
             <li class="nav-item"><a class="nav-link" href="#helpModal" data-bs-toggle="modal"><?= localize("Help") ?></a></li>
           </ul>
           <ul class="navbar-nav mb-3 mb-md-0">
-            <li class="nav-item d-flex align-items-center">
-              <button class="btn btn-sm btn-outline-light rounded-pill d-flex align-items-center gap-1 px-2 py-1" id="themeToggle" type="button" aria-label="Toggle theme">
+            <li class="nav-item">
+              <button class="nav-link" id="themeToggle" type="button" aria-label="Toggle theme">
                 <?= icon('sun', 'theme-icon-sun') ?>
                 <?= icon('moon', 'theme-icon-moon') ?>
               </button>
