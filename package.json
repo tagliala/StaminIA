@@ -4,10 +4,10 @@
   "description": "Hattrick's first substitutions calculator tool",
   "private": true,
   "scripts": {
-    "build": "coffee --compile --output js/ coffee/",
-    "watch": "coffee --watch --compile --output js/ coffee/",
+    "build": "esbuild src/engine.js src/main.js src/plugins.js --outdir=js --target=es2015 --format=iife",
+    "watch": "esbuild src/engine.js src/main.js src/plugins.js --outdir=js --target=es2015 --format=iife --watch",
     "lint": "run-s lint:js lint:css lint:php",
-    "lint:js": "biome check js/",
+    "lint:js": "biome check src/",
     "lint:css": "stylelint 'css/**/*.css'",
     "lint:php": "composer lint",
     "prepare": "husky"
@@ -20,14 +20,14 @@
   ],
   "license": "BSD-2-Clause",
   "lint-staged": {
-    "js/**/*.js": "biome check --write",
+    "src/**/*.js": "biome check --write",
     "css/**/*.css": "stylelint --fix",
     "*.php": "vendor/bin/php-cs-fixer fix --dry-run --config=.php-cs-fixer.dist.php"
   },
   "packageManager": "pnpm@10.30.1",
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
-    "coffeescript": "^2.7.0",
+    "esbuild": "^0.27.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
