@@ -63,7 +63,6 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     </script>
 
     <link href="dist/staminia.min.css" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet">
 
     <link rel="shortcut icon" href="img/staminia_favicon.png">
     <link rel="apple-touch-icon" href="img/ico/apple-touch-icon.png">
@@ -85,9 +84,9 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
           <ul class="navbar-nav me-auto">
             <li class="nav-item"><a class="nav-link" href="#helpModal" data-bs-toggle="modal"><?= localize("Help") ?></a></li>
           </ul>
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <button class="nav-link" id="themeToggle" type="button" aria-label="Toggle theme">
+          <ul class="navbar-nav mb-3 mb-md-0">
+            <li class="nav-item d-flex align-items-center">
+              <button class="btn btn-sm btn-outline-light rounded-pill d-flex align-items-center gap-1 px-2 py-1" id="themeToggle" type="button" aria-label="Toggle theme">
                 <?= icon('sun', 'theme-icon-sun') ?>
                 <?= icon('moon', 'theme-icon-moon') ?>
               </button>
@@ -101,9 +100,12 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
                   <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
                     <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
                     <fieldset>
-                      <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) {
-                          echo "checked=\"checked\"";
-                      } ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                      <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="permanent" id="chppRememberMe" <?php if ($permanent) {
+                            echo "checked=\"checked\"";
+                        } ?>/>
+                        <label class="form-check-label" for="chppRememberMe"><?php echo localize("Remember me"); ?></label>
+                      </div>
                       <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
                     </fieldset>
                   </form>
@@ -267,7 +269,7 @@ foreach ($lang_array as $key => $val) {
 
         <!-- Second Column Start -->
         <div class="col-lg-9">
-          <ul class="nav nav-tabs" role="tablist">
+          <ul class="nav nav-tabs mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="#tabPlayersInfo" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Players Info") ?></span></a></li>
             <li class="nav-item d-none" id="tabChartsNav"><a class="nav-link" href="#tabCharts" data-bs-toggle="tab" role="tab"><?= icon('chart-bar') ?> <span class="d-none d-sm-inline"><?= localize("Charts") ?></span></a></li>
             <li class="nav-item d-none" id="tabContributionsNav"><a class="nav-link" href="#tabContributions" data-bs-toggle="tab" role="tab"><?= icon('rectangle-list') ?> <span class="d-none d-sm-inline"><?= localize("Contributions table") ?></span></a></li>
@@ -313,18 +315,18 @@ foreach ($lang_array as $key => $val) {
                     <tr class="d-none">
                       <td><?= localize("Team"); ?></td>
                       <td colspan="2">
-                        <select class="ignore" id="CHPP_Team" name="CHPP_Team">
+                        <select class="form-select ignore" id="CHPP_Team" name="CHPP_Team">
                         </select>
                       </td>
                     </tr>
                     <tr class="chpp d-none">
                       <td><?= localize("Player"); ?></td>
                       <td>
-                        <select class="ignore" id="CHPP_Player_1" name="CHPP_Player_1_Name">
+                        <select class="form-select ignore" id="CHPP_Player_1" name="CHPP_Player_1_Name">
                         </select>
                       </td>
                       <td>
-                        <select class="ignore" id="CHPP_Player_2" name="CHPP_Player_2_Name">
+                        <select class="form-select ignore" id="CHPP_Player_2" name="CHPP_Player_2_Name">
                         </select>
                       </td>
                     </tr>
@@ -333,7 +335,7 @@ foreach ($lang_array as $key => $val) {
                       <td colspan="2">
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Sort by"); ?></span>
-                          <select class="ignore" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
+                          <select class="form-select ignore" id="CHPP_Players_SortBy" name="CHPP_Players_SortBy">
                             <option value="ShirtNumber"><?php echo localize("Shirt Number"); ?></option>
                             <option value="Name"><?php echo localize("Name"); ?></option>
                             <option value="Form"><?php echo localize("Form"); ?></option>
@@ -358,7 +360,7 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Form"); ?></span>
-                          <select name="Staminia_Simple_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>">
                             <?php optionSkills(1, 8) ?>
                           </select>
                         </div>
@@ -366,7 +368,7 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"></span>
-                          <select name="Staminia_Simple_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>">
                             <?php optionSkills(1, 8) ?>
                           </select>
                         </div>
@@ -377,14 +379,14 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Stamina"); ?></span>
-                          <select name="Staminia_Simple_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>">
                             <?php optionSkills(1, 9) ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <select name="Staminia_Simple_Player_2_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 2") ?> <?= localize("Stamina"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_2_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 2") ?> <?= localize("Stamina"); ?>">
                             <?php optionSkills(1, 9) ?>
                           </select>
                         </div>
@@ -395,14 +397,14 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Experience"); ?></span>
-                          <select name="Staminia_Simple_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>">
                             <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <select name="Staminia_Simple_Player_2_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Experience"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_2_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Experience"); ?>">
                             <?php optionSkills() ?>
                           </select>
                         </div>
@@ -413,14 +415,14 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Main Skill"); ?></span>
-                          <select name="Staminia_Simple_Player_1_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Main Skill"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_1_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Main Skill"); ?>">
                             <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <select name="Staminia_Simple_Player_2_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Main Skill"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_2_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Main Skill"); ?>">
                             <?php optionSkills() ?>
                           </select>
                         </div>
@@ -431,14 +433,14 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Loyalty"); ?></span>
-                          <select name="Staminia_Simple_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>">
                             <?php optionSkills(1, 20, 1) ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <select name="Staminia_Simple_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>">
+                          <select class="form-select" name="Staminia_Simple_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>">
                             <?php optionSkills(1, 20, 1) ?>
                           </select>
                         </div>
@@ -450,12 +452,12 @@ foreach ($lang_array as $key => $val) {
                         <div class="control-group">
                           <span class="field-caption"></span>
                           <span class="field-caption"><?= localize("Form"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -464,12 +466,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Stamina"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 2") ?> <?= localize("Stamina"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 2") ?> <?= localize("Stamina"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -478,12 +480,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Experience"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="30" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="30" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Experience" data-validate="range" data-range-min="0" data-range-max="30" data-field-name="<?= localize("Player 2") ?> <?= localize("Experience"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Experience" data-validate="range" data-range-min="0" data-range-max="30" data-field-name="<?= localize("Player 2") ?> <?= localize("Experience"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -492,12 +494,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Loyalty"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>" value="1.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>" value="1.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>" value="1.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>" value="1.00"/>
                         </div>
                       </td>
                     </tr>
@@ -522,7 +524,7 @@ foreach ($lang_array as $key => $val) {
                       <td colspan="2">
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Position"); ?></span>
-                          <select class="ignore" id="Staminia_Advanced_Position" name="Staminia_Advanced_Position" data-field-name="<?php echo localize("Position"); ?>">
+                          <select class="form-select ignore" id="Staminia_Advanced_Position" name="Staminia_Advanced_Position" data-field-name="<?php echo localize("Position"); ?>">
                             <option value="0"><?php echo localize("Keeper"); ?></option>
                             <optgroup label="<?= localize("Defender"); ?>">
                               <option value="1"><?php echo localize("Defender"); ?></option>
@@ -561,12 +563,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Keeper (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Keeper" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Keeper (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Keeper" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Keeper (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Keeper" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Keeper (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Keeper" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Keeper (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -575,12 +577,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Defending (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Defending" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Defending (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Defending" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Defending (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Defending" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Defending (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Defending" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Defending (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -589,12 +591,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Playmaking (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Playmaking" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Playmaking (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Playmaking" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Playmaking (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Playmaking" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Playmaking (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Playmaking" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Playmaking (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -603,12 +605,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Winger (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Winger" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Winger (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -617,12 +619,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Passing (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Passing" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Passing (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -631,12 +633,12 @@ foreach ($lang_array as $key => $val) {
                       <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Scoring (skill)"); ?></span>
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_1_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 1") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
-                          <input class="ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
+                          <input class="form-control ignore" type="text" name="Staminia_Advanced_Player_2_Skill_Scoring" data-validate="range" data-range-min="0" data-range-max="22" data-field-name="<?= localize("Player 2") ?> <?= localize("Scoring (skill)"); ?>" value="6.00"/>
                         </div>
                       </td>
                     </tr>
@@ -689,7 +691,7 @@ foreach ($lang_array as $key => $val) {
                   <label for="performanceAt90" class="inline">
                     <?= localize("Performance at 90'"); ?>:
                   </label>
-                  <select class="ignore width-auto" id="performanceAt90" name="performanceAt90">
+                  <select class="form-select ignore w-auto" id="performanceAt90" name="performanceAt90">
                     <?php for ($i = 100; $i >= 16; $i--) { ?>
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
@@ -737,7 +739,7 @@ foreach ($lang_array as $key => $val) {
 
       <!-- Help Modal Start -->
       <div class="modal fade" tabindex="-1" id="helpModal">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title"><?= localize("Help") ?></h5>

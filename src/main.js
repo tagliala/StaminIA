@@ -1054,6 +1054,11 @@ $("#extraLink").on("click", (e) => {
 });
 
 // BS5 accordion collapse is handled natively via data-bs-toggle
+// Expand settings on desktop
+if (window.innerWidth >= 768) {
+  const el = document.getElementById("collapseSettings");
+  if (el) bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }).show();
+}
 
 // Exports
 Staminia.format = format;
@@ -1065,11 +1070,18 @@ Staminia.isPressingEnabled = isPressingEnabled;
 Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled;
 
 // Theme toggle
+const syncThemeIcon = () => {
+  const isDark = document.documentElement.getAttribute("data-bs-theme") === "dark";
+  document.documentElement.classList.toggle("dark-mode", isDark);
+};
+syncThemeIcon();
+
 $("#themeToggle").on("click", () => {
   const current = document.documentElement.getAttribute("data-bs-theme");
   const next = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-bs-theme", next);
   document.cookie = "theme=" + next + ";path=/;max-age=31536000;SameSite=Lax";
+  syncThemeIcon();
 });
 
 // Document.ready

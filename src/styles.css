@@ -22,8 +22,9 @@
    Theme toggle icons
    ============================================================ */
 .theme-icon-sun { display: none; }
-[data-bs-theme="dark"] .theme-icon-sun { display: inline-block; }
-[data-bs-theme="dark"] .theme-icon-moon { display: none; }
+.theme-icon-moon { display: inline-block; }
+html.dark-mode .theme-icon-sun { display: inline-block; }
+html.dark-mode .theme-icon-moon { display: none; }
 
 /* ============================================================
    Focus reset
@@ -38,7 +39,6 @@
    ============================================================ */
 .navbar .navbar-brand {
   padding: 0 8px;
-  font-family: 'Lobster', cursive;
   font-size: 24px;
 }
 
@@ -76,9 +76,6 @@
 }
 
 @media (min-width: 768px) {
-  .accordion-collapse.collapse {
-    display: block;
-  }
   .accordion-button::after {
     display: none;
   }
@@ -193,7 +190,7 @@ form.staminiaForm input {
   text-align: right;
 }
 
-#loginDropdown label.rememberme {
+#loginDropdown .form-check {
   display: block;
   float: left;
   margin: 0;
@@ -223,10 +220,14 @@ form.staminiaForm input {
   background-color: var(--bs-tertiary-bg);
   border-top: 1px solid var(--bs-border-color);
   border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
 }
 
 .form-actions .btn {
-  margin-bottom: 5px;
+  margin-bottom: 0;
 }
 
 .field-caption {
@@ -251,7 +252,6 @@ form.staminiaForm input {
     display: block;
     margin-bottom: 2px;
     line-height: 14px;
-    font-size: 12px;
     font-weight: bold;
     color: var(--bs-secondary-color);
     text-transform: uppercase;
@@ -360,9 +360,7 @@ table.table-staminia th[colspan] {
   }
 }
 
-.width-auto {
-  width: auto !important;
-}
+
 
 .legend-like {
   border-bottom: 1px solid var(--bs-border-color);
@@ -562,14 +560,11 @@ footer a:hover {
    Theme toggle button
    ============================================================ */
 #themeToggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 #themeToggle .si {
-  width: 1.2em;
-  height: 1.2em;
+  width: 1em;
+  height: 1em;
 }
