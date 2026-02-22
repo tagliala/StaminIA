@@ -14,9 +14,15 @@ importers:
       bootstrap:
         specifier: 5.3.8
         version: 5.3.8(@popperjs/core@2.11.8)
+      flot:
+        specifier: 4.2.6
+        version: 4.2.6
       jquery:
         specifier: 3.7.1
         version: 3.7.1
+      jquery-validation:
+        specifier: 1.22.1
+        version: 1.22.1(jquery@3.7.1)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.4.4
@@ -603,6 +609,9 @@ packages:
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
+  flot@4.2.6:
+    resolution: {integrity: sha512-Iz4HCet1ZBQnjGwECz4jseD1zMnh7m2XJIMI6A62l8h2SeceLYOEmYGNQto1XhkSM9fUmqzyKhWwJ+RolWLydg==}
+
   get-east-asian-width@1.5.0:
     resolution: {integrity: sha512-CQ+bEO+Tva/qlmw24dCejulK5pMzVnUOFOijVogd3KQs07HnRIgp8TGipvCCRT06xeYEbpbgwaCxglFyiuIcmA==}
     engines: {node: '>=18'}
@@ -704,6 +713,11 @@ packages:
   isexe@3.1.5:
     resolution: {integrity: sha512-6B3tLtFqtQS4ekarvLVMZ+X+VlvQekbe4taUkf/rhVO3d/h0M2rfARm/pXLcPEsjjMsFgrFgSrhQIxcSVrBz8w==}
     engines: {node: '>=18'}
+
+  jquery-validation@1.22.1:
+    resolution: {integrity: sha512-ePLXLWK7Rh5eR652YsuIu7YPeGlCXrsJUteVw5iZopiU17yaMd3FaDggs6yyNMl56p8TYVeDRmKGK3fPZrMeQw==}
+    peerDependencies:
+      jquery: ^1.7 || ^2.0 || ^3.1 || ^4.0
 
   jquery@3.7.1:
     resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
@@ -1488,6 +1502,8 @@ snapshots:
 
   flatted@3.3.3: {}
 
+  flot@4.2.6: {}
+
   get-east-asian-width@1.5.0: {}
 
   glob-parent@5.1.2:
@@ -1565,6 +1581,10 @@ snapshots:
   isexe@2.0.0: {}
 
   isexe@3.1.5: {}
+
+  jquery-validation@1.22.1(jquery@3.7.1):
+    dependencies:
+      jquery: 3.7.1
 
   jquery@3.7.1: {}
 

@@ -780,7 +780,7 @@ foreach ($lang_array as $key => $val) {
           echo "false";
       } ?>;
 <?php
-$file = "js/vendor/jqvalidate/localization/messages_" . localize("validateLang") . ".js";
+$file = "node_modules/jquery-validation/dist/localization/messages_" . localize("validateLang") . ".js";
 if (is_file($file)) {
     include($file);
 }

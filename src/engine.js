@@ -1,5 +1,3 @@
-"use strict";
-
 window.Staminia = window.Staminia || {};
 const Staminia = window.Staminia;
 Staminia.Engine = Staminia.Engine || {};

@@ -1,5 +1,3 @@
-"use strict";
-
 window.Staminia = window.Staminia || {};
 const Staminia = window.Staminia;
 Staminia.CONFIG = Staminia.CONFIG || {};
@@ -1001,11 +999,14 @@ const plot_redraw = (plot) => {
 };
 
 // Resize charts if needed
-$(window).resize($.debounce(500, () => {
-  if (!$("#tabChartsNav").hasClass("active")) return;
-  if (document.plot1 != null) plot_redraw(document.plot1);
-  if (document.plot2 != null) plot_redraw(document.plot2);
-}));
+$(window).resize(function() {
+  clearTimeout(this._resizeTimer);
+  this._resizeTimer = setTimeout(() => {
+    if (!$("#tabChartsNav").hasClass("active")) return;
+    if (document.plot1 != null) plot_redraw(document.plot1);
+    if (document.plot2 != null) plot_redraw(document.plot2);
+  }, 500);
+});
 
 // Charts tooltips
 const showTooltip = (x, y, contents) => {

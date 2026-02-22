@@ -1,5 +1,3 @@
-"use strict";
-
 // SVG icon strings for dynamic icon swaps in JavaScript.
 // These are the FA 6 solid icons used by the CHPP status indicator.
 window.Staminia = window.Staminia || {};
