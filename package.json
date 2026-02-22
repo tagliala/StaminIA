@@ -6,9 +6,10 @@
   "scripts": {
     "build": "coffee --compile --output js/ coffee/",
     "watch": "coffee --watch --compile --output js/ coffee/",
-    "lint": "run-s lint:js lint:css",
+    "lint": "run-s lint:js lint:css lint:php",
     "lint:js": "biome check js/",
     "lint:css": "stylelint 'css/**/*.css'",
+    "lint:php": "find . -name '*.php' -not -path './lib/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 php -l",
     "prepare": "husky"
   },
   "keywords": [
@@ -20,7 +21,8 @@
   "license": "BSD-2-Clause",
   "lint-staged": {
     "js/**/*.js": "biome check --write",
-    "css/**/*.css": "stylelint --fix"
+    "css/**/*.css": "stylelint --fix",
+    "*.php": "php -l"
   },
   "packageManager": "pnpm@10.30.1",
   "devDependencies": {
