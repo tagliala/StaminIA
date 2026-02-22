@@ -17,11 +17,11 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     }
 }
 
-if ($_GET["locale"]) {
-    preg_match('/([a-z]{1,8}(-[a-z]{1,8})?)/i', $_GET['locale'], $lang_parse);
-    if ($lang_parse[0]) {
+if (!empty($_GET['locale'])) {
+  preg_match('/([a-z]{1,8}(-[a-z]{1,8})?)/i', $_GET['locale'], $lang_parse);
+    if (!empty($lang_parse[0])) {
       //highest priority
-      $langs{$lang_parse[0]} = 2;
+      $langs[$lang_parse[0]] = 2;
     }
 }
 
@@ -56,9 +56,9 @@ asort($lang_array);
 // look through sorted list and use first one that matches our languages
 foreach ($langs as $lang => $val) {
   $lang = strtolower($lang);
-  if ($lang_array[$lang]) {
+  if (isset($lang_array[$lang])) {
     defined('LANGUAGE') or define('LANGUAGE', $lang);
-  } else if ($lang_nocountry_array[$lang]) {
+  } elseif (isset($lang_nocountry_array[$lang])) {
     defined('LANGUAGE') or define('LANGUAGE', $lang_nocountry_array[$lang]);
   }
 }
@@ -67,16 +67,25 @@ foreach ($langs as $lang => $val) {
 defined('LANGUAGE') or define('LANGUAGE', "en-us");
 
 static $translations = NULL;
+static $translations_en = NULL;
 
 /* If no instance of $translations has occured load the language file */
 if (is_null($translations)) {
-    $lang_file = LANG_PATH . LANGUAGE . '.json';
-    if (!file_exists($lang_file)) {
-        $lang_file = LANG_PATH . 'en-us.json';
-    }
-    $lang_file_content = file_get_contents($lang_file);
-    /* Load the language file as a JSON object and transform it into an associative array */
-    $translations = json_decode($lang_file_content, true);
+  $lang_file = LANG_PATH . LANGUAGE . '.json';
+  if (!file_exists($lang_file)) {
+    $lang_file = LANG_PATH . 'en-us.json';
+  }
+  $lang_file_content = file_get_contents($lang_file);
+  /* Load the language file as a JSON object and transform it into an associative array */
+  $translations = json_decode($lang_file_content, true);
+
+  /* Load English fallback translations as a second-level fallback */
+  $en_file = LANG_PATH . 'en-us.json';
+  if (file_exists($en_file)) {
+    $translations_en = json_decode(file_get_contents($en_file), true);
+  } else {
+    $translations_en = array();
+  }
 }
 
 /**
@@ -90,20 +99,30 @@ if (is_null($translations)) {
 * @return string
 */
 function localize($phrase) {
-    global $translations;
-    /* Static keyword is used to ensure the file is loaded only once */
-    if ($translations[$phrase])
+    global $translations, $translations_en;
+    /* Return translation from selected language if present */
+    if (isset($translations[$phrase]) && $translations[$phrase] !== "") {
       return $translations[$phrase];
-    else
-      return $phrase;
+    }
+    /* Fallback to English translation if available */
+    if (isset($translations_en[$phrase]) && $translations_en[$phrase] !== "") {
+      return $translations_en[$phrase];
+    }
+    /* Last resort: return the key itself */
+    return $phrase;
 }
 
 function localizeJavascript() {
-    global $translations;
-    /* Static keyword is used to ensure the file is loaded only once */
-    $javascript_translation = $translations[JAVASCRIPT_MESSAGES];
+    global $translations, $translations_en;
+    /* Find JS messages in selected language, fallback to English */
+    $javascript_translation = array();
+    if (isset($translations[JAVASCRIPT_MESSAGES]) && is_array($translations[JAVASCRIPT_MESSAGES])) {
+        $javascript_translation = $translations[JAVASCRIPT_MESSAGES];
+    } elseif (isset($translations_en[JAVASCRIPT_MESSAGES]) && is_array($translations_en[JAVASCRIPT_MESSAGES])) {
+        $javascript_translation = $translations_en[JAVASCRIPT_MESSAGES];
+    }
     $javascript_messages = "Staminia.JAVASCRIPT_MESSAGES = { ";
-    foreach ($javascript_translation as $func => $message) {
+    foreach ((array)$javascript_translation as $func => $message) {
       $javascript_messages = $javascript_messages . strtolower($func) . ": Staminia.format(\"" . addslashes($message) . "\"), ";
     }
     return $javascript_messages . " };";

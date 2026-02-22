@@ -2,8 +2,8 @@
 include 'config.php';
 include 'lib/PHT/PHT.php';
 session_start();
-$HT = $_SESSION['HT'];
-$permanent = $_COOKIE['permanent'];
+$HT = isset($_SESSION['HT']) ? $_SESSION['HT'] : null;
+$permanent = isset($_COOKIE['permanent']) ? $_COOKIE['permanent'] : null;
 /*
 When user is redirected to your callback url
 you will received two parameters in url
@@ -22,7 +22,7 @@ $tryAjax = (($HT != null) || $permanent);
 <?php
 include 'localization.php';
 ?>
-<?
+<?php
 
 function optionSkills($start = 0, $stop = 20, $select = 6) {
   global $localizedSkills;
@@ -54,15 +54,12 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
     <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="keywords" content="Stamin.IA!, CHPP, stamina tool, hattrick, substitutions tool, substitutions"/>
 
-    <?php if (FB_ADMINS != "") { ?>
-      <meta property="fb:admins" content="<?= FB_ADMINS ?>"/>
-      <meta property="og:title" content="Stamin.IA!"/>
-      <meta property="og:description" content="<?php echo localize("SUBTITLE"); ?>"/>
-      <meta property="og:type" content="game"/>
-      <meta property="og:image" content="<?= APP_ROOT ?>img/big_logo.png"/>
-      <meta property="og:url" content="<?= APP_ROOT ?>"/>
-      <meta property="og:site_name" content="Lizardopoli"/>
-    <?php } ?>
+    <meta property="og:title" content="Stamin.IA!"/>
+    <meta property="og:description" content="<?php echo localize("SUBTITLE"); ?>"/>
+    <meta property="og:type" content="game"/>
+    <meta property="og:image" content="<?= APP_ROOT ?>img/big_logo.png"/>
+    <meta property="og:url" content="<?= APP_ROOT ?>"/>
+    <meta property="og:site_name" content="Lizardopoli"/>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -220,7 +217,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           </div> <!-- Staminia Options End -->
 
           <!-- Staminia CHPP Start -->
-          <div class="accordion<? if (!$tryAjax) echo " hide"; ?>" id="accordion-chpp">
+          <div class="accordion<?php if (!$tryAjax) echo " hide"; ?>" id="accordion-chpp">
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-chpp" href="#collapseCHPP">
@@ -230,7 +227,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               </div>
               <div id="collapseCHPP" class="accordion-body collapse">
                 <div class="accordion-inner">
-                  <div class="staminia-button-panel<? if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
+                  <div class="staminia-button-panel<?php if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
                       <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
                       <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
@@ -246,7 +243,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             </div>
           </div> <!-- Staminia CHPP End -->
 
-<? if (defined('GOOGLE_AD_CLIENT')) { ?>
+<?php if (defined('GOOGLE_AD_CLIENT')) { ?>
           <!-- Advertising -->
           <div class="advertising border-box">
             <script type="text/javascript">
@@ -272,9 +269,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
              src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             </script>
           </div>
-<? } else { ?>
+<?php } else { ?>
           <div class="spacer"></div>
-<? } ?>
+<?php } ?>
         </div> <!-- First Column End -->
 
         <!-- Second Column Start -->
@@ -371,7 +368,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Form"); ?></span>
                           <select name="Staminia_Simple_Player_1_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 1") ?> <?= localize("Form"); ?>">
-                            <? optionSkills(1, 8) ?>
+                            <?php optionSkills(1, 8) ?>
                           </select>
                         </div>
                       </td>
@@ -379,7 +376,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"></span>
                           <select name="Staminia_Simple_Player_2_Form" data-validate="range" data-range-min="1" data-range-max="8" data-field-name="<?= localize("Player 2") ?> <?= localize("Form"); ?>">
-                            <? optionSkills(1, 8) ?>
+                            <?php optionSkills(1, 8) ?>
                           </select>
                         </div>
                       </td>
@@ -390,14 +387,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Stamina"); ?></span>
                           <select name="Staminia_Simple_Player_1_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 1") ?> <?= localize("Stamina"); ?>">
-                            <? optionSkills(1, 9) ?>
+                            <?php optionSkills(1, 9) ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
                           <select name="Staminia_Simple_Player_2_Stamina" data-validate="range" data-range-min="1" data-range-max="9" data-field-name="<?= localize("Player 2") ?> <?= localize("Stamina"); ?>">
-                            <? optionSkills(1, 9) ?>
+                            <?php optionSkills(1, 9) ?>
                           </select>
                         </div>
                       </td>
@@ -408,14 +405,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Experience"); ?></span>
                           <select name="Staminia_Simple_Player_1_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Experience"); ?>">
-                            <? optionSkills() ?>
+                            <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
                           <select name="Staminia_Simple_Player_2_Experience" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Experience"); ?>">
-                            <? optionSkills() ?>
+                            <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
@@ -426,14 +423,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Main Skill"); ?></span>
                           <select name="Staminia_Simple_Player_1_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Main Skill"); ?>">
-                            <? optionSkills() ?>
+                            <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
                           <select name="Staminia_Simple_Player_2_MainSkill" data-validate="range" data-range-min="0" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Main Skill"); ?>">
-                            <? optionSkills() ?>
+                            <?php optionSkills() ?>
                           </select>
                         </div>
                       </td>
@@ -444,14 +441,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Loyalty"); ?></span>
                           <select name="Staminia_Simple_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>">
-                            <? optionSkills(1,20,1) ?>
+                            <?php optionSkills(1,20,1) ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
                           <select name="Staminia_Simple_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>">
-                            <? optionSkills(1,20,1) ?>
+                            <?php optionSkills(1,20,1) ?>
                           </select>
                         </div>
                       </td>
@@ -656,7 +653,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     </tr>
                   </tbody>
                 </table>
-<? if (defined('GOOGLE_AD_CLIENT')) { ?>
+<?php if (defined('GOOGLE_AD_CLIENT')) { ?>
                 <!-- Advertising -->
                 <div class="advertising border-box advertising-leaderboard">
                   <script type="text/javascript">
@@ -671,7 +668,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                     src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     </script>
                 </div>
-<? } ?>
+<?php } ?>
                 <div class="text-center form-actions">
                   <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-magic"></i> <?= localize("Calculate") ?></button>
                   <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-random"></i> <?= localize("Switch players") ?></button>
@@ -779,20 +776,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
       </footer> <!-- Footer End -->
 
     </div> <!-- Container Fluid End -->
-<?php
-if (defined('GA_ID')) { ?>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '<?= GA_ID ?>']);
-      _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-<? } ?>
     <!-- Bootstrap and jQuery from CDN for better performance -->
     <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
