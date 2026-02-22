@@ -58,7 +58,7 @@ Staminia.estimateStaminaSubskills = (performanceAt90) => {
   return 8 + (performanceAt90 - 90) / 15;
 };
 
-const getContribution = (minute, stamina, startsAtMinute, pressing) => {
+export const getContribution = (minute, stamina, startsAtMinute, pressing) => {
   minute = Number(minute);
   stamina = Number(stamina);
   startsAtMinute = Number(startsAtMinute);
@@ -114,7 +114,7 @@ const getContribution = (minute, stamina, startsAtMinute, pressing) => {
   return Math.min(energy, 1);
 };
 
-const getAvgAt90 = (stamina) => {
+export const getAvgAt90 = (stamina) => {
   if (stamina >= 9) return 1;
 
   let totalEnergy = 0;
@@ -136,7 +136,7 @@ const getAvgAt90 = (stamina) => {
   return totalEnergy / 18;
 };
 
-const calculateStrength = (skill, form, stamina, experience, include_stamina) => {
+export const calculateStrength = (skill, form, stamina, experience, include_stamina) => {
   skill = Number(skill);
   form = Math.max(0.5, Number(form));
   stamina = Number(stamina);
@@ -163,7 +163,7 @@ const calculateStrength = (skill, form, stamina, experience, include_stamina) =>
   return result;
 };
 
-const validateSkill = (skill, type) => {
+export const validateSkill = (skill, type) => {
   if (SKILL_VALIDATION[type] == null) return 0;
 
   const min = SKILL_VALIDATION[type].min;
@@ -178,7 +178,7 @@ const validateSkill = (skill, type) => {
   return parsedSkill;
 };
 
-const getPlayerBonus = (loyalty, motherClubBonus) => {
+export const getPlayerBonus = (loyalty, motherClubBonus) => {
   if (motherClubBonus) loyalty = 20;
   let playerBonus = 0;
   if (motherClubBonus) playerBonus += 0.5;

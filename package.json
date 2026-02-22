@@ -17,6 +17,7 @@
     "lint:js": "biome check src/",
     "lint:css": "stylelint 'src/**/*.scss'",
     "lint:php": "composer lint",
+    "test": "vitest run",
     "prepare": "husky"
   },
   "keywords": [
@@ -36,12 +37,14 @@
     "@biomejs/biome": "^2.4.4",
     "esbuild": "^0.27.3",
     "husky": "^9.1.7",
+    "jsdom": "^28.1.0",
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
     "sass": "^1.97.3",
     "stylelint": "^17.3.0",
     "stylelint-config-standard": "^40.0.0",
-    "stylelint-config-standard-scss": "^17.0.0"
+    "stylelint-config-standard-scss": "^17.0.0",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
