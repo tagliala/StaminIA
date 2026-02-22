@@ -31,7 +31,6 @@ Staminia.messages = {
   partial_contributions: "Részleges Hozzájárulások",
   copy_to_clipboard: "Vágólapra másol",
   copied_to_clipboard: "Kimásolva",
-  no_flash: "Flash nem támogatott, vágólapra másolás letiltva",
   validation_error: "Kérlek javítsd az alábbi hibát:",
   validation_errors: Staminia.format("Kérlek javítsd az alábbi {0} hibát:"),
   refresh_throttle: Staminia.format("Adatok nem frissültek. Kérlek várj {0} másodpercet a következő kérésig."),

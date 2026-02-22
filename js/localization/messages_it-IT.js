@@ -31,7 +31,6 @@ Staminia.messages = {
   partial_contributions: "Apporti parziali",
   copy_to_clipboard: "Copia negli appunti",
   copied_to_clipboard: "Copiato!",
-  no_flash: "Flash non supportato, impossibile copiare negli appunti",
   validation_error: "Correggi il seguente errore:",
   validation_errors: Staminia.format("Correggi i seguenti {0} errori:"),
   refresh_throttle: Staminia.format("I dati non sono stati aggiornati. Attendere {0} secondi prima della prossima richiesta."),

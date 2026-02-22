@@ -740,7 +740,6 @@ foreach ($lang_array as $key => $val) {
               <p>
                 <a href="http://getbootstrap.com/">Twitter Bootstrap's team</a>,
                 <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
-                <a href="http://github.com/mojombo/clippy">mojombo/clippy</a>,
                 <a href="http://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
                 <a href="http://github.com/flot/flot">flot/flot</a>,
                 <a href="http://fontawesome.io">Font Awesome</a>,

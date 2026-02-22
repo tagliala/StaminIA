@@ -559,12 +559,10 @@ $("#getLink").on("click", (e) => {
 
   link += `params=${formSerialize()}`;
 
-  const clippy = `&nbsp;<span class="clippy" data-clipboard-text="${link}" id="staminiaClippy"></span>`;
+  const copyButton = '<button class="btn btn-mini" id="copyLinkToClipboard" type="button">' + Staminia.messages.copy_to_clipboard + '</button>';
   const body = link;
 
   if ($("#generatedLinkBody").length) {
-    $("#copyLinkToClipboard").data("text", link);
-    $("#staminiaClippy").attr("data-clipboard-text", link);
     $("#generatedLinkBody").fadeOut("fast", function() {
       $(this).html(body).fadeIn("fast");
     });
@@ -573,10 +571,13 @@ $("#getLink").on("click", (e) => {
       id: "generatedLink",
       type: "info",
       body: body,
-      title: Staminia.messages.copy_link + " " + clippy
+      title: Staminia.messages.copy_link + " " + copyButton
     }));
-    new Staminia.ClippableBehavior($("#staminiaClippy")[0]);
   }
+
+  $("#copyLinkToClipboard").off("click").on("click", () => {
+    Staminia.copyToClipboard(link, $("#copyLinkToClipboard"));
+  });
 
   // Scroll up if needed
   scrollUpToResults();

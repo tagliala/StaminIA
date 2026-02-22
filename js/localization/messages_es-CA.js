@@ -31,7 +31,6 @@ Staminia.messages = {
   partial_contributions: "Contribución parcial",
   copy_to_clipboard: "Copiar al portapapeles",
   copied_to_clipboard: "Copiado",
-  no_flash: "Sin soporte para flash, copiado al portapapeles desactivado",
   validation_error: "Por favor, corrige el siguiente error:",
   validation_errors: Staminia.format("Por favor corrige {0} error(es):"),
   refresh_throttle: Staminia.format("Datos no actualizados. Espera {0} segundos antes de intentarlo de nuevo."),

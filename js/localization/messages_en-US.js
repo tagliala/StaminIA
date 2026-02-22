@@ -31,7 +31,6 @@ Staminia.messages = {
   partial_contributions: "Partial Contributions",
   copy_to_clipboard: "Copy to clipboard",
   copied_to_clipboard: "Copied",
-  no_flash: "No flash support, copying to clipboard disabled",
   validation_error: "Please correct the following error:",
   validation_errors: Staminia.format("Please correct the following {0} errors:"),
   refresh_throttle: Staminia.format("Data not refreshed. Please wait {0} seconds before next request."),

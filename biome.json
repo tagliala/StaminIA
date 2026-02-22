@@ -29,6 +29,6 @@
 		"enabled": false
 	},
 	"javascript": {
-		"globals": ["$", "jQuery", "ActiveXObject", "Enumerator"]
+		"globals": ["$", "jQuery"]
 	}
 }

@@ -174,19 +174,8 @@ form.staminiaForm select {
   font-size : smaller;
 }
 
-.clippy {
-  height: 14px;
-  width: 14px;
-  display:inline-block;
-  background : url("../img/css_sprite.png") no-repeat -206px -16px;  
-}
-
-.clippy-disabled {
-  background : url("../img/css_sprite.png") no-repeat -206px -31px;  
-}
-
-#global-clippy-flash-bug {
-  line-height: 1px;
+#copyLinkToClipboard {
+  vertical-align: baseline;
 }
 
 .form-actions {
