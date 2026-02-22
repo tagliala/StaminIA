@@ -1,8 +1,5 @@
 // StaminIA — single JS bundle entry point
-// jQuery globals are set by src/jquery-shim.js (loaded via esbuild --inject).
-
-import * as bootstrap from "bootstrap";
-window.bootstrap = bootstrap;
+// jQuery and Bootstrap globals are set by src/globals-shim.js (esbuild --inject).
 
 import "jquery-validation";
 import "flot";
