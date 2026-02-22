@@ -10,7 +10,7 @@ on player stamina, form, experience, and other attributes.
 
 - **Backend**: PHP (index.php, localization.php, CHPP OAuth integration)
 - **Frontend logic**: CoffeeScript sources in `coffee/` compiled to JavaScript in `js/`
-- **Stylesheets**: LESS sources in `less/` compiled to CSS in `css/`
+- **Stylesheets**: Custom CSS in `css/main.css`, vendored Bootstrap 2.3.0 in `css/bootstrap.css`
 - **Build system**: pnpm with npm scripts (migrated from legacy Apache Ant)
 - **Package manager**: pnpm
 - **CI**: GitHub Actions
@@ -21,7 +21,7 @@ on player stamina, form, experience, and other attributes.
 | ---------------- | --------------------------------- |
 | Package manager  | pnpm                              |
 | JS compilation   | CoffeeScript (coffeescript)       |
-| CSS compilation  | LESS (less)                       |
+| CSS framework    | Bootstrap 2.3.0 (vendored)        |
 | JS linting       | Biome                             |
 | CSS linting      | Stylelint                         |
 | CI               | GitHub Actions                    |
@@ -38,11 +38,11 @@ on player stamina, form, experience, and other attributes.
 - Prefer descriptive variable names (camelCase)
 - Keep functions short and focused
 
-### CSS / LESS
+### CSS
 
 - Use two-space indentation
-- Follow the existing Bootstrap 2.x LESS conventions in `less/`
-- Keep selectors specific but not overly nested
+- Custom styles go in `css/main.css`
+- Do not modify vendored files (`css/bootstrap.css`, `css/bootstrap-responsive.css`, `css/flags.css`)
 
 ### Ruby Conventions (where applicable)
 
@@ -89,33 +89,31 @@ Fix stamina calculation for pressing mode
 ### Commands
 
 ```bash
-pnpm install          # Install dependencies
-pnpm run build        # Compile CoffeeScript and LESS (production)
-pnpm run build:coffee # Compile CoffeeScript only
-pnpm run build:less   # Compile LESS only
-pnpm run watch        # Watch for changes (development)
-pnpm run lint         # Run all linters
-pnpm run lint:js      # Lint JavaScript files
-pnpm run lint:css     # Lint CSS/LESS files
+pnpm install       # Install dependencies
+pnpm run build     # Compile CoffeeScript to JavaScript
+pnpm run watch     # Watch CoffeeScript for changes (development)
+pnpm run lint      # Run all linters
+pnpm run lint:js   # Lint JavaScript files (Biome)
+pnpm run lint:css  # Lint CSS files (Stylelint)
 ```
 
 ### Directory Structure
 
 ```
-coffee/          → CoffeeScript source files
+coffee/          → CoffeeScript source files (project code)
 js/              → Compiled JavaScript (output from CoffeeScript)
-less/            → LESS source files (Bootstrap 2.x)
-css/             → Compiled CSS (output from LESS) + custom stylesheets
+js/vendor/       → Vendored JavaScript libraries (do not modify)
+css/             → Stylesheets (main.css is project code, rest is vendored)
+less/            → Vendored Bootstrap 2.3.0 LESS source (reference only)
 chpp/            → CHPP API integration (PHP)
 lang/            → Localization JSON files
 lib/             → PHP libraries (PHT)
 img/             → Images and icons
-build/           → (removed — was legacy Ant build system)
 ```
 
 ### Development Workflow
 
-1. Make changes to files in `coffee/` or `less/`
+1. Make changes to CoffeeScript files in `coffee/`
 2. Run `pnpm run watch` for automatic recompilation during development
 3. Run `pnpm run lint` before committing
 4. Run `pnpm run build` to verify production builds
@@ -124,6 +122,6 @@ build/           → (removed — was legacy Ant build system)
 
 - All linters must pass before merging
 - CI must be green on every pull request
-- Build output (`js/`, `css/`) must match expected compilation results
+- Build output (`js/`) must match expected compilation results
 - No regressions in existing PHP backend functionality
 - Manual testing with a PHP server to verify the application works

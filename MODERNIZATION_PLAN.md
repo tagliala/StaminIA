@@ -17,8 +17,7 @@ backward compatibility with the existing PHP backend.
 - Remove the Apache Ant build system
 - Implement modern build tooling with pnpm and npm scripts
 - Migrate CoffeeScript compilation to the new build system
-- Migrate LESS compilation to the new build system
-- Set up development and production build scripts
+- Set up development build scripts with watch mode
 - Maintain backward compatibility with the existing PHP backend
 
 ### Changes
@@ -26,8 +25,7 @@ backward compatibility with the existing PHP backend.
 | Before                           | After                                |
 | -------------------------------- | ------------------------------------ |
 | Apache Ant + Java                | pnpm + npm scripts                   |
-| Manual CoffeeScript compilation  | `pnpm run build:coffee`              |
-| Manual LESS compilation          | `pnpm run build:less`                |
+| Manual CoffeeScript compilation  | `pnpm run build`                     |
 | No watch mode                    | `pnpm run watch` for development     |
 | `build/` directory with Ant XML  | `package.json` with npm scripts      |
 
@@ -38,8 +36,9 @@ backward compatibility with the existing PHP backend.
 - **npm scripts** used for build orchestration (no bundler needed since this is a
   PHP app with simple compilation needs)
 - **coffeescript** package for CoffeeScript → JavaScript compilation
-- **less** package for LESS → CSS compilation
-- Compiled output continues to go to `js/` and `css/` for PHP backend compatibility
+- The `less/` directory contains vendored Bootstrap 2.3.0 LESS source and is kept
+  as reference only — the pre-compiled `css/bootstrap.css` is used directly
+- Compiled JS output continues to go to `js/` for PHP backend compatibility
 
 ---
 
@@ -50,7 +49,7 @@ backward compatibility with the existing PHP backend.
 ### Goals
 
 - Implement JavaScript linting with Biome
-- Implement CSS/LESS linting with Stylelint
+- Implement CSS linting with Stylelint
 - Set up GitHub Actions CI workflow
 - Ensure linters run on every commit and pull request
 - Add pre-commit hooks with Husky and lint-staged
@@ -59,8 +58,8 @@ backward compatibility with the existing PHP backend.
 
 | Tool        | Purpose                          |
 | ----------- | -------------------------------- |
-| Biome       | JavaScript/JSON linting          |
-| Stylelint   | CSS/LESS linting                 |
+| Biome       | JavaScript linting               |
+| Stylelint   | CSS linting                      |
 | Husky       | Git hook management              |
 | lint-staged | Run linters on staged files only |
 
@@ -69,6 +68,15 @@ backward compatibility with the existing PHP backend.
 - Runs on every push and pull request
 - Steps: install dependencies → lint → build
 - Uses pnpm for reproducible installs
+
+### Linting Strategy
+
+- **Biome**: Lints project JS files (`js/*.js`), excludes vendored libraries
+  (`js/vendor/`). Configured with minimal rules appropriate for CoffeeScript-
+  generated code.
+- **Stylelint**: Lints custom CSS (`css/main.css`, `css/bootstrap-overload.css`),
+  excludes vendored CSS (`css/bootstrap.css`, `css/bootstrap-responsive.css`,
+  `css/flags.css`).
 
 ---
 
@@ -116,7 +124,7 @@ CHPP API documentation is reviewed and specific changes are identified.
 ### Goals
 
 - Full UI redesign with Tailwind CSS
-- Replace existing Bootstrap 2.x LESS styles
+- Replace vendored Bootstrap 2.3.0 styles
 - Modernize component structure
 - Ensure responsive design across all devices
 
@@ -129,7 +137,8 @@ CHPP API documentation is reviewed and specific changes are identified.
 - [ ] Redesign results display and substitution recommendations
 - [ ] Redesign charts and data visualization
 - [ ] Implement responsive design for mobile and tablet
-- [ ] Remove Bootstrap 2.x LESS files and compiled CSS
+- [ ] Remove vendored Bootstrap 2.x files (`less/`, `css/bootstrap.css`,
+  `css/bootstrap-responsive.css`)
 - [ ] Update `index.php` templates to use new component structure
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
 
