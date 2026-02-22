@@ -190,11 +190,11 @@ foreach ($lang_array as $key => $val) {
                       <?= localize("Predictions Type") ?>
                       <div class="btn-group d-flex" role="group">
                         <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked autocomplete="off">
-                        <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_HO">
+                        <label class="btn btn-secondary" for="Staminia_Options_AdvancedMode_Predictions_HO">
                           HO
                         </label>
                         <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac" autocomplete="off">
-                        <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
+                        <label class="btn btn-secondary" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
                           AndreaC
                         </label>
                       </div>
@@ -223,7 +223,7 @@ foreach ($lang_array as $key => $val) {
                   } ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
                       <button class="btn btn-sm btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><?= icon('triangle-exclamation') ?></button>
-                      <button class="btn btn-sm btn-outline-secondary" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn btn-sm btn-secondary" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
                     <div id="CHPP_Results" class="d-none shy">
@@ -235,36 +235,6 @@ foreach ($lang_array as $key => $val) {
               </div>
             </div>
           </div> <!-- Staminia CHPP End -->
-
-<?php if (defined('GOOGLE_AD_CLIENT')) { ?>
-          <!-- Advertising -->
-          <div class="advertising">
-            <script type="text/javascript">
-              google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
-              if (window.innerWidth <= 767) {
-                /* Stamin.IA! 236x60 */
-                google_ad_slot = "6526500219";
-                google_ad_width = 234;
-                google_ad_height = 60;
-              } else if (window.innerWidth >= 1024) {
-                /* Stamin.IA! 200x200 */
-                google_ad_slot = "9120039814";
-                google_ad_width = 200;
-                google_ad_height = 200;
-              } else {
-                /* Stamin.IA! 125x125 */
-                google_ad_slot = "2912055810";
-                google_ad_width = 125;
-                google_ad_height = 125;
-              }
-            </script>
-            <script type="text/javascript"
-             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-            </script>
-          </div>
-<?php } else { ?>
-          <div class="spacer"></div>
-<?php } ?>
         </div> <!-- First Column End -->
 
         <!-- Second Column Start -->
@@ -662,8 +632,8 @@ foreach ($lang_array as $key => $val) {
 <?php } ?>
                 <div class="text-center form-actions">
                   <button type="submit" id="calculate" class="btn btn-lg btn-primary"><?= icon('wand-magic-sparkles') ?> <?= localize("Calculate") ?></button>
-                  <button type="button" id="switchPlayers" class="btn btn-lg btn-outline-secondary"><?= icon('shuffle') ?> <?= localize("Switch players") ?></button>
-                  <button type="button" id="getLink" class="btn btn-lg btn-outline-secondary"><?= icon('link') ?> <?= localize("Get link") ?></button>
+                  <button type="button" id="switchPlayers" class="btn btn-lg btn-secondary"><?= icon('shuffle') ?> <?= localize("Switch players") ?></button>
+                  <button type="button" id="getLink" class="btn btn-lg btn-secondary"><?= icon('link') ?> <?= localize("Get link") ?></button>
                   <button type="reset" id="resetApp" class="btn btn-lg btn-warning"><?= icon('rotate-left') ?> <?= localize("Reset") ?></button>
                 </div>
               </form> <!-- Main Form End -->
