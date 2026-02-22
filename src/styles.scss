@@ -44,12 +44,6 @@ html.dark-mode .theme-icon-moon { display: none; }
   background-size: 27px 27px;
 }
 
-#staminia-brand {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 // ============================================================
 // Layout
 // ============================================================
@@ -179,28 +173,6 @@ form.staminiaForm input {
 #loginDropdown {
   width: 280px;
   padding: $spacer;
-}
-
-#loginDropdown fieldset {
-  display: block;
-  text-align: right;
-}
-
-#loginDropdown .form-check {
-  display: block;
-  float: left;
-  margin: 0;
-  line-height: $line-height-base * $font-size-base * 2;
-  cursor: pointer;
-}
-
-#loginDropdown input[type="checkbox"] {
-  display: inline-block;
-  vertical-align: baseline;
-}
-
-#loginDropdown button {
-  margin: 0;
 }
 
 #loginDropdown small {

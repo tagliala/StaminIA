@@ -74,9 +74,9 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
 
   <!-- Navbar
     ================================================== -->
-    <nav class="navbar navbar-expand-md fixed-top bg-success" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-md fixed-top bg-success-subtle">
       <div class="container-fluid">
-        <span class="navbar-brand"><i id="staminia-logo"></i><span id="staminia-brand" class="d-none d-sm-inline">Stamin.IA!</span></span>
+        <a class="navbar-brand"><span id="staminia-logo"></span>Stamin.IA!</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
