@@ -293,6 +293,11 @@ $(FORM_ID).validate({
 
     // Render Charts
     if (isChartsEnabled()) {
+      // Show the charts tab first so containers have dimensions for Flot
+      $("#tabChartsNav").removeClass("d-none");
+      const chartsTab = document.querySelector("#tabChartsNav a");
+      if (chartsTab) bootstrap.Tab.getOrCreateInstance(chartsTab).show();
+
       let plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
       $.extend(true, plot_options, {
         lines: {
@@ -338,7 +343,6 @@ $(FORM_ID).validate({
         }
       });
       document.plot2 = $.plot($("#chartPartials"), dataset, plot_options);
-      $("#tabChartsNav").removeClass("d-none");
     }
 
     createSubstitutionAlert(
@@ -348,8 +352,6 @@ $(FORM_ID).validate({
 
     // Show the right tab
     if (isChartsEnabled()) {
-      const chartsTab = document.querySelector("#tabChartsNav a");
-      if (chartsTab) bootstrap.Tab.getOrCreateInstance(chartsTab).show();
       setTimeout(() => {
         plot_redraw(document.plot1);
         plot_redraw(document.plot2);
