@@ -4,7 +4,7 @@ window.Staminia = window.Staminia || {};
 const Staminia = window.Staminia;
 Staminia.CONFIG = Staminia.CONFIG || {};
 
-$.extend(Staminia.CONFIG, {
+Object.assign(Staminia.CONFIG, {
   FORM_ID: "#formPlayersInfo",
   OPTION_FORM_ID: "#optionForm",
   TABLE_ID: "#playersInfoTable",
@@ -26,18 +26,18 @@ $.extend(Staminia.CONFIG, {
 const format = function(source, params) {
   if (arguments.length === 1) {
     return function() {
-      const args = $.makeArray(arguments);
+      const args = [...arguments];
       args.unshift(source);
       return format.apply(this, args);
     };
   }
   if (arguments.length > 2 && params.constructor !== Array) {
-    params = $.makeArray(arguments).slice(1);
+    params = [...arguments].slice(1);
   }
   if (params.constructor !== Array) {
     params = [params];
   }
-  $.each(params, (i, n) => {
+  params.forEach((n, i) => {
     source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
   });
   return source;
@@ -93,7 +93,7 @@ const createSubstitutionAlert = (substituteAtArray, mayNotReplace) => {
     title = Staminia.messages.do_not_replace;
   }
 
-  $("#AlertsContainer").append(createAlert({
+  document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
     id: "formSubstituteAt",
     type: "success",
     title: title,
@@ -102,14 +102,14 @@ const createSubstitutionAlert = (substituteAtArray, mayNotReplace) => {
 };
 
 const resetAndHideTabs = () => {
-  $("#tabChartsNav").addClass("d-none");
-  $("#tabContributionsNav").addClass("d-none");
-  $("#tabDebugNav").addClass("d-none");
+  document.getElementById("tabChartsNav").classList.add("d-none");
+  document.getElementById("tabContributionsNav").classList.add("d-none");
+  document.getElementById("tabDebugNav").classList.add("d-none");
   destroyCharts();
-  $("#chartTotal").html("");
-  $("#chartPartials").html("");
-  $("#tabContributions").html("");
-  $("#tabDebug").html("");
+  document.getElementById("chartTotal").innerHTML = "";
+  document.getElementById("chartPartials").innerHTML = "";
+  document.getElementById("tabContributions").innerHTML = "";
+  document.getElementById("tabDebug").innerHTML = "";
 };
 
 const FORM_ID = Staminia.CONFIG.FORM_ID;
@@ -120,8 +120,8 @@ const AUTOSTART = Staminia.CONFIG.AUTOSTART;
 Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
 
 // Stops propagation of click event on login form
-$(".dropdown-menu").find("form").click((e) => {
-  e.stopPropagation();
+document.querySelectorAll(".dropdown-menu form").forEach(el => {
+  el.addEventListener("click", (e) => e.stopPropagation());
 });
 
 const checkIframe = () => {
@@ -138,7 +138,7 @@ $(FORM_ID).validate({
   focusInvalid: true,
   showErrors: function(errorMap, errorList) {
     if (this.numberOfInvalids() === 0) {
-      $("#formErrors").remove();
+      document.getElementById("formErrors")?.remove();
     }
     this.defaultShowErrors();
   },
@@ -149,27 +149,29 @@ $(FORM_ID).validate({
       let message;
       if (errors === 1) message = Staminia.messages.validation_error;
       if (errors > 1) message = Staminia.messages.validation_errors(errors);
-      $("#formErrors").remove();
+      document.getElementById("formErrors")?.remove();
       if (validator.errorList.length > 0) {
-        $("#AlertsContainer").append(createAlert({
+        document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
           id: "formErrors",
           type: "error",
           title: message,
           body: '<ul id="formErrorsUl"></ul>'
         }));
+        const errorListEl = document.getElementById("formErrorsUl");
         for (const error of validator.errorList) {
-          $("#formErrorsUl").append(`<li>${$(error.element).data("fieldName")}: ${error.message}</li>`);
+          errorListEl.insertAdjacentHTML("beforeend", `<li>${error.element.dataset.fieldName}: ${error.message}</li>`);
         }
       } else {
-        $("#formErrors").dismiss();
+        const formErrorsEl = document.getElementById("formErrors");
+        if (formErrorsEl) bootstrap.Alert.getOrCreateInstance(formErrorsEl).close();
       }
       validator.focusInvalid();
     }
   },
   submitHandler: (form) => {
-    $("#calculate").addClass("disabled");
+    document.getElementById("calculate").classList.add("disabled");
     resetAndHideTabs();
-    $("#AlertsContainer").html("");
+    document.getElementById("AlertsContainer").innerHTML = "";
     const result = Staminia.Engine.start();
 
     // Show warnings
@@ -187,7 +189,7 @@ $(FORM_ID).validate({
       warnings_list += `<li>${Staminia.messages.best_in_first_half}</li>`;
     }
     if (warnings_list !== "") {
-      $("#AlertsContainer").append(createAlert({
+      document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
         id: "formWarnings",
         type: "warning",
         title: Staminia.messages.status_warning,
@@ -197,6 +199,7 @@ $(FORM_ID).validate({
 
     // Render Contributions table
     if (isVerboseModeEnabled()) {
+      const tabContributions = document.getElementById("tabContributions");
       let tempHTML =
         `<h3 class="legend-like">${Staminia.messages.strength_table}</h3>` +
         '<table class="table table-striped table-sm table-staminia table-staminia-strength width-auto">' +
@@ -211,7 +214,7 @@ $(FORM_ID).validate({
         `<td>${number_format(result.player2StrengthStaminaIndependent, 2)}</td></tr>` +
         "</tbody></table>" +
         `<p><small>${Staminia.messages.used_in_calculation}</small></p>`;
-      $("#tabContributions").append(tempHTML);
+      tabContributions.insertAdjacentHTML("beforeend", tempHTML);
 
       const tableHeader =
         "<thead><tr>" +
@@ -260,13 +263,13 @@ $(FORM_ID).validate({
       }
 
       tempHTML += "</tbody></table>";
-      $("#tabContributions").append(tempHTML);
-      $("#tabContributionsNav").removeClass("d-none");
+      tabContributions.insertAdjacentHTML("beforeend", tempHTML);
+      document.getElementById("tabContributionsNav").classList.remove("d-none");
     }
 
     // Render Charts
     if (isChartsEnabled()) {
-      $("#tabChartsNav").removeClass("d-none");
+      document.getElementById("tabChartsNav").classList.remove("d-none");
       const chartsTab = document.querySelector("#tabChartsNav a");
       if (chartsTab) bootstrap.Tab.getOrCreateInstance(chartsTab).show();
 
@@ -305,13 +308,17 @@ $(FORM_ID).validate({
     scrollUpToResults();
 
     // Reset button status
-    $("#calculate").removeClass("disabled");
+    document.getElementById("calculate").classList.remove("disabled");
   },
   highlight: (element, errorClass, validClass) => {
-    $(element).closest("div").addClass(errorClass).removeClass(validClass);
+    const div = element.closest("div");
+    div.classList.add(errorClass);
+    div.classList.remove(validClass);
   },
   unhighlight: (element, errorClass, validClass) => {
-    $(element).closest("div").removeClass(errorClass).addClass(validClass);
+    const div = element.closest("div");
+    div.classList.remove(errorClass);
+    div.classList.add(validClass);
   }
 });
 
@@ -347,18 +354,23 @@ const number_format = (number = "", decimals = 0, dec_point = ".", thousands_sep
 
 // Set the view at the right point
 const scrollUpToResults = () => {
-  const $elem = $(".nav-tabs");
-  const docViewTop = $(window).scrollTop();
-  const elemTop = $elem.offset().top;
-  if (docViewTop > elemTop) {
-    $("html, body").animate({ scrollTop: elemTop }, 200);
+  const elem = document.querySelector(".nav-tabs");
+  if (!elem) return;
+  const elemTop = elem.getBoundingClientRect().top + window.scrollY;
+  if (window.scrollY > elemTop) {
+    window.scrollTo({ top: elemTop, behavior: "smooth" });
   }
 };
 
 // Dynamic Table Stripe
 const stripeTable = () => {
-  $(`${TABLE_ID} tr td, ${TABLE_ID} tr th`).removeClass("stripe");
-  $(`${TABLE_ID} tr:visible:odd td, ${TABLE_ID} tr:visible:odd td`).addClass("stripe");
+  document.querySelectorAll(`${TABLE_ID} tr td, ${TABLE_ID} tr th`).forEach(el => el.classList.remove("stripe"));
+  const visibleRows = [...document.querySelectorAll(`${TABLE_ID} tr`)].filter(tr => tr.offsetParent !== null);
+  visibleRows.forEach((tr, i) => {
+    if (i % 2 === 1) {
+      tr.querySelectorAll("td, th").forEach(cell => cell.classList.add("stripe"));
+    }
+  });
 };
 
 // Create alert
@@ -370,60 +382,61 @@ const createAlert = (params) => {
     `<p id="${params.id}Body">${params.body}</p></div>`;
 };
 
-$("#Staminia_Advanced_Position").on("change", () => {
+document.getElementById("Staminia_Advanced_Position").addEventListener("change", () => {
   showSkillsByPosition();
   stripeTable();
 });
 
 const showSkillsByPosition = () => {
-  $(`${FORM_ID} tr[class~=advanced]:not([id*=_Advanced_]) *[name*=_Advanced_]`).removeClass("ignore");
-  $(`${FORM_ID} tr[class~=advanced][id*=_Advanced_] *[name*=_Advanced_]`).addClass("ignore");
-  $(`${TABLE_ID} tr[class~=advanced][id*=_Advanced_]`).addClass("d-none").hide();
+  document.querySelectorAll(`${FORM_ID} tr[class~=advanced]:not([id*=_Advanced_]) *[name*=_Advanced_]`).forEach(el => el.classList.remove("ignore"));
+  document.querySelectorAll(`${FORM_ID} tr[class~=advanced][id*=_Advanced_] *[name*=_Advanced_]`).forEach(el => el.classList.add("ignore"));
+  document.querySelectorAll(`${TABLE_ID} tr[class~=advanced][id*=_Advanced_]`).forEach(el => el.classList.add("d-none"));
 
-  const position = Number($("#Staminia_Advanced_Position").val());
+  const position = Number(document.getElementById("Staminia_Advanced_Position").value);
   if (!(position >= 0 && position <= 19)) return;
 
   const SKILL_ENUMERATOR = Staminia.CONFIG.PR_ENUM_SKILL;
   for (const skill in SKILL_ENUMERATOR) {
     if (Staminia.predictions[position][SKILL_ENUMERATOR[skill]] > 0) {
-      $(`#Staminia_Advanced_Skill_${skill} *[name]`).removeClass("ignore");
-      $(`#Staminia_Advanced_Skill_${skill}`).removeClass("d-none").show();
+      document.querySelectorAll(`#Staminia_Advanced_Skill_${skill} *[name]`).forEach(el => el.classList.remove("ignore"));
+      const row = document.getElementById(`Staminia_Advanced_Skill_${skill}`);
+      if (row) row.classList.remove("d-none");
     }
   }
 };
 
 // Enable Advanced Mode
 const enableAdvancedMode = () => {
-  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop("disabled", false);
-  $(`${TABLE_ID} tr[class~='simple']`).addClass("d-none").hide();
-  $(`${FORM_ID} *[name*=_Simple_]`).addClass("ignore");
-  $(`${TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])`).removeClass("d-none").show();
-  $("#Staminia_Options_Predictions_Type").removeClass("d-none");
+  document.querySelectorAll("#Staminia_Options_AdvancedMode_Predictions .btn").forEach(el => { el.disabled = false; });
+  document.querySelectorAll(`${TABLE_ID} tr[class~='simple']`).forEach(el => el.classList.add("d-none"));
+  document.querySelectorAll(`${FORM_ID} *[name*=_Simple_]`).forEach(el => el.classList.add("ignore"));
+  document.querySelectorAll(`${TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])`).forEach(el => el.classList.remove("d-none"));
+  document.getElementById("Staminia_Options_Predictions_Type").classList.remove("d-none");
   showSkillsByPosition();
 };
 
 // Disable Advanced Mode
 const disableAdvancedMode = () => {
-  $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop("disabled", false);
-  $(`${TABLE_ID} tr[class~='advanced']`).addClass("d-none").hide();
-  $(`${FORM_ID} *[name*=_Advanced_]`).addClass("ignore");
-  $(`${FORM_ID} *[name*=_Simple_]`).removeClass("ignore");
-  $(`${TABLE_ID} tr[class~='simple']`).removeClass("d-none").show();
-  $("#Staminia_Options_Predictions_Type").addClass("d-none");
+  document.querySelectorAll("#Staminia_Options_AdvancedMode_Predictions .btn").forEach(el => { el.disabled = false; });
+  document.querySelectorAll(`${TABLE_ID} tr[class~='advanced']`).forEach(el => el.classList.add("d-none"));
+  document.querySelectorAll(`${FORM_ID} *[name*=_Advanced_]`).forEach(el => el.classList.add("ignore"));
+  document.querySelectorAll(`${FORM_ID} *[name*=_Simple_]`).forEach(el => el.classList.remove("ignore"));
+  document.querySelectorAll(`${TABLE_ID} tr[class~='simple']`).forEach(el => el.classList.remove("d-none"));
+  document.getElementById("Staminia_Options_Predictions_Type").classList.add("d-none");
 };
 
-const isOnlySecondHalfEnabled = () => $("#Staminia_Options_OnlySecondHalf").prop("checked");
-const isChartsEnabled = () => $("#Staminia_Options_Charts").prop("checked");
-const isVerboseModeEnabled = () => $("#Staminia_Options_VerboseMode").prop("checked");
-const isPressingEnabled = () => $("#Staminia_Options_Pressing").prop("checked");
-const isAdvancedModeEnabled = () => $("#Staminia_Options_AdvancedMode").prop("checked");
+const isOnlySecondHalfEnabled = () => document.getElementById("Staminia_Options_OnlySecondHalf").checked;
+const isChartsEnabled = () => document.getElementById("Staminia_Options_Charts").checked;
+const isVerboseModeEnabled = () => document.getElementById("Staminia_Options_VerboseMode").checked;
+const isPressingEnabled = () => document.getElementById("Staminia_Options_Pressing").checked;
+const isAdvancedModeEnabled = () => document.getElementById("Staminia_Options_AdvancedMode").checked;
 
 const enableCHPPMode = () => {
-  $(`${TABLE_ID} tr[class~='chpp']`).removeClass("d-none").show();
+  document.querySelectorAll(`${TABLE_ID} tr[class~='chpp']`).forEach(el => el.classList.remove("d-none"));
 };
 
 const disableCHPPMode = () => {
-  $(`${TABLE_ID} tr[class~='chpp']`).addClass("d-none").hide();
+  document.querySelectorAll(`${TABLE_ID} tr[class~='chpp']`).forEach(el => el.classList.add("d-none"));
 };
 
 // Fill Form Helper
@@ -432,19 +445,17 @@ const fillForm = () => {
   if (paramsString == null) return;
 
   const params = decodeURI(paramsString).split("-");
-  const fields = $("*[name^=Staminia_]");
-  for (let i = 0; i < fields.length; i++) {
-    const field = fields[i];
-    const $field = $(field);
-    switch ($field.attr("type")) {
+  const fields = document.querySelectorAll("*[name^=Staminia_]");
+  fields.forEach((field, i) => {
+    switch (field.type) {
       case "checkbox":
       case "radio":
-        $field.prop("checked", params[i] === "true");
+        field.checked = params[i] === "true";
         break;
       default:
-        $field.val(params[i]);
+        field.value = params[i];
     }
-  }
+  });
   if (isAdvancedModeEnabled()) {
     enableAdvancedMode();
   } else {
@@ -457,14 +468,15 @@ const fillForm = () => {
 
 const checkMotherClubBonus = () => {
   for (const playerId of [1, 2]) {
-    const status = $(`input[name=Staminia_Player_${playerId}_MotherClubBonus]`).prop("checked");
-    $(`select[name=Staminia_Simple_Player_${playerId}_Loyalty]`).prop("disabled", status);
-    $(`input[name=Staminia_Advanced_Player_${playerId}_Loyalty]`).prop("disabled", status);
+    const status = document.querySelector(`input[name=Staminia_Player_${playerId}_MotherClubBonus]`).checked;
+    document.querySelector(`select[name=Staminia_Simple_Player_${playerId}_Loyalty]`).disabled = status;
+    document.querySelector(`input[name=Staminia_Advanced_Player_${playerId}_Loyalty]`).disabled = status;
   }
 };
 
 const updatePredictions = () => {
-  if ($('input[name="Staminia_Options_Predictions_Type"]:checked').val() === "ho") {
+  const checked = document.querySelector('input[name="Staminia_Options_Predictions_Type"]:checked');
+  if (checked && checked.value === "ho") {
     Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
   } else {
     Staminia.predictions = Staminia.CONFIG.PREDICTIONS_ANDREAC;
@@ -473,24 +485,23 @@ const updatePredictions = () => {
 
 const formSerialize = () => {
   const serializedFields = [];
-  $('*[name^="Staminia_"]').each(function() {
-    const $this = $(this);
-    switch ($this.attr("type")) {
+  document.querySelectorAll('*[name^="Staminia_"]').forEach(field => {
+    switch (field.type) {
       case "checkbox":
       case "radio":
-        serializedFields.push($this.prop("checked"));
+        serializedFields.push(field.checked);
         break;
       default:
-        serializedFields.push($this.val());
+        serializedFields.push(field.value);
     }
   });
   return encodeURI(serializedFields.join("-"));
 };
 
 // Stamin.IA! Get Link Button
-$("#getLink").on("click", (e) => {
+document.getElementById("getLink").addEventListener("click", (e) => {
   if (!$(FORM_ID).validate().form()) {
-    $("#generatedLink").remove();
+    document.getElementById("generatedLink")?.remove();
     return;
   }
 
@@ -508,12 +519,11 @@ $("#getLink").on("click", (e) => {
   const copyButton = '<button class="btn btn-sm" id="copyLinkToClipboard" type="button">' + Staminia.messages.copy_to_clipboard + '</button>';
   const body = link;
 
-  if ($("#generatedLinkBody").length) {
-    $("#generatedLinkBody").fadeOut("fast", function() {
-      $(this).html(body).fadeIn("fast");
-    });
+  const linkBody = document.getElementById("generatedLinkBody");
+  if (linkBody) {
+    linkBody.innerHTML = body;
   } else {
-    $("#AlertsContainer").append(createAlert({
+    document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
       id: "generatedLink",
       type: "info",
       body: body,
@@ -521,39 +531,39 @@ $("#getLink").on("click", (e) => {
     }));
   }
 
-  $("#copyLinkToClipboard").off("click").on("click", () => {
-    Staminia.copyToClipboard(link, $("#copyLinkToClipboard"));
-  });
+  const copyBtn = document.getElementById("copyLinkToClipboard");
+  if (copyBtn) {
+    copyBtn.onclick = () => {
+      Staminia.copyToClipboard(link, copyBtn);
+    };
+  }
 
   // Scroll up if needed
   scrollUpToResults();
 });
 
 // Stamin.IA! Switch Players Button
-$("#switchPlayers").click(() => {
-  $(`${FORM_ID} *[name*=_Player_1_]`).each(function() {
-    const form = $(FORM_ID)[0];
-    const p2Field = form[this.name.replace("_1", "_2")];
+document.getElementById("switchPlayers").addEventListener("click", () => {
+  const form = document.querySelector(FORM_ID);
+  document.querySelectorAll(`${FORM_ID} *[name*=_Player_1_]`).forEach(p1Field => {
+    const p2Field = form[p1Field.name.replace("_1", "_2")];
 
-    const $this = $(this);
-    const $p2Field = $(p2Field);
-
-    const p1Value = this.value;
-    const p1Disabled = $this.prop("disabled");
-    const p1Checked = $this.prop("checked");
-    $this.val($p2Field.val());
-    $this.prop("disabled", $p2Field.prop("disabled"));
-    $this.prop("checked", $p2Field.prop("checked"));
-    $p2Field.val(p1Value);
-    $p2Field.prop("disabled", p1Disabled);
-    $p2Field.prop("checked", p1Checked);
+    const p1Value = p1Field.value;
+    const p1Disabled = p1Field.disabled;
+    const p1Checked = p1Field.checked;
+    p1Field.value = p2Field.value;
+    p1Field.disabled = p2Field.disabled;
+    p1Field.checked = p2Field.checked;
+    p2Field.value = p1Value;
+    p2Field.disabled = p1Disabled;
+    p2Field.checked = p1Checked;
   });
   checkMotherClubBonus();
   $(FORM_ID).validate().form();
 });
 
-$("#Staminia_Options_AdvancedMode").on("change", function(e) {
-  if ($(this).prop("checked")) {
+document.getElementById("Staminia_Options_AdvancedMode").addEventListener("change", function(e) {
+  if (this.checked) {
     enableAdvancedMode();
   } else {
     disableAdvancedMode();
@@ -561,25 +571,26 @@ $("#Staminia_Options_AdvancedMode").on("change", function(e) {
   stripeTable();
 });
 
-$(".motherclub-bonus-checkbox").on("change", () => {
-  checkMotherClubBonus();
+document.querySelectorAll(".motherclub-bonus-checkbox").forEach(el => {
+  el.addEventListener("change", () => checkMotherClubBonus());
 });
 
-$('input[name="Staminia_Options_Predictions_Type"]').on("change", () => {
-  updatePredictions();
+document.querySelectorAll('input[name="Staminia_Options_Predictions_Type"]').forEach(el => {
+  el.addEventListener("change", () => updatePredictions());
 });
 
-$('input[data-validate="range"], select[data-validate="range"]').each(function() {
-  $(this).rules("add", { range: [$(this).data("rangeMin"), $(this).data("rangeMax")] });
+document.querySelectorAll('input[data-validate="range"], select[data-validate="range"]').forEach(function(el) {
+  $(el).rules("add", { range: [Number(el.dataset.rangeMin), Number(el.dataset.rangeMax)] });
 });
 
 // Hide alerts when showing credits and redraw charts if needed
 document.querySelectorAll('[data-bs-toggle="tab"]').forEach((el) => {
   el.addEventListener("shown.bs.tab", (e) => {
+    const alertsContainer = document.getElementById("AlertsContainer");
     if (e.target.getAttribute("href") === "#tabCredits") {
-      $("#AlertsContainer").hide();
+      alertsContainer.style.display = "none";
     } else {
-      $("#AlertsContainer").show();
+      alertsContainer.style.display = "";
     }
     if (e.target.getAttribute("href") === "#tabCharts") {
       resizeCharts();
@@ -588,14 +599,14 @@ document.querySelectorAll('[data-bs-toggle="tab"]').forEach((el) => {
 });
 
 // Stamin.IA! Reset Button
-$("#resetApp").on("click", (e) => {
-  $(`${FORM_ID}, ${OPTION_FORM_ID}`).each(function() {
-    if (typeof this.reset === "function" || (typeof this.reset === "object" && !this.reset.nodeType)) {
-      this.reset();
+document.getElementById("resetApp").addEventListener("click", (e) => {
+  document.querySelectorAll(`${FORM_ID}, ${OPTION_FORM_ID}`).forEach(form => {
+    if (typeof form.reset === "function" || (typeof form.reset === "object" && !form.reset.nodeType)) {
+      form.reset();
     }
   });
 
-  $("#AlertsContainer").html("");
+  document.getElementById("AlertsContainer").innerHTML = "";
   resetAndHideTabs();
 
   checkMotherClubBonus();
@@ -618,48 +629,66 @@ $.validator.addMethod("position", function(value, element, params) {
   return this.optional(element) || (value >= params[0] && value <= params[1]);
 }, jQuery.validator.messages.required);
 
-$("#Staminia_Advanced_Position").rules("add", { position: [0, 19] });
+$(document.getElementById("Staminia_Advanced_Position")).rules("add", { position: [0, 19] });
 
-$.ajaxSetup({
-  dataType: "json",
-  timeout: 30000,
-  beforeSend: (XMLHttpRequest, settings) => {
-    const $btn = $("#CHPP_Refresh_Data");
-    $btn.prop("disabled", true).text($btn.data("loadingText"));
-    $("#CHPP_Refresh_Data_Status").html(Staminia.icons.clock);
-    $("#CHPP_Refresh_Data_Status").prop("disabled", true);
-    $("#CHPP_Refresh_Data_Status").removeClass("btn-danger btn-success btn-warning").addClass("btn-progress");
-    $("#CHPP_Results").addClass("d-none");
-    $("#CHPP_Status_Description").html("");
-  },
-  success: (jsonObject, textStatus, xhr) => {
+const fetchCHPP = async (refresh = false) => {
+  // beforeSend
+  const btn = document.getElementById("CHPP_Refresh_Data");
+  btn.disabled = true;
+  btn.textContent = btn.dataset.loadingText;
+  const statusEl = document.getElementById("CHPP_Refresh_Data_Status");
+  statusEl.innerHTML = Staminia.icons.clock;
+  statusEl.disabled = true;
+  statusEl.classList.remove("btn-danger", "btn-success", "btn-warning");
+  statusEl.classList.add("btn-progress");
+  document.getElementById("CHPP_Results").classList.add("d-none");
+  document.getElementById("CHPP_Status_Description").innerHTML = "";
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const url = refresh ? "chpp/chpp_retrievedata.php?refresh" : "chpp/chpp_retrievedata.php";
+    const response = await fetch(url, {
+      signal: controller.signal,
+      ...(refresh && { cache: "no-store" })
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const jsonObject = await response.json();
+
     let error_message, description_message;
     switch (jsonObject.Status) {
       case "OK":
         try {
           Staminia.Teams = jsonObject.Teams;
-          $("#menuLoginTitle").text(Staminia.Teams[0].TeamName);
+          document.getElementById("menuLoginTitle").textContent = Staminia.Teams[0].TeamName;
           setupCHPPPlayerFields(true);
           loginMenuHide();
           enableCHPPMode();
           stripeTable();
           if (jsonObject.RefreshThrottle) {
-            $("#CHPP_Refresh_Data_Status").html(Staminia.icons["triangle-exclamation"]).attr("title", Staminia.messages.status_warning);
-            $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-danger btn-success").addClass("btn-warning");
-            $("#CHPP_Status_Description").text(Staminia.messages.refresh_throttle(jsonObject.RefreshThrottle));
+            statusEl.innerHTML = Staminia.icons["triangle-exclamation"];
+            statusEl.title = Staminia.messages.status_warning;
+            statusEl.classList.remove("btn-progress", "btn-danger", "btn-success");
+            statusEl.classList.add("btn-warning");
+            document.getElementById("CHPP_Status_Description").textContent = Staminia.messages.refresh_throttle(jsonObject.RefreshThrottle);
           } else {
-            $("#CHPP_Refresh_Data_Status").html(Staminia.icons.check).attr("title", Staminia.messages.status_ok);
-            $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-danger btn-warning").addClass("btn-success");
+            statusEl.innerHTML = Staminia.icons.check;
+            statusEl.title = Staminia.messages.status_ok;
+            statusEl.classList.remove("btn-progress", "btn-danger", "btn-warning");
+            statusEl.classList.add("btn-success");
           }
-          $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("successText"));
+          btn.dataset.completeText = btn.dataset.successText;
         } catch (error) {
-          $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
-          $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
+          statusEl.innerHTML = Staminia.icons.xmark;
+          statusEl.title = Staminia.messages.status_error;
+          statusEl.classList.remove("btn-progress", "btn-success", "btn-warning");
+          statusEl.classList.add("btn-danger");
           loginMenuShow();
-          $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
-          $("#CHPP_Status_Description").html(
-            `${Staminia.messages.error_unknown}.<br/>${Staminia.messages.retry_to_authorize}.`
-          );
+          btn.dataset.completeText = btn.dataset.errorText;
+          document.getElementById("CHPP_Status_Description").innerHTML =
+            `${Staminia.messages.error_unknown}.<br/>${Staminia.messages.retry_to_authorize}.`;
         }
         break;
       case "Error":
@@ -674,44 +703,44 @@ $.ajaxSetup({
             error_message = Staminia.messages.error_unknown;
             description_message = Staminia.messages.retry_to_authorize;
         }
-        $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
-        $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
-        $("#CHPP_Status_Description").html(`${error_message}<br/>${description_message}`);
+        statusEl.innerHTML = Staminia.icons.xmark;
+        statusEl.title = Staminia.messages.status_error;
+        statusEl.classList.remove("btn-progress", "btn-success", "btn-warning");
+        statusEl.classList.add("btn-danger");
+        document.getElementById("CHPP_Status_Description").innerHTML = `${error_message}<br/>${description_message}`;
         loginMenuShow();
-        $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
+        btn.dataset.completeText = btn.dataset.errorText;
         break;
     }
-    $("#CHPP_Refresh_Data_Status").prop("disabled", false);
-  },
-  error: (jqXHR, textStatus, thrownError) => {
+    statusEl.disabled = false;
+  } catch (err) {
+    clearTimeout(timeoutId);
     let error_message, description_message;
-    switch (textStatus) {
-      case "timeout":
-        error_message = Staminia.messages.error_timeout;
-        description_message = "";
-        break;
-      case "parsererror":
-        error_message = Staminia.messages.error_parser;
-        description_message = "";
-        break;
-      default:
-        error_message = Staminia.messages.error_unknown;
-        description_message = Staminia.messages.retry_to_authorize;
+    if (err.name === "AbortError") {
+      error_message = Staminia.messages.error_timeout;
+      description_message = "";
+    } else if (err instanceof SyntaxError) {
+      error_message = Staminia.messages.error_parser;
+      description_message = "";
+    } else {
+      error_message = Staminia.messages.error_unknown;
+      description_message = Staminia.messages.retry_to_authorize;
     }
-    $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
-    $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
-    $("#CHPP_Results").addClass("d-none");
-    $("#CHPP_Status_Description").html(`${error_message}<br/>${description_message}`);
+    statusEl.innerHTML = Staminia.icons.xmark;
+    statusEl.title = Staminia.messages.status_error;
+    statusEl.classList.remove("btn-progress", "btn-success", "btn-warning");
+    statusEl.classList.add("btn-danger");
+    document.getElementById("CHPP_Results").classList.add("d-none");
+    document.getElementById("CHPP_Status_Description").innerHTML = `${error_message}<br/>${description_message}`;
     loginMenuShow();
-    $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
-    $("#CHPP_Refresh_Data_Status").prop("disabled", false);
-  },
-  complete: (jqXHR, textStatus) => {
-    $("#CHPP_Results").removeClass("d-none");
-    const $btn = $("#CHPP_Refresh_Data");
-    $btn.prop("disabled", false).text($btn.data("completeText") || $btn.data("successText"));
+    btn.dataset.completeText = btn.dataset.errorText;
+    statusEl.disabled = false;
+  } finally {
+    document.getElementById("CHPP_Results").classList.remove("d-none");
+    btn.disabled = false;
+    btn.textContent = btn.dataset.completeText || btn.dataset.successText;
   }
-});
+};
 
 const sort_by = (field, reverse, primer) => {
   reverse = reverse ? -1 : 1;
@@ -731,14 +760,14 @@ const sort_by = (field, reverse, primer) => {
 };
 
 const sortCHPPPlayerFields = () => {
-  const PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
+  const PlayersData = Staminia.Teams[document.getElementById("CHPP_Team").value].PlayersData;
   if (PlayersData == null) return;
 
   let field = "PlayerNumber";
   let reverse = false;
   let primer = parseInt;
 
-  switch ($(`${FORM_ID} select[id=CHPP_Players_SortBy]`).val()) {
+  switch (document.getElementById("CHPP_Players_SortBy").value) {
     case "ShirtNumber":
       field = "PlayerNumber";
       break;
@@ -796,93 +825,93 @@ const sortCHPPPlayerFields = () => {
 };
 
 const updateCHPPPlayerFields = () => {
-  const PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
+  const teamIndex = document.getElementById("CHPP_Team").value;
+  const PlayersData = Staminia.Teams[teamIndex].PlayersData;
   if (PlayersData == null) return;
 
   sortCHPPPlayerFields();
 
-  $("#CHPP_Player_1").html("");
-  $("#CHPP_Player_2").html("");
+  const p1Select = document.getElementById("CHPP_Player_1");
+  const p2Select = document.getElementById("CHPP_Player_2");
+  p1Select.innerHTML = "";
+  p2Select.innerHTML = "";
 
-  const select = $(document.createElement("select"));
-  let number, mc;
   for (let index = 0; index < PlayersData.length; index++) {
     const player = PlayersData[index];
-    const optionElement = $(document.createElement("option"));
-    if (Number(player.InjuryLevel) === 0) optionElement.addClass("isBruised");
-    if (Number(player.InjuryLevel) > 0) optionElement.addClass("isInjured");
-    if (Number(player.Cards) >= 3) optionElement.addClass("isSuspended");
-    if (player.TransferListed) optionElement.addClass("isTransferListed");
-    optionElement.attr("value", index);
-    optionElement.text(`${number = player.PlayerNumber != null ? player.PlayerNumber + "." : ""} ${player.PlayerName} ${mc = player.MotherClubBonus ? "\u2665" : ""}`);
-    select.append(optionElement);
+    const opt = document.createElement("option");
+    if (Number(player.InjuryLevel) === 0) opt.classList.add("isBruised");
+    if (Number(player.InjuryLevel) > 0) opt.classList.add("isInjured");
+    if (Number(player.Cards) >= 3) opt.classList.add("isSuspended");
+    if (player.TransferListed) opt.classList.add("isTransferListed");
+    opt.value = index;
+    const number = player.PlayerNumber != null ? player.PlayerNumber + "." : "";
+    const mc = player.MotherClubBonus ? "\u2665" : "";
+    opt.textContent = `${number} ${player.PlayerName} ${mc}`;
+    p1Select.appendChild(opt.cloneNode(true));
+    p2Select.appendChild(opt);
   }
-
-  const selectP1 = select.clone(true);
-  const selectP2 = select.clone(true);
-
-  selectP1.attr("id", "CHPP_Player_1");
-  selectP2.attr("id", "CHPP_Player_2");
-
-  $("#CHPP_Player_1").html(selectP1.html());
-  $("#CHPP_Player_2").html(selectP2.html());
 };
 
 const setupCHPPPlayerFields = (checkUrlParameter = false) => {
   const Teams = Staminia.Teams;
   if (Teams == null || Teams.length === 0) return;
 
-  const select = $(document.createElement("select"));
+  const teamSelect = document.getElementById("CHPP_Team");
+  teamSelect.innerHTML = "";
   for (let index = 0; index < Teams.length; index++) {
-    const team = Teams[index];
-    const optionElement = $(document.createElement("option"));
-    optionElement.attr("value", index);
-    optionElement.text(team.TeamName);
-    select.append(optionElement);
+    const opt = document.createElement("option");
+    opt.value = index;
+    opt.textContent = Teams[index].TeamName;
+    teamSelect.appendChild(opt);
   }
 
-  $("#CHPP_Team").html(select.html());
   if (Teams.length > 1) {
-    $("#CHPP_Team").closest("tr").removeClass("d-none");
+    teamSelect.closest("tr").classList.remove("d-none");
   }
 
   updateCHPPPlayerFields();
 
-  if ($("#CHPP_Player_1 option").length > 2 && $("#CHPP_Player_2 option").length > 2) {
-    $("#CHPP_Player_1 option:eq(0)").prop("selected", true);
-    $("#CHPP_Player_2 option:eq(1)").prop("selected", true);
+  const p1Select = document.getElementById("CHPP_Player_1");
+  const p2Select = document.getElementById("CHPP_Player_2");
+  if (p1Select.options.length > 2 && p2Select.options.length > 2) {
+    p1Select.selectedIndex = 0;
+    p2Select.selectedIndex = 1;
     setPlayerFormFields(1, checkUrlParameter);
     setPlayerFormFields(2, checkUrlParameter);
   }
 };
 
-$("#CHPP_Player_1").on("change", () => {
+document.getElementById("CHPP_Player_1").addEventListener("change", () => {
   setPlayerFormFields(1);
 });
 
-$("#CHPP_Player_2").on("change", () => {
+document.getElementById("CHPP_Player_2").addEventListener("change", () => {
   setPlayerFormFields(2);
 });
 
-$("#CHPP_Players_SortBy, #CHPP_Team").on("change", () => {
-  updateCHPPPlayerFields();
-  if ($("#CHPP_Player_1 option").length > 2 && $("#CHPP_Player_2 option").length > 2) {
-    $("#CHPP_Player_1 option:eq(0)").prop("selected", true);
-    $("#CHPP_Player_2 option:eq(1)").prop("selected", true);
-    setPlayerFormFields(1);
-    setPlayerFormFields(2);
-  }
+document.querySelectorAll("#CHPP_Players_SortBy, #CHPP_Team").forEach(el => {
+  el.addEventListener("change", () => {
+    updateCHPPPlayerFields();
+    const p1Select = document.getElementById("CHPP_Player_1");
+    const p2Select = document.getElementById("CHPP_Player_2");
+    if (p1Select.options.length > 2 && p2Select.options.length > 2) {
+      p1Select.selectedIndex = 0;
+      p2Select.selectedIndex = 1;
+      setPlayerFormFields(1);
+      setPlayerFormFields(2);
+    }
+  });
 });
 
-$("#CHPP_Team").on("change", function() {
-  $("#menuLoginTitle").text(Staminia.Teams[$(this).val()].TeamName);
+document.getElementById("CHPP_Team").addEventListener("change", function() {
+  document.getElementById("menuLoginTitle").textContent = Staminia.Teams[this.value].TeamName;
 });
 
 const setPlayerFormFields = (player, checkUrlParameter = false) => {
   if (checkUrlParameter && gup("params") != null) return;
 
-  const PlayersData = Staminia.Teams[$("#CHPP_Team").val()].PlayersData;
-  const formReference = $(FORM_ID)[0];
+  const PlayersData = Staminia.Teams[document.getElementById("CHPP_Team").value].PlayersData;
+  const formReference = document.querySelector(FORM_ID);
   if (PlayersData == null) return;
 
   const PlayerData = PlayersData[formReference["CHPP_Player_" + player].value];
@@ -896,7 +925,7 @@ const setPlayerFormFields = (player, checkUrlParameter = false) => {
   formReference[`Staminia_Simple_Player_${player}_Loyalty`].value = PlayerData.Loyalty;
 
   // Mother Club Bonus
-  $(`input[name=Staminia_Player_${player}_MotherClubBonus]`).prop("checked", PlayerData.MotherClubBonus);
+  document.querySelector(`input[name=Staminia_Player_${player}_MotherClubBonus]`).checked = PlayerData.MotherClubBonus;
   checkMotherClubBonus();
 
   // Advanced Mode
@@ -913,38 +942,39 @@ const setPlayerFormFields = (player, checkUrlParameter = false) => {
 };
 
 const loginMenuHide = () => {
-  $("#loginDropdown").addClass("d-none");
-  $("#loggedInDropdown").removeClass("d-none");
+  document.getElementById("loginDropdown").classList.add("d-none");
+  document.getElementById("loggedInDropdown").classList.remove("d-none");
 };
 
 const loginMenuShow = () => {
-  $("#menuLoginTitle").text("CHPP");
-  $("#loggedInDropdown").addClass("d-none");
-  $("#loginDropdown").removeClass("d-none");
+  document.getElementById("menuLoginTitle").textContent = "CHPP";
+  document.getElementById("loggedInDropdown").classList.add("d-none");
+  document.getElementById("loginDropdown").classList.remove("d-none");
 };
 
-$("#CHPP_Refresh_Data").on("click", () => {
-  $.ajax({ url: "chpp/chpp_retrievedata.php?refresh", cache: false });
+document.getElementById("CHPP_Refresh_Data").addEventListener("click", () => {
+  fetchCHPP(true);
 });
 
-$("#CHPP_Revoke_Auth_Link").on("click", function() {
-  $(this).closest("[class~='open']").removeClass("open");
+document.getElementById("CHPP_Revoke_Auth_Link").addEventListener("click", function() {
+  const openParent = this.closest(".open");
+  if (openParent) openParent.classList.remove("open");
   window.confirm(Staminia.messages.revoke_auth_confirm);
 });
 
 
 
-$("#performanceAt90").on("change", function() {
-  Staminia.estimateStaminaSubskills($(this).val());
-  $("#staminaSubskillsEstimationTarget").text(Staminia.estimateStaminaSubskills($(this).val()).toFixed(1));
-  if ($(this).val() === "100") {
-    $("#or-higher").show();
+document.getElementById("performanceAt90").addEventListener("change", function() {
+  Staminia.estimateStaminaSubskills(this.value);
+  document.getElementById("staminaSubskillsEstimationTarget").textContent = Staminia.estimateStaminaSubskills(this.value).toFixed(1);
+  if (this.value === "100") {
+    document.getElementById("or-higher").style.display = "";
   } else {
-    $("#or-higher").hide();
+    document.getElementById("or-higher").style.display = "none";
   }
 });
 
-$("#extraLink").on("click", (e) => {
+document.getElementById("extraLink").addEventListener("click", (e) => {
   e.preventDefault();
   const extraTab = document.querySelector("#tabExtraNav a");
   if (extraTab) bootstrap.Tab.getOrCreateInstance(extraTab).show();
@@ -976,7 +1006,7 @@ const syncThemeIcon = () => {
 };
 syncThemeIcon();
 
-$("#themeToggle").on("click", () => {
+document.getElementById("themeToggle").addEventListener("click", () => {
   const current = document.documentElement.getAttribute("data-bs-theme");
   const next = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-bs-theme", next);
@@ -986,15 +1016,21 @@ $("#themeToggle").on("click", () => {
 });
 
 // Document.ready
-$(() => {
+const onReady = () => {
   checkIframe();
   const hasParams = gup("params") != null;
   if (hasParams) fillForm();
   stripeTable();
-  if (hasParams && AUTOSTART) $(FORM_ID).submit();
+  if (hasParams && AUTOSTART) document.querySelector(FORM_ID).requestSubmit();
   const madeInItaly = document.getElementById("imgMadeInItaly");
   if (madeInItaly) new bootstrap.Tooltip(madeInItaly);
   if (document.startAjax) {
-    $.ajax({ url: "chpp/chpp_retrievedata.php", cache: true });
+    fetchCHPP(false);
   }
-});
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", onReady);
+} else {
+  onReady();
+}

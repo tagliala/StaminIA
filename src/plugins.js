@@ -1,13 +1,13 @@
 window.Staminia = window.Staminia || {};
 const Staminia = window.Staminia;
 
-const copyToClipboard = (text, $button) => {
+const copyToClipboard = (text, button) => {
   if (!navigator.clipboard) return;
 
-  const originalText = $button.text();
+  const originalText = button.textContent;
   navigator.clipboard.writeText(text).then(() => {
-    $button.text(Staminia.messages.copied_to_clipboard);
-    setTimeout(() => $button.text(originalText), 2000);
+    button.textContent = Staminia.messages.copied_to_clipboard;
+    setTimeout(() => { button.textContent = originalText; }, 2000);
   });
 };
 

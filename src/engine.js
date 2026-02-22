@@ -157,7 +157,7 @@ export const calculateStrength = (skill, form, stamina, experience, include_stam
       `&nbsp;&nbsp;result_w_stamina = <b>${skill * c_form * c_stamina * c_experience}</b><br/>` +
       `&nbsp;&nbsp;result_wo_stamina = <b>${skill * c_form * 1 * c_experience}</b><br/>` +
       `&nbsp;&nbsp;result = <b>${result}</b><br/><br/>`;
-    $("#tabDebug").append(tempHTML);
+    document.getElementById("tabDebug").insertAdjacentHTML("beforeend", tempHTML);
   }
 
   return result;
@@ -186,13 +186,13 @@ export const getPlayerBonus = (loyalty, motherClubBonus) => {
 
   if (Staminia.CONFIG.DEBUG) {
     const tempHTML = `getPlayerBonus(loyalty = <b>${loyalty}</b>, motherClubBonus = <b>${motherClubBonus}</b>): <b>${playerBonus}</b><br/><br/>`;
-    $("#tabDebug").append(tempHTML);
+    document.getElementById("tabDebug").insertAdjacentHTML("beforeend", tempHTML);
   }
   return playerBonus;
 };
 
 const getSimpleSkill = (player) => {
-  const formReference = $(Staminia.CONFIG.FORM_ID)[0];
+  const formReference = document.querySelector(Staminia.CONFIG.FORM_ID);
 
   const playerLoyalty = validateSkill(formReference["Staminia_Simple_Player_" + player + "_Loyalty"].value, "loyalty");
   const playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].checked;
@@ -203,13 +203,13 @@ const getSimpleSkill = (player) => {
 
   if (Staminia.CONFIG.DEBUG) {
     const tempHTML = `getSimpleSkill(player = <b>${player}</b>): <b>${playerSkill}</b><br/><br/>`;
-    $("#tabDebug").append(tempHTML);
+    document.getElementById("tabDebug").insertAdjacentHTML("beforeend", tempHTML);
   }
   return playerSkill;
 };
 
 const getAdvancedSkill = (player) => {
-  const formReference = $(Staminia.CONFIG.FORM_ID)[0];
+  const formReference = document.querySelector(Staminia.CONFIG.FORM_ID);
   const position = Number(formReference.Staminia_Advanced_Position.value);
   if (position < 0) return 0;
 
@@ -248,7 +248,7 @@ const getAdvancedSkill = (player) => {
       `Expected (if all skills = 1.00): <b>${debug_coeff}</b><br/>` +
       `Calculated: <b>${total}</b><br/>` +
       `Match: <b>${total === debug_coeff}</b><br/><br/>`;
-    $("#tabDebug").append(tempHTML);
+    document.getElementById("tabDebug").insertAdjacentHTML("beforeend", tempHTML);
   }
 
   return total;
@@ -263,7 +263,7 @@ Staminia.Engine.start = function() {
     bestInFirstHalf: false
   };
 
-  const formReference = $(Staminia.CONFIG.FORM_ID)[0];
+  const formReference = document.querySelector(Staminia.CONFIG.FORM_ID);
   let player1Form, player2Form, player1Stamina, player2Stamina;
   let player1Experience, player2Experience, player1Skill, player2Skill;
 
@@ -457,7 +457,7 @@ Staminia.Engine.start = function() {
     console.log(this.result);
     printContributionTables();
     printContributionTables(true);
-    $("#tabDebugNav").show();
+    document.getElementById("tabDebugNav").classList.remove("d-none");
   }
 
   this.result.status = "OK";
@@ -529,6 +529,7 @@ const printContributionTables = (pressing = false) => {
 
   tempHTML += "</tbody></table>";
   tempAVGHTML += "</tbody></table>";
-  $("#tabDebug").append(tempHTML);
-  $("#tabDebug").append(tempAVGHTML);
+  const tabDebugEl = document.getElementById("tabDebug");
+  tabDebugEl.insertAdjacentHTML("beforeend", tempHTML);
+  tabDebugEl.insertAdjacentHTML("beforeend", tempAVGHTML);
 };
