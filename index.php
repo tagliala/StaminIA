@@ -59,7 +59,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     <meta property="og:site_name" content="Lizardopoli"/>
 
     <script>
-      (function(){var m=document.cookie.match(/(?:^|;\s*)theme=(\w+)/);document.documentElement.setAttribute("data-bs-theme",m?m[1]:"light")})()
+      (function(){var m=document.cookie.match(/(?:^|;\s*)theme=(\w+)/);document.documentElement.setAttribute("data-bs-theme",m?m[1]:(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"))})()
     </script>
 
     <link href="dist/staminia.min.css" rel="stylesheet">
