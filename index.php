@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/config.php';
+include __DIR__ . '/includes/icon.php';
 session_start();
 $oauthToken = $_SESSION['oauthToken'] ?? null;
 $permanent = $_COOKIE['permanent'] ?? null;
@@ -42,15 +43,12 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stamin.IA! <?php echo localize("SUBTITLE"); ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="author" content="Lizardopoli"/>
-
-    <meta name="description" content="Stamin.IA! <?php echo localize("SUBTITLE"); ?>"/>
     <meta name="keywords" content="Stamin.IA!, CHPP, stamina tool, hattrick, substitutions tool, substitutions"/>
 
     <meta property="og:title" content="Stamin.IA!"/>
@@ -60,17 +58,13 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     <meta property="og:url" content="<?= APP_ROOT ?>"/>
     <meta property="og:site_name" content="Lizardopoli"/>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <script>
+      (function(){var m=document.cookie.match(/(?:^|;\s*)theme=(\w+)/);document.documentElement.setAttribute("data-bs-theme",m?m[1]:"light")})()
+    </script>
 
-    <!-- Le styles -->
-    <link href="css/main.css" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet" type="text/css">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="dist/staminia.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Telex|Lobster" rel="stylesheet">
 
-    <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="img/staminia_favicon.png">
     <link rel="apple-touch-icon" href="img/ico/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="img/ico/apple-touch-icon-72x72.png">
@@ -78,137 +72,127 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
   </head>
 <?php flush(); ?>
   <body>
-  <div id="fb-root"></div>
 
   <!-- Navbar
     ================================================== -->
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <div class="brand"><i id="staminia-logo"></i><span id="staminia-brand" class="hidden-phone">Stamin.IA!</span></div>
-          <ul class="nav pull-right">
+    <nav class="navbar navbar-expand-md fixed-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <span class="navbar-brand"><i id="staminia-logo"></i><span id="staminia-brand" class="d-none d-sm-inline">Stamin.IA!</span></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="#helpModal" data-bs-toggle="modal"><?= localize("Help") ?></a></li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <button class="nav-link" id="themeToggle" type="button" aria-label="Toggle theme">
+                <?= icon('sun', 'theme-icon-sun') ?>
+                <?= icon('moon', 'theme-icon-moon') ?>
+              </button>
+            </li>
             <?php if (CHPP_APP_ID != "") { ?>
-              <li class="dropdown" id="dropdownLogin">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLogin">
+              <li class="nav-item dropdown" id="dropdownLogin">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button">
                   <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
-                  <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu" id="loginDropdown">
+                <div class="dropdown-menu dropdown-menu-end" id="loginDropdown">
+                  <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                    <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
+                    <fieldset>
+                      <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) {
+                          echo "checked=\"checked\"";
+                      } ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                      <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
+                    </fieldset>
+                  </form>
+                  <small><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end d-none" id="loggedInDropdown">
                   <li>
-                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
-                      <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
-                      <fieldset>
-                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) {
-                            echo "checked=\"checked\"";
-                        } ?>/> <span><?php echo localize("Remember me"); ?></span></label>
-                        <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
-                      </fieldset>
-                    </form>
-                    <small><i class="icon-warning-sign"></i> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
-                  </li>
-                </ul>
-                <ul class="dropdown-menu hide" id="loggedInDropdown">
-                  <li>
-                    <a id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
+                    <a class="dropdown-item" id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
                   </li>
                 </ul>
               </li>
             <?php } ?>
-            <li class="dropdown" id="dropdownLanguages">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownLanguages">
+            <li class="nav-item dropdown" id="dropdownLanguages">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
                 <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
-                <span class="hidden-phone">
+                <span class="d-none d-sm-inline">
                   <?= $lang_array[strtolower(localize("lang"))]["lang-name"] ?>
                 </span>
-                <b class="caret"></b>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu dropdown-menu-end">
 <?php
 foreach ($lang_array as $key => $val) {
     if (strtolower(localize("lang")) === $key) {
         continue;
     }
-    echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
+    echo "                  <li><a class=\"dropdown-item\" href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
 }
 ?>
-                </ul>
-              </li>
+              </ul>
+            </li>
           </ul>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li><a href="#helpModal" data-toggle="modal"><?= localize("Help") ?></a></li>
-            </ul>
-            <ul class="nav pull-right">
-            </ul>
-          </div>
         </div>
       </div>
-    </div>
+    </nav>
 
-    <!-- Container Fluid Start -->
+    <!-- Container Start -->
     <div id="main" class="container-fluid">
 
       <!-- First Row Start -->
-      <div class="row-fluid">
+      <div class="row">
 
         <!-- First Column Start -->
-        <div class="span3 side-panel" id="side-panel">
+        <div class="col-lg-3 side-panel" id="side-panel">
 
           <!-- Staminia Options Start -->
           <div class="accordion" id="accordion-settings">
             <form id="optionForm" action="javascript:{}" method="post">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseSettings">
-                    <i class="icon-cog"></i>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings">
+                    <?= icon('gear') ?>
                     <?= localize("Settings") ?>
-                  </a>
-                </div>
-                <div id="collapseSettings" class="accordion-body collapse">
-                  <div class="accordion-inner">
+                  </button>
+                </h2>
+                <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#accordion-settings">
+                  <div class="accordion-body">
                     <div class="staminia-button-panel">
-                      <label class="btn btn-checkbox">
-                        <input type="checkbox" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" checked>
-                        <i class="btn-checkbox-status-icon"></i>
-                        <span title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></span>
-                      </label>
-                      <label class="btn btn-checkbox">
-                        <input type="checkbox" name="Staminia_Options_Charts" id="Staminia_Options_Charts" checked>
-                        <i class="btn-checkbox-status-icon"></i>
-                        <span title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></span>
-                      </label>
-                      <label class="btn btn-checkbox">
-                        <input type="checkbox" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" checked>
-                        <i class="btn-checkbox-status-icon"></i>
-                        <span title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></span>
-                      </label>
-                      <label class="btn btn-checkbox">
-                        <input type="checkbox" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing">
-                        <i class="btn-checkbox-status-icon"></i>
-                        <span title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></span>
-                      </label>
-                      <label class="btn btn-checkbox">
-                        <input type="checkbox" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode">
-                        <i class="btn-checkbox-status-icon"></i>
-                        <span title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></span>
-                      </label>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" checked>
+                        <label class="form-check-label" for="Staminia_Options_OnlySecondHalf" title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="Staminia_Options_Charts" id="Staminia_Options_Charts" checked>
+                        <label class="form-check-label" for="Staminia_Options_Charts" title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" checked>
+                        <label class="form-check-label" for="Staminia_Options_VerboseMode" title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing">
+                        <label class="form-check-label" for="Staminia_Options_Pressing" title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode">
+                        <label class="form-check-label" for="Staminia_Options_AdvancedMode" title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></label>
+                      </div>
                     </div>
 
                     <!-- Staminia Predictions Type Start -->
-                    <div class="staminia-button-panel hide" id="Staminia_Options_Predictions_Type">
+                    <div class="staminia-button-panel d-none" id="Staminia_Options_Predictions_Type">
                       <?= localize("Predictions Type") ?>
-                      <div class="btn-group btn-group-radio btn-block">
+                      <div class="btn-group btn-group-radio d-flex">
                         <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
-                        <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_HO">
+                        <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_HO">
                           HO
                         </label>
                         <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac">
-                        <label class="btn" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
+                        <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
                           AndreaC
                         </label>
                       </div>
@@ -221,26 +205,26 @@ foreach ($lang_array as $key => $val) {
 
           <!-- Staminia CHPP Start -->
           <div class="accordion<?php if (!$tryAjax) {
-              echo " hide";
+              echo " d-none";
           } ?>" id="accordion-chpp">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-chpp" href="#collapseCHPP">
-                  <i class="icon-star"></i>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCHPP">
+                  <?= icon('star') ?>
                   <?= localize("CHPP Mode") ?>
-                </a>
-              </div>
-              <div id="collapseCHPP" class="accordion-body collapse">
-                <div class="accordion-inner">
+                </button>
+              </h2>
+              <div id="collapseCHPP" class="accordion-collapse collapse" data-bs-parent="#accordion-chpp">
+                <div class="accordion-body">
                   <div class="staminia-button-panel<?php if (!$tryAjax) {
-                      echo " hide";
+                      echo " d-none";
                   } ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
-                      <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
-                      <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn btn-sm btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><?= icon('triangle-exclamation') ?></button>
+                      <button class="btn btn-sm btn-outline-secondary" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
-                    <div id="CHPP_Results" class="hide shy">
+                    <div id="CHPP_Results" class="d-none shy">
                       <p id="CHPP_Status_Description"></p>
                     </div>
 
@@ -282,14 +266,14 @@ foreach ($lang_array as $key => $val) {
         </div> <!-- First Column End -->
 
         <!-- Second Column Start -->
-        <div class="span9">
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tabPlayersInfo" data-toggle="tab"><i class="icon-user"></i> <span class="hidden-phone"><?= localize("Players Info") ?></span></a></li>
-            <li class="hide" id="tabChartsNav"><a href="#tabCharts" data-toggle="tab"><i class="icon-bar-chart"></i> <span class="hidden-phone"><?= localize("Charts") ?></span></a></li>
-            <li class="hide" id="tabContributionsNav"><a href="#tabContributions" data-toggle="tab"><i class="icon-list-alt"></i> <span class="hidden-phone"><?= localize("Contributions table") ?></span></a></li>
-            <li class="hide" id="tabDebugNav"><a href="#tabDebug" data-toggle="tab">Debug</a></li>
-            <li id="tabExtraNav"><a href="#tabExtra" data-toggle="tab"><i class="icon-plus-sign"></i> <span class="hidden-phone"><?= localize("Extra") ?></span></a></li>
-            <li class="credits"><a href="#tabCredits" data-toggle="tab"><i class="icon-gift"></i> <span class="hidden-phone"><?= localize("Credits") ?></span></a></li>
+        <div class="col-lg-9">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" href="#tabPlayersInfo" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Players Info") ?></span></a></li>
+            <li class="nav-item d-none" id="tabChartsNav"><a class="nav-link" href="#tabCharts" data-bs-toggle="tab" role="tab"><?= icon('chart-bar') ?> <span class="d-none d-sm-inline"><?= localize("Charts") ?></span></a></li>
+            <li class="nav-item d-none" id="tabContributionsNav"><a class="nav-link" href="#tabContributions" data-bs-toggle="tab" role="tab"><?= icon('rectangle-list') ?> <span class="d-none d-sm-inline"><?= localize("Contributions table") ?></span></a></li>
+            <li class="nav-item d-none" id="tabDebugNav"><a class="nav-link" href="#tabDebug" data-bs-toggle="tab" role="tab">Debug</a></li>
+            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('circle-plus') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
+            <li class="nav-item credits"><a class="nav-link" href="#tabCredits" data-bs-toggle="tab" role="tab"><?= icon('gift') ?> <span class="d-none d-sm-inline"><?= localize("Credits") ?></span></a></li>
           </ul>
 
           <!-- Tab Content Start -->
@@ -298,7 +282,7 @@ foreach ($lang_array as $key => $val) {
             <div id="AlertsContainer"></div>
 
             <noscript>
-              <div class="alert alert-block alert-error">
+              <div class="alert alert-danger">
                 <h4 class="alert-heading"><?= localize("Error"); ?></h4>
                 <?= localize("You need a browser with JavaScript support") ?>
               </div>
@@ -521,18 +505,16 @@ foreach ($lang_array as $key => $val) {
                       <td><?= localize("Mother club bonus") ?></td>
                       <td>
                         <span class="field-caption"><?= localize("Mother club bonus"); ?></span>
-                        <label class="btn btn-checkbox btn-motherclub-bonus">
-                          <input type="checkbox" name="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox">
-                          <i class="btn-checkbox-status-icon"></i>
-                          <i class="icon-heart"></i>
-                        </label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox">
+                          <label class="form-check-label" for="Staminia_Player_1_MotherClubBonus"><?= icon('heart') ?></label>
+                        </div>
                       </td>
                       <td>
-                        <label class="btn btn-checkbox btn-motherclub-bonus">
-                          <input type="checkbox" name="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox">
-                          <i class="btn-checkbox-status-icon"></i>
-                          <i class="icon-heart"></i>
-                        </label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox">
+                          <label class="form-check-label" for="Staminia_Player_2_MotherClubBonus"><?= icon('heart') ?></label>
+                        </div>
                       </td>
                     </tr>
                     <tr class="advanced hide">
@@ -677,10 +659,10 @@ foreach ($lang_array as $key => $val) {
                 </div>
 <?php } ?>
                 <div class="text-center form-actions">
-                  <button type="submit" id="calculate" class="btn btn-large btn-primary"><i class="icon-magic"></i> <?= localize("Calculate") ?></button>
-                  <button type="button" id="switchPlayers" class="btn btn-large"><i class="icon-random"></i> <?= localize("Switch players") ?></button>
-                  <button type="button" id="getLink" class="btn btn-large"><i class="icon-link"></i> <?= localize("Get link") ?></button>
-                  <button type="reset" id="resetApp" class="btn btn-large btn-warning"><i class="icon-undo"></i> <?= localize("Reset") ?></button>
+                  <button type="submit" id="calculate" class="btn btn-lg btn-primary"><?= icon('wand-magic-sparkles') ?> <?= localize("Calculate") ?></button>
+                  <button type="button" id="switchPlayers" class="btn btn-lg btn-outline-secondary"><?= icon('shuffle') ?> <?= localize("Switch players") ?></button>
+                  <button type="button" id="getLink" class="btn btn-lg btn-outline-secondary"><?= icon('link') ?> <?= localize("Get link") ?></button>
+                  <button type="reset" id="resetApp" class="btn btn-lg btn-warning"><?= icon('rotate-left') ?> <?= localize("Reset") ?></button>
                 </div>
               </form> <!-- Main Form End -->
             </div>
@@ -712,9 +694,9 @@ foreach ($lang_array as $key => $val) {
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
-                  <span class="help-inline"><span class="text-success"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span></span>
+                  <span class="text-success"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
                 </div>
-                <p class="help-block"><i class="icon-question-sign"></i> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
+                <p class="text-body-secondary"><?= icon('circle-question') ?> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
               </form>
             </div>
 
@@ -754,16 +736,20 @@ foreach ($lang_array as $key => $val) {
       </div> <!-- First Row End -->
 
       <!-- Help Modal Start -->
-      <div class='modal border-box hide' tabindex="-1" id='helpModal'>
-        <div class='modal-header'>
-          <button type='button' class='close' data-dismiss='modal'>&times;</button>
-          <h3><?= localize("Help") ?></h3>
-        </div>
-        <div class="modal-body">
-          <?= localize("LONG_HELP") ?>
-        </div>
-        <div class="modal-footer">
-          <a href="#" class="btn" data-dismiss="modal"><?= localize("Close") ?></a>
+      <div class="modal fade" tabindex="-1" id="helpModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><?= localize("Help") ?></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <?= localize("LONG_HELP") ?>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= localize("Close") ?></button>
+            </div>
+          </div>
         </div>
       </div> <!-- Help Modal End -->
 
@@ -771,32 +757,19 @@ foreach ($lang_array as $key => $val) {
 
       <!-- Footer Start -->
       <footer>
-        <ul class="unstyled">
+        <ul class="list-unstyled">
           <li><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
           <li><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
           <?php if (CHPP_APP_ID != "") { ?>
-            <li><i class="icon-star"></i> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
+            <li><?= icon('star') ?> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
           <?php } ?>
-          <li><i class="icon-github"></i> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
+          <li><?= icon('github') ?> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
         </ul>
       </footer> <!-- Footer End -->
 
-    </div> <!-- Container Fluid End -->
+    </div> <!-- Container End -->
 
-    <!-- Bootstrap and jQuery from CDN for better performance -->
-    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
-
-    <!-- scripts concatenated and minified via build script -->
-    <script src="js/vendor/jqvalidate/jquery.validate.min.js"></script>
-    <script src="js/vendor/jqthrottle/jquery.ba-throttle-debounce.min.js"></script>
-    <script src="js/jquery.flot.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/engine.js"></script>
-    <!-- end scripts -->
-
-    <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/flot/excanvas.min.js"></script><![endif]-->
+    <script src="dist/staminia.min.js"></script>
 
     <script>
       document.startAjax = <?php if ($tryAjax) {

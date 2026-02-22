@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["src/*.js"]
+		"includes": ["src/**/*.js"]
 	},
 	"formatter": {
 		"enabled": false
@@ -29,6 +29,6 @@
 		"enabled": false
 	},
 	"javascript": {
-		"globals": ["$", "jQuery"]
+		"globals": ["$", "jQuery", "bootstrap"]
 	}
 }

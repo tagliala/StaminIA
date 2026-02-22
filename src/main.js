@@ -130,9 +130,9 @@ const createSubstitutionAlert = (substituteAtArray, mayNotReplace) => {
 };
 
 const resetAndHideTabs = () => {
-  $("#tabChartsNav").hide();
-  $("#tabContributionsNav").hide();
-  $("#tabDebugNav").hide();
+  $("#tabChartsNav").addClass("d-none");
+  $("#tabContributionsNav").addClass("d-none");
+  $("#tabDebugNav").addClass("d-none");
   $("#chartTotal").html("");
   $("#chartPartials").html("");
   $("#tabContributions").html("");
@@ -226,7 +226,7 @@ $(FORM_ID).validate({
     if (isVerboseModeEnabled()) {
       let tempHTML =
         `<h3 class="legend-like">${Staminia.messages.strength_table}</h3>` +
-        '<table class="table table-striped table-condensed table-staminia table-staminia-strength width-auto">' +
+        '<table class="table table-striped table-sm table-staminia table-staminia-strength width-auto">' +
         "<thead><tr>" +
         `<th></th><th>${Staminia.messages.player1}</th><th>${Staminia.messages.player2}</th>` +
         "</tr></thead><tbody>" +
@@ -252,7 +252,7 @@ $(FORM_ID).validate({
 
       tempHTML =
         `<h3 class="legend-like">${Staminia.messages.contribution_table}</h3>` +
-        '<table class="table table-striped table-condensed table-staminia table-staminia-contributions">' +
+        '<table class="table table-striped table-sm table-staminia table-staminia-contributions">' +
         tableHeader + "<tbody>";
 
       const player1LowStamina = String(result.player1_low_stamina_se);
@@ -288,7 +288,7 @@ $(FORM_ID).validate({
 
       tempHTML += "</tbody></table>";
       $("#tabContributions").append(tempHTML);
-      $("#tabContributionsNav").show();
+      $("#tabContributionsNav").removeClass("d-none");
     }
 
     // Render Charts
@@ -338,7 +338,7 @@ $(FORM_ID).validate({
         }
       });
       document.plot2 = $.plot($("#chartPartials"), dataset, plot_options);
-      $("#tabChartsNav").show();
+      $("#tabChartsNav").removeClass("d-none");
     }
 
     createSubstitutionAlert(
@@ -348,13 +348,15 @@ $(FORM_ID).validate({
 
     // Show the right tab
     if (isChartsEnabled()) {
-      $("#tabChartsNav").find("a").tab("show");
+      const chartsTab = document.querySelector("#tabChartsNav a");
+      if (chartsTab) bootstrap.Tab.getOrCreateInstance(chartsTab).show();
       setTimeout(() => {
         plot_redraw(document.plot1);
         plot_redraw(document.plot2);
       }, 500);
     } else if (isVerboseModeEnabled()) {
-      $("#tabContributionsNav").find("a").tab("show");
+      const contribTab = document.querySelector("#tabContributionsNav a");
+      if (contribTab) bootstrap.Tab.getOrCreateInstance(contribTab).show();
     }
 
     // Scroll up if needed
@@ -418,11 +420,13 @@ const stripeTable = () => {
 };
 
 // Create alert
-const createAlert = (params) =>
-  `<div class="alert alert-block alert-${params.type} fade in" id="${params.id}">` +
-  '<button class="close" data-dismiss="alert" type="button">&times;</button>' +
-  `<h4 class="alert-heading">${params.title}</h4>` +
-  `<p id="${params.id}Body">${params.body}</p></div>`;
+const createAlert = (params) => {
+  const type = params.type === "error" ? "danger" : params.type;
+  return `<div class="alert alert-${type} alert-dismissible fade show" id="${params.id}">` +
+    '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+    `<h4 class="alert-heading">${params.title}</h4>` +
+    `<p id="${params.id}Body">${params.body}</p></div>`;
+};
 
 $("#Staminia_Advanced_Position").on("change", () => {
   showSkillsByPosition();
@@ -432,7 +436,7 @@ $("#Staminia_Advanced_Position").on("change", () => {
 const showSkillsByPosition = () => {
   $(`${FORM_ID} tr[class~=advanced]:not([id*=_Advanced_]) *[name*=_Advanced_]`).removeClass("ignore");
   $(`${FORM_ID} tr[class~=advanced][id*=_Advanced_] *[name*=_Advanced_]`).addClass("ignore");
-  $(`${TABLE_ID} tr[class~=advanced][id*=_Advanced_]`).addClass("hide").hide();
+  $(`${TABLE_ID} tr[class~=advanced][id*=_Advanced_]`).addClass("d-none").hide();
 
   const position = Number($("#Staminia_Advanced_Position").val());
   if (!(position >= 0 && position <= 19)) return;
@@ -441,7 +445,7 @@ const showSkillsByPosition = () => {
   for (const skill in SKILL_ENUMERATOR) {
     if (Staminia.predictions[position][SKILL_ENUMERATOR[skill]] > 0) {
       $(`#Staminia_Advanced_Skill_${skill} *[name]`).removeClass("ignore");
-      $(`#Staminia_Advanced_Skill_${skill}`).removeClass("hide").show();
+      $(`#Staminia_Advanced_Skill_${skill}`).removeClass("d-none").show();
     }
   }
 };
@@ -449,9 +453,9 @@ const showSkillsByPosition = () => {
 // Enable Advanced Mode
 const enableAdvancedMode = () => {
   $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop("disabled", false);
-  $(`${TABLE_ID} tr[class~='simple']`).addClass("hide").hide();
+  $(`${TABLE_ID} tr[class~='simple']`).addClass("d-none").hide();
   $(`${FORM_ID} *[name*=_Simple_]`).addClass("ignore");
-  $(`${TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])`).removeClass("hide").show();
+  $(`${TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])`).removeClass("d-none").show();
   $("#Staminia_Options_Predictions_Type").slideDown();
   showSkillsByPosition();
 };
@@ -459,10 +463,10 @@ const enableAdvancedMode = () => {
 // Disable Advanced Mode
 const disableAdvancedMode = () => {
   $("#Staminia_Options_AdvancedMode_Predictions").find(".btn").prop("disabled", false);
-  $(`${TABLE_ID} tr[class~='advanced']`).addClass("hide").hide();
+  $(`${TABLE_ID} tr[class~='advanced']`).addClass("d-none").hide();
   $(`${FORM_ID} *[name*=_Advanced_]`).addClass("ignore");
   $(`${FORM_ID} *[name*=_Simple_]`).removeClass("ignore");
-  $(`${TABLE_ID} tr[class~='simple']`).removeClass("hide").show();
+  $(`${TABLE_ID} tr[class~='simple']`).removeClass("d-none").show();
   $("#Staminia_Options_Predictions_Type").slideUp();
 };
 
@@ -473,11 +477,11 @@ const isPressingEnabled = () => $("#Staminia_Options_Pressing").prop("checked");
 const isAdvancedModeEnabled = () => $("#Staminia_Options_AdvancedMode").prop("checked");
 
 const enableCHPPMode = () => {
-  $(`${TABLE_ID} tr[class~='chpp']`).removeClass("hide").show();
+  $(`${TABLE_ID} tr[class~='chpp']`).removeClass("d-none").show();
 };
 
 const disableCHPPMode = () => {
-  $(`${TABLE_ID} tr[class~='chpp']`).addClass("hide").hide();
+  $(`${TABLE_ID} tr[class~='chpp']`).addClass("d-none").hide();
 };
 
 // Fill Form Helper
@@ -544,7 +548,7 @@ const formSerialize = () => {
 // Stamin.IA! Get Link Button
 $("#getLink").on("click", (e) => {
   if (!$(FORM_ID).validate().form()) {
-    $("#generatedLink").alert("close");
+    $("#generatedLink").remove();
     return;
   }
 
@@ -603,7 +607,6 @@ $("#switchPlayers").click(() => {
     $p2Field.prop("checked", p1Checked);
   });
   checkMotherClubBonus();
-  $(".control-group").removeClass("error");
   $(FORM_ID).validate().form();
 });
 
@@ -629,16 +632,18 @@ $('input[data-validate="range"], select[data-validate="range"]').each(function()
 });
 
 // Hide alerts when showing credits and redraw charts if needed
-$('a[data-toggle="tab"]').on("shown", (e) => {
-  if ($(e.target).attr("href") === "#tabCredits") {
-    $("#AlertsContainer").hide();
-  } else {
-    $("#AlertsContainer").show();
-  }
-  if ($(e.target).attr("href") === "#tabCharts") {
-    plot_redraw(document.plot1);
-    plot_redraw(document.plot2);
-  }
+document.querySelectorAll('[data-bs-toggle="tab"]').forEach((el) => {
+  el.addEventListener("shown.bs.tab", (e) => {
+    if (e.target.getAttribute("href") === "#tabCredits") {
+      $("#AlertsContainer").hide();
+    } else {
+      $("#AlertsContainer").show();
+    }
+    if (e.target.getAttribute("href") === "#tabCharts") {
+      plot_redraw(document.plot1);
+      plot_redraw(document.plot2);
+    }
+  });
 });
 
 // Stamin.IA! Reset Button
@@ -649,7 +654,6 @@ $("#resetApp").on("click", (e) => {
     }
   });
 
-  $(".control-group").removeClass("error");
   $("#AlertsContainer").html("");
   resetAndHideTabs();
 
@@ -679,9 +683,9 @@ $.ajaxSetup({
   dataType: "json",
   timeout: 30000,
   beforeSend: (XMLHttpRequest, settings) => {
-    $("#CHPP_Refresh_Data").button("loading");
-    $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-time");
-    $("#CHPP_Refresh_Data_Status").find("i").attr("title", "");
+    const $btn = $("#CHPP_Refresh_Data");
+    $btn.prop("disabled", true).text($btn.data("loadingText"));
+    $("#CHPP_Refresh_Data_Status").html(Staminia.icons.clock);
     $("#CHPP_Refresh_Data_Status").prop("disabled", true);
     $("#CHPP_Refresh_Data_Status").removeClass("btn-danger btn-success btn-warning").addClass("btn-progress");
     $("#CHPP_Results").hide();
@@ -699,19 +703,16 @@ $.ajaxSetup({
           enableCHPPMode();
           stripeTable();
           if (jsonObject.RefreshThrottle) {
-            $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-warning-sign");
-            $("#CHPP_Refresh_Data_Status").find("i").attr("title", Staminia.messages.status_warning);
+            $("#CHPP_Refresh_Data_Status").html(Staminia.icons["triangle-exclamation"]).attr("title", Staminia.messages.status_warning);
             $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-danger btn-success").addClass("btn-warning");
             $("#CHPP_Status_Description").text(Staminia.messages.refresh_throttle(jsonObject.RefreshThrottle));
           } else {
-            $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-ok");
-            $("#CHPP_Refresh_Data_Status").find("i").attr("title", Staminia.messages.status_ok);
+            $("#CHPP_Refresh_Data_Status").html(Staminia.icons.check).attr("title", Staminia.messages.status_ok);
             $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-danger btn-warning").addClass("btn-success");
           }
           $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("successText"));
         } catch (error) {
-          $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-remove");
-          $("#CHPP_Refresh_Data_Status").find("i").attr("title", Staminia.messages.status_error);
+          $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
           $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
           loginMenuShow();
           $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
@@ -732,8 +733,7 @@ $.ajaxSetup({
             error_message = Staminia.messages.error_unknown;
             description_message = Staminia.messages.retry_to_authorize;
         }
-        $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-remove");
-        $("#CHPP_Refresh_Data_Status").find("i").attr("title", Staminia.messages.status_error);
+        $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
         $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
         $("#CHPP_Status_Description").html(`${error_message}<br/>${description_message}`);
         loginMenuShow();
@@ -757,9 +757,9 @@ $.ajaxSetup({
         error_message = Staminia.messages.error_unknown;
         description_message = Staminia.messages.retry_to_authorize;
     }
-    $("#CHPP_Refresh_Data_Status").find("i").attr("class", "icon-white icon-remove");
-    $("#CHPP_Refresh_Data_Status").find("i").attr("title", Staminia.messages.status_error);
-    $("#CHPP_Refresh_Data_Status").removeClass("btn-success btn-warning").addClass("btn-danger");
+    $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
+    $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
+    $("#CHPP_Results").hide();
     $("#CHPP_Status_Description").html(`${error_message}<br/>${description_message}`);
     loginMenuShow();
     $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
@@ -767,7 +767,8 @@ $.ajaxSetup({
   },
   complete: (jqXHR, textStatus) => {
     $("#CHPP_Results").show();
-    $("#CHPP_Refresh_Data").button("complete");
+    const $btn = $("#CHPP_Refresh_Data");
+    $btn.prop("disabled", false).text($btn.data("completeText") || $btn.data("successText"));
   }
 });
 
@@ -971,14 +972,14 @@ const setPlayerFormFields = (player, checkUrlParameter = false) => {
 };
 
 const loginMenuHide = () => {
-  $("#loginDropdown").addClass("hide");
-  $("#loggedInDropdown").removeClass("hide");
+  $("#loginDropdown").addClass("d-none");
+  $("#loggedInDropdown").removeClass("d-none");
 };
 
 const loginMenuShow = () => {
   $("#menuLoginTitle").text("CHPP");
-  $("#loggedInDropdown").addClass("hide");
-  $("#loginDropdown").removeClass("hide");
+  $("#loggedInDropdown").addClass("d-none");
+  $("#loginDropdown").removeClass("d-none");
 };
 
 $("#CHPP_Refresh_Data").on("click", () => {
@@ -1043,18 +1044,14 @@ $("#performanceAt90").on("change", function() {
 
 $("#extraLink").on("click", (e) => {
   e.preventDefault();
-  $("#tabExtraNav").find("a").tab("show");
-  $("#helpModal").modal("toggle");
+  const extraTab = document.querySelector("#tabExtraNav a");
+  if (extraTab) bootstrap.Tab.getOrCreateInstance(extraTab).show();
+  const helpModal = document.getElementById("helpModal");
+  if (helpModal) bootstrap.Modal.getOrCreateInstance(helpModal).toggle();
   return false;
 });
 
-$('a.accordion-toggle[data-toggle="collapse"]').on("click", function(e) {
-  const $this = $(this);
-  const $target = $($this.attr("href"));
-  if ($target.css("height") !== "0px") {
-    $target.addClass("in");
-  }
-});
+// BS5 accordion collapse is handled natively via data-bs-toggle
 
 // Exports
 Staminia.format = format;
@@ -1065,6 +1062,14 @@ Staminia.isVerboseModeEnabled = isVerboseModeEnabled;
 Staminia.isPressingEnabled = isPressingEnabled;
 Staminia.isAdvancedModeEnabled = isAdvancedModeEnabled;
 
+// Theme toggle
+$("#themeToggle").on("click", () => {
+  const current = document.documentElement.getAttribute("data-bs-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-bs-theme", next);
+  document.cookie = "theme=" + next + ";path=/;max-age=31536000;SameSite=Lax";
+});
+
 // Document.ready
 $(() => {
   checkIframe();
@@ -1072,7 +1077,8 @@ $(() => {
   if (hasParams) fillForm();
   stripeTable();
   if (hasParams && AUTOSTART) $(FORM_ID).submit();
-  $("#imgMadeInItaly").tooltip();
+  const madeInItaly = document.getElementById("imgMadeInItaly");
+  if (madeInItaly) new bootstrap.Tooltip(madeInItaly);
   if (document.startAjax) {
     $.ajax({ url: "chpp/chpp_retrievedata.php", cache: true });
   }

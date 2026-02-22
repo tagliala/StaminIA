@@ -4,11 +4,18 @@
   "description": "Hattrick's first substitutions calculator tool",
   "private": true,
   "scripts": {
-    "build": "esbuild src/engine.js src/main.js src/plugins.js --outdir=js --target=es2015 --format=iife",
-    "watch": "esbuild src/engine.js src/main.js src/plugins.js --outdir=js --target=es2015 --format=iife --watch",
+    "build": "run-s build:js build:css",
+    "build:js": "esbuild src/index.js --bundle --outfile=dist/staminia.min.js --format=iife --target=es2015 --minify",
+    "build:css": "esbuild src/styles.css --bundle --outfile=dist/staminia.min.css --minify --external:*.png",
+    "build:dev": "run-s build:dev:js build:dev:css",
+    "build:dev:js": "esbuild src/index.js --bundle --outfile=dist/staminia.min.js --format=iife --target=es2015",
+    "build:dev:css": "esbuild src/styles.css --bundle --outfile=dist/staminia.min.css --external:*.png",
+    "watch": "run-p watch:js watch:css",
+    "watch:js": "esbuild src/index.js --bundle --outfile=dist/staminia.min.js --format=iife --target=es2015 --watch",
+    "watch:css": "esbuild src/styles.css --bundle --outfile=dist/staminia.min.css --external:*.png --watch",
     "lint": "run-s lint:js lint:css lint:php",
     "lint:js": "biome check src/",
-    "lint:css": "stylelint 'css/**/*.css'",
+    "lint:css": "stylelint 'src/**/*.css'",
     "lint:php": "composer lint",
     "prepare": "husky"
   },
@@ -21,7 +28,7 @@
   "license": "BSD-2-Clause",
   "lint-staged": {
     "src/**/*.js": "biome check --write",
-    "css/**/*.css": "stylelint --fix",
+    "src/**/*.css": "stylelint --fix",
     "*.php": "vendor/bin/php-cs-fixer fix --dry-run --config=.php-cs-fixer.dist.php"
   },
   "packageManager": "pnpm@10.30.1",
@@ -33,5 +40,10 @@
     "npm-run-all2": "^8.0.4",
     "stylelint": "^17.3.0",
     "stylelint-config-standard": "^40.0.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "5.3.3",
+    "jquery": "3.7.1"
   }
 }
