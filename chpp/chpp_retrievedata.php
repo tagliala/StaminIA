@@ -1,5 +1,6 @@
 <?php
 
+error_reporting(E_ALL & ~E_DEPRECATED);
 ob_start('ob_gzhandler');
 header('Content-type: application/json');
 require __DIR__ . '/../vendor/autoload.php';
