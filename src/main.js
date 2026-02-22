@@ -456,7 +456,7 @@ const enableAdvancedMode = () => {
   $(`${TABLE_ID} tr[class~='simple']`).addClass("d-none").hide();
   $(`${FORM_ID} *[name*=_Simple_]`).addClass("ignore");
   $(`${TABLE_ID} tr[class~=advanced]:not([id*=_Advanced_])`).removeClass("d-none").show();
-  $("#Staminia_Options_Predictions_Type").slideDown();
+  $("#Staminia_Options_Predictions_Type").removeClass("d-none");
   showSkillsByPosition();
 };
 
@@ -467,7 +467,7 @@ const disableAdvancedMode = () => {
   $(`${FORM_ID} *[name*=_Advanced_]`).addClass("ignore");
   $(`${FORM_ID} *[name*=_Simple_]`).removeClass("ignore");
   $(`${TABLE_ID} tr[class~='simple']`).removeClass("d-none").show();
-  $("#Staminia_Options_Predictions_Type").slideUp();
+  $("#Staminia_Options_Predictions_Type").addClass("d-none");
 };
 
 const isOnlySecondHalfEnabled = () => $("#Staminia_Options_OnlySecondHalf").prop("checked");
@@ -563,7 +563,7 @@ $("#getLink").on("click", (e) => {
 
   link += `params=${formSerialize()}`;
 
-  const copyButton = '<button class="btn btn-mini" id="copyLinkToClipboard" type="button">' + Staminia.messages.copy_to_clipboard + '</button>';
+  const copyButton = '<button class="btn btn-sm" id="copyLinkToClipboard" type="button">' + Staminia.messages.copy_to_clipboard + '</button>';
   const body = link;
 
   if ($("#generatedLinkBody").length) {
@@ -688,7 +688,7 @@ $.ajaxSetup({
     $("#CHPP_Refresh_Data_Status").html(Staminia.icons.clock);
     $("#CHPP_Refresh_Data_Status").prop("disabled", true);
     $("#CHPP_Refresh_Data_Status").removeClass("btn-danger btn-success btn-warning").addClass("btn-progress");
-    $("#CHPP_Results").hide();
+    $("#CHPP_Results").addClass("d-none");
     $("#CHPP_Status_Description").html("");
   },
   success: (jsonObject, textStatus, xhr) => {
@@ -759,14 +759,14 @@ $.ajaxSetup({
     }
     $("#CHPP_Refresh_Data_Status").html(Staminia.icons.xmark).attr("title", Staminia.messages.status_error);
     $("#CHPP_Refresh_Data_Status").removeClass("btn-progress btn-success btn-warning").addClass("btn-danger");
-    $("#CHPP_Results").hide();
+    $("#CHPP_Results").addClass("d-none");
     $("#CHPP_Status_Description").html(`${error_message}<br/>${description_message}`);
     loginMenuShow();
     $("#CHPP_Refresh_Data").data("completeText", $("#CHPP_Refresh_Data").data("errorText"));
     $("#CHPP_Refresh_Data_Status").prop("disabled", false);
   },
   complete: (jqXHR, textStatus) => {
-    $("#CHPP_Results").show();
+    $("#CHPP_Results").removeClass("d-none");
     const $btn = $("#CHPP_Refresh_Data");
     $btn.prop("disabled", false).text($btn.data("completeText") || $btn.data("successText"));
   }
@@ -902,7 +902,7 @@ const setupCHPPPlayerFields = (checkUrlParameter = false) => {
 
   $("#CHPP_Team").html(select.html());
   if (Teams.length > 1) {
-    $("#CHPP_Team").closest("tr").show();
+    $("#CHPP_Team").closest("tr").removeClass("d-none");
   }
 
   updateCHPPPlayerFields();

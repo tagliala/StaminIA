@@ -236,7 +236,7 @@ foreach ($lang_array as $key => $val) {
 
 <?php if (defined('GOOGLE_AD_CLIENT')) { ?>
           <!-- Advertising -->
-          <div class="advertising border-box">
+          <div class="advertising">
             <script type="text/javascript">
               google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
               if (window.innerWidth <= 767) {
@@ -297,7 +297,7 @@ foreach ($lang_array as $key => $val) {
 
               <form id="formPlayersInfo" action="javascript:{}" method="post" class="staminiaForm">
 
-                <table class="table table-bordered table-condensed border-box" id="playersInfoTable">
+                <table class="table table-bordered table-sm" id="playersInfoTable">
                   <thead>
                     <tr>
                       <th></th>
@@ -310,14 +310,14 @@ foreach ($lang_array as $key => $val) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="hide">
+                    <tr class="d-none">
                       <td><?= localize("Team"); ?></td>
                       <td colspan="2">
                         <select class="ignore" id="CHPP_Team" name="CHPP_Team">
                         </select>
                       </td>
                     </tr>
-                    <tr class="chpp hide">
+                    <tr class="chpp d-none">
                       <td><?= localize("Player"); ?></td>
                       <td>
                         <select class="ignore" id="CHPP_Player_1" name="CHPP_Player_1_Name">
@@ -328,7 +328,7 @@ foreach ($lang_array as $key => $val) {
                         </select>
                       </td>
                     </tr>
-                    <tr class="chpp hide">
+                    <tr class="chpp d-none">
                       <td><?= localize("Sort by"); ?></td>
                       <td colspan="2">
                         <div class="control-group">
@@ -444,7 +444,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide">
+                    <tr class="advanced d-none">
                       <td><?= localize("Form"); ?></td>
                       <td>
                         <div class="control-group">
@@ -459,7 +459,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide">
+                    <tr class="advanced d-none">
                       <td><?= localize("Stamina"); ?></td>
                       <td>
                         <div class="control-group">
@@ -473,7 +473,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide">
+                    <tr class="advanced d-none">
                       <td><?= localize("Experience"); ?></td>
                       <td>
                         <div class="control-group">
@@ -487,7 +487,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide">
+                    <tr class="advanced d-none">
                       <td><?= localize("Loyalty"); ?></td>
                       <td>
                         <div class="control-group">
@@ -517,7 +517,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide">
+                    <tr class="advanced d-none">
                       <td><?= localize("Position"); ?></td>
                       <td colspan="2">
                         <div class="control-group">
@@ -556,7 +556,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Keeper">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Keeper">
                       <td><?= localize("Keeper (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -570,7 +570,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Defending">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Defending">
                       <td><?= localize("Defending (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -584,7 +584,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Playmaking">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Playmaking">
                       <td><?= localize("Playmaking (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -598,7 +598,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Winger">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Winger">
                       <td><?= localize("Winger (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -612,7 +612,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Passing">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Passing">
                       <td><?= localize("Passing (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -626,7 +626,7 @@ foreach ($lang_array as $key => $val) {
                         </div>
                       </td>
                     </tr>
-                    <tr class="advanced hide" id="Staminia_Advanced_Skill_Scoring">
+                    <tr class="advanced d-none" id="Staminia_Advanced_Skill_Scoring">
                       <td><?= localize("Scoring (skill)"); ?></td>
                       <td>
                         <div class="control-group">
@@ -644,7 +644,7 @@ foreach ($lang_array as $key => $val) {
                 </table>
 <?php if (defined('GOOGLE_AD_CLIENT')) { ?>
                 <!-- Advertising -->
-                <div class="advertising border-box advertising-leaderboard">
+                <div class="advertising advertising-leaderboard">
                   <script type="text/javascript">
                     google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
                     /* Stamin.IA! 728x90 */
@@ -684,7 +684,7 @@ foreach ($lang_array as $key => $val) {
             <!-- Extra -->
             <div class="tab-pane" id="tabExtra">
               <h3 class="legend-like"><?= localize("Stamina subskills calculation"); ?></h3>
-              <form action="javascript:{}" method="post" class="form-inline">
+              <form action="javascript:{}" method="post" class="d-flex flex-wrap align-items-center gap-2">
                 <div class="control-group">
                   <label for="performanceAt90" class="inline">
                     <?= localize("Performance at 90'"); ?>:
