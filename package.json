@@ -1,0 +1,42 @@
+{
+  "name": "staminia",
+  "version": "13.9.29",
+  "description": "Hattrick's first substitutions calculator tool",
+  "private": true,
+  "scripts": {
+    "build": "run-s build:coffee build:less",
+    "build:coffee": "coffee --compile --output js/ coffee/",
+    "build:less": "lessc less/bootstrap.less css/bootstrap.css",
+    "watch": "run-p watch:coffee watch:less",
+    "watch:coffee": "coffee --watch --compile --output js/ coffee/",
+    "watch:less": "chokidar 'less/**/*.less' -c 'pnpm run build:less'",
+    "lint": "run-s lint:js lint:css",
+    "lint:js": "biome check js/",
+    "lint:css": "stylelint 'css/**/*.css' 'less/**/*.less'",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "hattrick",
+    "stamina",
+    "substitutions",
+    "calculator"
+  ],
+  "license": "BSD-2-Clause",
+  "lint-staged": {
+    "js/**/*.js": "biome check --write",
+    "css/**/*.css": "stylelint --fix",
+    "less/**/*.less": "stylelint --fix"
+  },
+  "packageManager": "pnpm@10.30.1",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
+    "coffeescript": "^2.7.0",
+    "husky": "^9.1.7",
+    "less": "^3.13.1",
+    "lint-staged": "^16.2.7",
+    "npm-run-all2": "^8.0.4",
+    "postcss-less": "^6.0.0",
+    "stylelint": "^17.3.0",
+    "stylelint-config-standard": "^40.0.0"
+  }
+}
