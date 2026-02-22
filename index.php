@@ -188,12 +188,12 @@ foreach ($lang_array as $key => $val) {
                     <!-- Staminia Predictions Type Start -->
                     <div class="staminia-button-panel d-none" id="Staminia_Options_Predictions_Type">
                       <?= localize("Predictions Type") ?>
-                      <div class="btn-group btn-group-radio d-flex">
-                        <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked>
+                      <div class="btn-group d-flex" role="group">
+                        <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked autocomplete="off">
                         <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_HO">
                           HO
                         </label>
-                        <input type="radio" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac">
+                        <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac" autocomplete="off">
                         <label class="btn btn-outline-secondary" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
                           AndreaC
                         </label>
@@ -708,10 +708,15 @@ foreach ($lang_array as $key => $val) {
 
             <!-- Credits -->
             <div class="tab-pane" id="tabCredits">
+              <figure class="text-center">
+                <blockquote class="blockquote">
+                  <p><?= localize("QUOTE"); ?></p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                  Danfisico (3232936)
+                </figcaption>
+              </figure>
               <blockquote>
-                <p><?= localize("QUOTE"); ?></p>
-                <small>Danfisico (3232936)</small>
-              </blockquote>
               <h3><?= localize("Thanks to"); ?>:</h3>
               <p>
                 <b>CHPP-teles</b> (653581), <b>GM-Andreac</b> (7790187), <b>Cuomos</b> (4052076), <b>Danfisico</b> (3232936), <b>Hiddink14</b> (9141503), <b>sulce</b> (9767434), <b>Shinobi-fisc</b> (7328722), <b>taccola</b> (7541533), <b>Cacchino</b> (11389955), <b>-Materasso-</b> (7313267), <b>arezzowave</b> (11613695), <b>trigrottro</b> (10193531), <b>Manny_Ray-BSK</b> (6506224), <b>xin</b> [old 3D Logo], Federation <b>"L'Antica Osteria da Ciccio"</b> (91634), Federation <b>"DAC - Crick &amp; Croack"</b> (37817)
