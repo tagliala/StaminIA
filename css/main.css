@@ -74,7 +74,7 @@
 h3 {
   margin: 0;
   font-size: 18px;
-  line-height: 27px; 
+  line-height: 27px;
 }
 
 .staminia-button-panel .btn,
@@ -318,7 +318,7 @@ table.table-staminia th[colspan] {
           box-sizing: border-box;
 }
 
-.text-justify { 
+.text-justify {
   text-align: justify !important;
 }
 
@@ -541,7 +541,7 @@ footer a:hover {
 .btn-group-radio > input:first-child + .btn.large {
   margin-left: 0;
 }
- 
+
 .btn-group-radio > .btn {
   margin-left: -1px;
 }
