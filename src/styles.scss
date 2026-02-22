@@ -381,36 +381,10 @@ span.minutes {
 // ============================================================
 #chartTotal,
 #chartPartials {
+  position: relative;
   height: 250px;
   width: 100% !important;
   margin: ($spacer * 1.125) 0 ($spacer * .5625);
-}
-
-#charts .legendColorBox,
-#charts .legendLabel {
-  color: var(--bs-secondary-color);
-  background: var(--bs-secondary-bg)
-}
-
-#charts .legend table {
-  border: $border-width solid var(--bs-border-color);
-  border-collapse: separate;
-  border-spacing: 2px;
-  cursor: default;
-}
-
-#flot-tooltip {
-  position: absolute;
-  display: block;
-  visibility: hidden;
-  top: 0;
-  left: 0;
-  border: $border-width solid var(--bs-border-color);
-  padding: 2px;
-  font-size: $font-size-sm * .77;
-  background-color: var(--bs-tertiary-bg);
-  opacity: 0.90;
-  z-index: $zindex-tooltip;
 }
 
 // ============================================================

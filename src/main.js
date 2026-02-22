@@ -1,3 +1,5 @@
+import { renderTotalChart, renderPartialsChart, destroyCharts, resizeCharts, updateChartsTheme } from "./charts.js";
+
 window.Staminia = window.Staminia || {};
 const Staminia = window.Staminia;
 Staminia.CONFIG = Staminia.CONFIG || {};
@@ -18,34 +20,6 @@ $.extend(Staminia.CONFIG, {
     Winger: 3,
     Passing: 4,
     Scoring: 5
-  },
-  PLOT_OPTIONS: {
-    shadowSize: 0,
-    lines: {
-      show: true,
-      lineWidth: 2,
-      steps: false
-    },
-    points: {
-      show: false,
-      radius: 3
-    },
-    xaxis: {
-      color: "#666666",
-      ticks: [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 89]
-    },
-    yaxis: {
-      color: "#666666",
-      tickFormatter: (val, axis) => val.toFixed(2)
-    },
-    grid: {
-      backgroundColor: null,
-      color: null,
-      borderWidth: 2,
-      borderColor: "#AAAAAA",
-      hoverable: true,
-      labelMargin: 15
-    }
   }
 });
 
@@ -131,6 +105,7 @@ const resetAndHideTabs = () => {
   $("#tabChartsNav").addClass("d-none");
   $("#tabContributionsNav").addClass("d-none");
   $("#tabDebugNav").addClass("d-none");
+  destroyCharts();
   $("#chartTotal").html("");
   $("#chartPartials").html("");
   $("#tabContributions").html("");
@@ -291,56 +266,26 @@ $(FORM_ID).validate({
 
     // Render Charts
     if (isChartsEnabled()) {
-      // Show the charts tab first so containers have dimensions for Flot
       $("#tabChartsNav").removeClass("d-none");
       const chartsTab = document.querySelector("#tabChartsNav a");
       if (chartsTab) bootstrap.Tab.getOrCreateInstance(chartsTab).show();
 
-      let plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
-      $.extend(true, plot_options, {
-        lines: {
-          fill: true,
-          fillColor: "rgba(0,136,204,0.1)"
-        },
-        points: {
-          fillColor: "#0088CC"
-        },
-        yaxis: {
-          min: Number(result.min * 0.99),
-          max: Number(result.max * 1.01)
-        }
-      });
-      document.plot1 = $.plot($("#chartTotal"), [{ data: result.plotDataTotal[0], color: "#0088CC" }], plot_options);
+      renderTotalChart(
+        document.getElementById("chartTotal"),
+        result.plotDataTotal[0],
+        result.min,
+        result.max,
+        Staminia.messages
+      );
 
-      const dataset = [
-        {
-          data: result.plotDataPartial[0],
-          color: "#BD362F",
-          label: Staminia.messages.p1_contrib,
-          points: { fillColor: "#BD362F" },
-          lines: { fill: true, fillColor: "rgba(189,54,47,0.1)" }
-        },
-        {
-          data: result.plotDataPartial[1],
-          color: "#51A351",
-          label: Staminia.messages.p2_contrib,
-          points: { fillColor: "#51A351" },
-          lines: { fill: true, fillColor: "rgba(81,163,81,0.10)" }
-        }
-      ];
-
-      plot_options = $.extend(true, {}, Staminia.CONFIG.PLOT_OPTIONS);
-      $.extend(true, plot_options, {
-        legend: {
-          position: "se",
-          labelBoxBorderColor: "#cccccc",
-          margin: [10, 10],
-          backgroundColor: "#ffffff",
-          backgroundOpacity: 0.5,
-          borderColor: "#cccccc"
-        }
-      });
-      document.plot2 = $.plot($("#chartPartials"), dataset, plot_options);
+      renderPartialsChart(
+        document.getElementById("chartPartials"),
+        result.plotDataPartial[0],
+        result.plotDataPartial[1],
+        Staminia.messages.p1_contrib,
+        Staminia.messages.p2_contrib,
+        Staminia.messages
+      );
     }
 
     createSubstitutionAlert(
@@ -350,10 +295,7 @@ $(FORM_ID).validate({
 
     // Show the right tab
     if (isChartsEnabled()) {
-      setTimeout(() => {
-        plot_redraw(document.plot1);
-        plot_redraw(document.plot2);
-      }, 500);
+      // Chart.js handles resize automatically
     } else if (isVerboseModeEnabled()) {
       const contribTab = document.querySelector("#tabContributionsNav a");
       if (contribTab) bootstrap.Tab.getOrCreateInstance(contribTab).show();
@@ -640,8 +582,7 @@ document.querySelectorAll('[data-bs-toggle="tab"]').forEach((el) => {
       $("#AlertsContainer").show();
     }
     if (e.target.getAttribute("href") === "#tabCharts") {
-      plot_redraw(document.plot1);
-      plot_redraw(document.plot2);
+      resizeCharts();
     }
   });
 });
@@ -991,49 +932,7 @@ $("#CHPP_Revoke_Auth_Link").on("click", function() {
   window.confirm(Staminia.messages.revoke_auth_confirm);
 });
 
-const plot_redraw = (plot) => {
-  if (plot == null) return;
-  plot.resize();
-  plot.setupGrid();
-  plot.draw();
-};
 
-// Resize charts if needed
-$(window).resize(function() {
-  clearTimeout(this._resizeTimer);
-  this._resizeTimer = setTimeout(() => {
-    if (!$("#tabChartsNav").hasClass("active")) return;
-    if (document.plot1 != null) plot_redraw(document.plot1);
-    if (document.plot2 != null) plot_redraw(document.plot2);
-  }, 500);
-});
-
-// Charts tooltips
-const showTooltip = (x, y, contents) => {
-  const $content_div = $('<div id="flot-tooltip">' + contents + "</div>").appendTo("body");
-  $content_div.css({
-    display: "none",
-    visibility: "visible",
-    top: y - $content_div.height() - 11,
-    left: x - $content_div.width() - 11
-  }).fadeIn("fast");
-};
-
-let previousPoint = null;
-
-$("#chartTotal, #chartPartials").bind("plothover", (event, pos, item) => {
-  if (item) {
-    if (previousPoint === item.dataIndex) return;
-    previousPoint = item.dataIndex;
-    $("#flot-tooltip").remove();
-    const x = item.datapoint[0];
-    const y = item.datapoint[1].toFixed(2);
-    showTooltip(item.pageX, item.pageY, `${Staminia.messages.substitution_minute}: ${x}<br/>${Staminia.messages.contribution}: ${y}`);
-  } else {
-    $("#flot-tooltip").remove();
-    previousPoint = null;
-  }
-});
 
 $("#performanceAt90").on("change", function() {
   Staminia.estimateStaminaSubskills($(this).val());
@@ -1083,6 +982,7 @@ $("#themeToggle").on("click", () => {
   document.documentElement.setAttribute("data-bs-theme", next);
   document.cookie = "theme=" + next + ";path=/;max-age=31536000;SameSite=Lax";
   syncThemeIcon();
+  updateChartsTheme();
 });
 
 // Document.ready
