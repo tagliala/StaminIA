@@ -82,38 +82,55 @@ backward compatibility with the existing PHP backend.
 
 ## Phase 1: CHPP API Migration
 
-**Status**: 📋 Planned (Future)
+**Status**: ✅ Complete
 
 ### Goals
 
-- Migrate to the latest CHPP API
-- Update authentication flows
-- Document all API endpoints and required changes
+- Migrate from vendored PHT v2 to Composer-managed PHT v3
+- Update authentication flows to use PHT v3 API
+- Add Composer for PHP dependency management
+- Add PHP linting with PHP-CS-Fixer
 
-### Context
+### Changes
 
-The CHPP (Certified Hattrick Product Program) API provides access to Hattrick
-game data. The current integration uses the PHT library in `chpp/`.
-
-- **Official documentation**: https://wiki.hattrick.org/wiki/CHPP
-- **Note**: Official documentation may not be publicly accessible; the wiki may
-  be outdated
-- **Current library**: PHT (PHP Hattrick library in `lib/PHT/`)
+| Before                                  | After                                         |
+| --------------------------------------- | --------------------------------------------- |
+| Vendored PHT v2.17 in `lib/PHT/`       | Composer-managed `jetwitaussi/pht` ^3.15      |
+| `include '../lib/PHT/PHT.php'`          | `require __DIR__ . '/../vendor/autoload.php'` |
+| `CHPPConnection` class                  | `\PHT\Connection` + `\PHT\PHT` classes        |
+| `HTError` exceptions                    | `\PHT\Exception\ChppException`                |
+| Serialized `$_SESSION['HT']` object     | Token-based session (`oauthToken`, `oauthTokenSecret`) |
+| No PHP linter                           | PHP-CS-Fixer with @PER-CS ruleset             |
+| No PHP dependency manager               | Composer                                      |
 
 ### Tasks
 
-- [ ] Audit current CHPP API usage in `chpp/*.php` files
-- [ ] Review latest CHPP API documentation and identify breaking changes
-- [ ] Update OAuth authentication flow if required
-- [ ] Update data retrieval endpoints (`chpp_retrievedata.php`)
-- [ ] Test all API interactions with the latest CHPP version
-- [ ] Update `config.php.example` if configuration changes are needed
-- [ ] Consider replacing PHT library if a more maintained alternative exists
+- [x] Add Composer with `jetwitaussi/pht` ^3.15 as runtime dependency
+- [x] Add `php-cs-fixer/shim` ^3.94 as dev dependency
+- [x] Create `.php-cs-fixer.dist.php` configuration
+- [x] Update `config.php.example` with `getPhtConfig()` helper
+- [x] Migrate `chpp_auth.php` to PHT v3 (`\PHT\Connection`)
+- [x] Migrate `chpp_callback.php` to PHT v3 (`\PHT\Connection::getChppAccess()`)
+- [x] Migrate `chpp_retrievedata.php` to PHT v3 (`\PHT\PHT`)
+- [x] Migrate `chpp_revokeauth.php` to PHT v3 (`\PHT\Connection::deleteChppAccess()`)
+- [x] Update `index.php` session logic (token-based instead of object-based)
+- [x] Remove vendored `lib/PHT/` directory
+- [x] Add `.editorconfig`
+- [x] Format all PHP files with PHP-CS-Fixer
+- [x] Update `package.json` lint scripts to include PHP
+
+### Session Architecture Change
+
+PHT v2 serialized the entire `CHPPConnection` object into `$_SESSION['HT']`.
+PHT v3 uses a config-based approach: only OAuth tokens are stored in the session
+(`$_SESSION['oauthToken']`, `$_SESSION['oauthTokenSecret']`), and `\PHT\Connection`
+/ `\PHT\PHT` objects are reconstructed on each request using `getPhtConfig()`.
 
 ### Notes
 
-This is a placeholder phase. Detailed API upgrade work can be deferred until the
-CHPP API documentation is reviewed and specific changes are identified.
+- The actual `chpp/config.php` (gitignored) must be manually updated to match
+  the new `config.php.example` (add `getPhtConfig()` helper, update `require`
+  path to use Composer autoload)
 
 ---
 

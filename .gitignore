@@ -11,6 +11,10 @@ Thumbs.db
 
 # Dependencies
 node_modules/
+vendor/
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
 
 # Legacy build system
 build/apache-ant-1.8.3

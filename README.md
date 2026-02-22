@@ -62,7 +62,7 @@ jQuery throttle / debounce is licensed under the MIT License
 
 flot is licensed under the MIT License
 
-PHT is licensed under the PHP License, version 3.0
+PHT is licensed under the LGPL-3.0 License
 
 Font Awesome is licensed under CC BY 3.0 License
 

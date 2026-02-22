@@ -1,42 +1,41 @@
 <?php
-include 'config.php';
-include 'lib/PHT/PHT.php';
+require __DIR__ . '/vendor/autoload.php';
+include __DIR__ . '/config.php';
 session_start();
-$HT = isset($_SESSION['HT']) ? $_SESSION['HT'] : null;
-$permanent = isset($_COOKIE['permanent']) ? $_COOKIE['permanent'] : null;
-/*
-When user is redirected to your callback url
-you will received two parameters in url
-oauth_token and oauth_verifier
-use both in next function:
-*/
-if ($HT != null) try
-{
-}
-catch(HTError $e)
-{
-  echo $e->getMessage();
-}
-$tryAjax = (($HT != null) || $permanent);
+$oauthToken = $_SESSION['oauthToken'] ?? null;
+$permanent = $_COOKIE['permanent'] ?? null;
+$tryAjax = (($oauthToken != null) || $permanent);
 ?>
 <?php
 include 'localization.php';
 ?>
 <?php
 
-function optionSkills($start = 0, $stop = 20, $select = 6) {
-  global $localizedSkills;
+function optionSkills($start = 0, $stop = 20, $select = 6)
+{
+    global $localizedSkills;
 
-  if ($start < 0) $start = 0;
-  if ($stop > 20) $stop = 20;
-  if (($select < 0) || ($select > 20)) $select = -1;
+    if ($start < 0) {
+        $start = 0;
+    }
+    if ($stop > 20) {
+        $stop = 20;
+    }
+    if (($select < 0) || ($select > 20)) {
+        $select = -1;
+    }
 
-  if ($stop < $start) { $start = 0; $stop = 20; }
-  if ($select > $stop) { $select = -1; }
+    if ($stop < $start) {
+        $start = 0;
+        $stop = 20;
+    }
+    if ($select > $stop) {
+        $select = -1;
+    }
 
-  for ($i = $start; $i <= $stop; ++$i) {
-    echo "<option value=\"$i\"" . (($select == $i)?" selected=\"selected\"":"") . ">$localizedSkills[$i]</option>\n";
-  }
+    for ($i = $start; $i <= $stop; ++$i) {
+        echo "<option value=\"$i\"" . (($select == $i) ? " selected=\"selected\"" : "") . ">$localizedSkills[$i]</option>\n";
+    }
 }
 ?>
 <?php $staminia_version = "13.09.29" ?>
@@ -104,7 +103,9 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
                     <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
                       <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
                       <fieldset>
-                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) echo "checked=\"checked\"" ?>/> <span><?php echo localize("Remember me"); ?></span></label>
+                        <label class="rememberme"><input type="checkbox" name="permanent" <?php if ($permanent) {
+                            echo "checked=\"checked\"";
+                        } ?>/> <span><?php echo localize("Remember me"); ?></span></label>
                         <button type="submit" class="btn" id="CHPPLink"><?= localize("Login"); ?></button>
                       </fieldset>
                     </form>
@@ -129,8 +130,10 @@ function optionSkills($start = 0, $stop = 20, $select = 6) {
               <ul class="dropdown-menu">
 <?php
 foreach ($lang_array as $key => $val) {
-if (strtolower(localize("lang")) === $key) { continue; }
-echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
+    if (strtolower(localize("lang")) === $key) {
+        continue;
+    }
+    echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
 }
 ?>
                 </ul>
@@ -217,7 +220,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
           </div> <!-- Staminia Options End -->
 
           <!-- Staminia CHPP Start -->
-          <div class="accordion<?php if (!$tryAjax) echo " hide"; ?>" id="accordion-chpp">
+          <div class="accordion<?php if (!$tryAjax) {
+              echo " hide";
+          } ?>" id="accordion-chpp">
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-chpp" href="#collapseCHPP">
@@ -227,7 +232,9 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
               </div>
               <div id="collapseCHPP" class="accordion-body collapse">
                 <div class="accordion-inner">
-                  <div class="staminia-button-panel<?php if (!$tryAjax) echo " hide"; ?>" id="Staminia_Options_CHPP">
+                  <div class="staminia-button-panel<?php if (!$tryAjax) {
+                      echo " hide";
+                  } ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group btn-chpp">
                       <button class="btn btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><i class="icon-warning-sign"></i></button>
                       <button class="btn" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
@@ -300,7 +307,7 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo">
               <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
-              <p><?= sprintf(localize("SHORT_HELP"),localize("Player 1"), localize("Player 2")) ?></p>
+              <p><?= sprintf(localize("SHORT_HELP"), localize("Player 1"), localize("Player 2")) ?></p>
 
               <!-- Main Form Start -->
 
@@ -441,14 +448,14 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Loyalty"); ?></span>
                           <select name="Staminia_Simple_Player_1_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 1") ?> <?= localize("Loyalty"); ?>">
-                            <?php optionSkills(1,20,1) ?>
+                            <?php optionSkills(1, 20, 1) ?>
                           </select>
                         </div>
                       </td>
                       <td>
                         <div class="control-group">
                           <select name="Staminia_Simple_Player_2_Loyalty" data-validate="range" data-range-min="1" data-range-max="20" data-field-name="<?= localize("Player 2") ?> <?= localize("Loyalty"); ?>">
-                            <?php optionSkills(1,20,1) ?>
+                            <?php optionSkills(1, 20, 1) ?>
                           </select>
                         </div>
                       </td>
@@ -793,14 +800,23 @@ echo "                  <li><a href=\"?locale=$key\"><i class=\"flag-" . $val["f
     <!--[if IE]><script language="javascript" type="text/javascript" src="js/vendor/flot/excanvas.min.js"></script><![endif]-->
 
     <script>
-      document.startAjax = <?php if ($tryAjax) { echo "true"; } else { echo "false"; } ?>;
+      document.startAjax = <?php if ($tryAjax) {
+          echo "true";
+      } else {
+          echo "false";
+      } ?>;
 <?php
 $file = "js/vendor/jqvalidate/localization/messages_" . localize("validateLang") . ".js";
-if (is_file($file)) { include($file); }
+if (is_file($file)) {
+    include($file);
+}
 $file = "js/localization/messages_" . localize("lang") . ".js";
 $file_en = "js/localization/messages_en-US.js";
-if (is_file($file)) { include($file); }
-else { include($file_en); }
+if (is_file($file)) {
+    include($file);
+} else {
+    include($file_en);
+}
 ?>
     </script>
   </body>

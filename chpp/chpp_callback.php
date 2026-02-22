@@ -1,41 +1,36 @@
 <?php
 
-include '../lib/PHT/PHT.php';
-include 'config.php';
+require __DIR__ . '/../vendor/autoload.php';
+include __DIR__ . '/config.php';
 session_start();
-$HT = $_SESSION['HT'];
-/*
-When user is redirected to your callback url
-you will received two parameters in url
-oauth_token and oauth_verifier
-use both in next function:
-*/
-if ($HT != null) try
-{
- $HT->retrieveAccessToken($_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
- 
- /*
- Now access is granted for your application
- You can save user token and token secret and/or request xml files
- */
- 
- $storeTokens = $_SESSION['storeTokens'];
 
- if (($storeTokens != null) && ($storeTokens)) {
+$temporaryToken = $_SESSION['temporaryToken'] ?? null;
 
-  $userToken = $HT->getOauthToken();
-  $userTokenSecret = $HT->getOauthTokenSecret();
+if ($temporaryToken != null) {
+    try {
+        $HT = new \PHT\Connection(getPhtConfig());
+        $access = $HT->getChppAccess($temporaryToken, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
 
-  setcookie('userToken'      , $userToken      , COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
-  setcookie('userTokenSecret', $userTokenSecret, COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
-  setcookie('permanent'      , 1               , COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
+        if ($access === false) {
+            echo "Impossible to confirm CHPP connection";
+            exit();
+        }
 
-  unset($_SESSION['storeTokens']);
- }
-}
-catch(HTError $e)
-{
- echo $e->getMessage();
+        $_SESSION['oauthToken'] = $access->oauthToken;
+        $_SESSION['oauthTokenSecret'] = $access->oauthTokenSecret;
+        unset($_SESSION['temporaryToken']);
+
+        $storeTokens = $_SESSION['storeTokens'] ?? false;
+
+        if ($storeTokens) {
+            setcookie('userToken', $access->oauthToken, COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
+            setcookie('userTokenSecret', $access->oauthTokenSecret, COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
+            setcookie('permanent', 1, COOKIE_EXPIRE_TIME, COOKIE_PATH, COOKIE_DOMAIN);
+
+            unset($_SESSION['storeTokens']);
+        }
+    } catch (\PHT\Exception\ChppException $e) {
+        echo $e->getMessage();
+    }
 }
 header('Location: ' . APP_ROOT);
-?>

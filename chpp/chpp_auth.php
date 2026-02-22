@@ -1,40 +1,36 @@
 <?php
 
-// Include PHT file before starting session!
-include '../lib/PHT/PHT.php';
-include 'config.php';
+require __DIR__ . '/../vendor/autoload.php';
+include __DIR__ . '/config.php';
 session_start();
-/*
-You must supply your chpp crendentials and a callback url.
-User will be redirected to this url after login
-You can add your own parameters to this url if you need,
-they will be kept on user redirection
-*/
-try
-{
- $_SESSION['storeTokens'] = false;
 
- $HT = new CHPPConnection(APP_CONSUMERKEY, APP_CONSUMERSECRET, APP_ROOT . 'chpp/chpp_callback.php');
+/*
+You must supply your chpp credentials and a callback url.
+User will be redirected to this url after login.
+*/
+try {
+    $_SESSION['storeTokens'] = false;
 
- if (isset($_GET['permanent'])) {
-  $url = $HT->getAuthorizeUrl(); //permanent authorization
-  $_SESSION['storeTokens'] = true;
- } else {
-  $url = $HT->getAuthenticateUrl(); //temporary authorization
- } 
+    $HT = new \PHT\Connection(getPhtConfig());
+    $callbackUrl = APP_ROOT . 'chpp/chpp_callback.php';
+
+    if (isset($_GET['permanent'])) {
+        $auth = $HT->getPermanentAuthorization($callbackUrl);
+        $_SESSION['storeTokens'] = true;
+    } else {
+        $auth = $HT->getTemporaryAuthorization($callbackUrl);
+    }
+
+    if ($auth === false) {
+        echo "Impossible to initiate CHPP connection";
+        exit();
+    }
+
+    $_SESSION['temporaryToken'] = $auth->temporaryToken;
+    $url = $auth->url;
+} catch (\PHT\Exception\ChppException $e) {
+    echo $e->getMessage();
+    exit();
 }
-catch(HTError $e)
-{
- echo $e->getMessage();
-}
-/*
-Be sure to store $HT in session before redirect user
-to Hattrick chpp login page 
-*/
-$_SESSION['HT'] = $HT;
-/*
-Redirect user to Hattrick for login
-or put a link with this url on your site
-*/
+
 header('Location: ' . $url);
-?>

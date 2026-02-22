@@ -1,15 +1,23 @@
 <?php
-include '../config.php';
+
+include __DIR__ . '/../config.php';
 
 // chpp secret keys, KEEP THESE SECRET!
-define('APP_CONSUMERKEY',    '');
+define('APP_CONSUMERKEY', '');
 define('APP_CONSUMERSECRET', '');
 
-// pervent flooding
+// prevent flooding
 define('MIN_REFRESH_SECONDS', 60);
 
 // cookies (for permanent authorization)
 define('COOKIE_DOMAIN', '');
 define('COOKIE_PATH', '');
-define('COOKIE_EXPIRE_TIME', mktime(0, 0, 0, 1, 1, 2020));
-?>
+define('COOKIE_EXPIRE_TIME', mktime(0, 0, 0, 1, 1, 2030));
+
+function getPhtConfig(array $extra = []): array
+{
+    return array_merge([
+        'CONSUMER_KEY' => APP_CONSUMERKEY,
+        'CONSUMER_SECRET' => APP_CONSUMERSECRET,
+    ], $extra);
+}
