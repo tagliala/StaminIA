@@ -32,10 +32,9 @@
     "@biomejs/biome": "^2.4.4",
     "coffeescript": "^2.7.0",
     "husky": "^9.1.7",
-    "less": "^3.13.1",
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
-    "postcss-less": "^6.0.0",
+    "sass": "^1.97.3",
     "stylelint": "^17.3.0",
     "stylelint-config-standard": "^40.0.0"
   }
