@@ -62,7 +62,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
       (function(){var m=document.cookie.match(/(?:^|;\s*)theme=(\w+)/);document.documentElement.setAttribute("data-bs-theme",m?m[1]:(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"))})()
     </script>
 
-    <link href="dist/staminia.min.css" rel="stylesheet">
+    <link href="dist/staminia.min.css?v=<?php echo filemtime('dist/staminia.min.css'); ?>" rel="stylesheet">
 
     <link rel="shortcut icon" href="img/staminia_favicon.png">
     <link rel="apple-touch-icon" href="img/ico/apple-touch-icon.png">
@@ -93,20 +93,22 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
             </li>
             <?php if (CHPP_APP_ID != "") { ?>
               <li class="nav-item dropdown" id="dropdownLogin">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" id="loginDropdown">
                   <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
                     <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
                     <fieldset>
-                      <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="permanent" id="chppRememberMe" <?php if ($permanent) {
-                            echo "checked=\"checked\"";
-                        } ?>/>
-                        <label class="form-check-label" for="chppRememberMe"><?php echo localize("Remember me"); ?></label>
+                      <div class="d-flex align-items-center gap-2">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="permanent" id="chppRememberMe" <?php if ($permanent) {
+                              echo "checked=\"checked\"";
+                          } ?>/>
+                          <label class="form-check-label" for="chppRememberMe"><?php echo localize("Remember me"); ?></label>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
                       </div>
-                      <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
                     </fieldset>
                   </form>
                   <small><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
@@ -119,7 +121,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
               </li>
             <?php } ?>
             <li class="nav-item dropdown" id="dropdownLanguages">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                 <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
                 <span class="d-none d-sm-inline">
                   <?= $lang_array[strtolower(localize("lang"))]["lang-name"] ?>
@@ -155,7 +157,7 @@ foreach ($lang_array as $key => $val) {
             <form id="optionForm" action="javascript:{}" method="post">
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
                     <?= icon('gear') ?>
                     <?= localize("Settings") ?>
                   </button>
@@ -230,7 +232,7 @@ foreach ($lang_array as $key => $val) {
           } ?>" id="accordion-chpp">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCHPP">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCHPP" aria-expanded="false" aria-controls="collapseCHPP">
                   <?= icon('star') ?>
                   <?= localize("CHPP Mode") ?>
                 </button>
@@ -280,7 +282,7 @@ foreach ($lang_array as $key => $val) {
             </noscript>
 
             <!-- Tab Players Info -->
-            <div class="tab-pane active" id="tabPlayersInfo">
+            <div class="tab-pane active" id="tabPlayersInfo" role="tabpanel">
               <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
               <p><?= sprintf(localize("SHORT_HELP"), localize("Player 1"), localize("Player 2")) ?></p>
 
@@ -525,6 +527,7 @@ foreach ($lang_array as $key => $val) {
                               <option value="1"><?php echo localize("Defender"); ?></option>
                               <option value="2"><?php echo localize("Defender (Off)"); ?></option>
                               <option value="3"><?php echo localize("Defender (TW)"); ?></option>
+                            </optgroup>
                             <optgroup label="<?= localize("Winger Back"); ?>">
                               <option value="4"><?php echo localize("Winger Back"); ?></option>
                               <option value="5"><?php echo localize("Winger Back (Off)"); ?></option>
@@ -665,7 +668,7 @@ foreach ($lang_array as $key => $val) {
             </div>
 
             <!-- Charts -->
-            <div class="tab-pane" id="tabCharts">
+            <div class="tab-pane" id="tabCharts" role="tabpanel">
               <div id="charts">
                 <h3 class="legend-like"><?= localize("Total Contribution"); ?></h3>
                 <div id="chartTotal" class="chart"></div>
@@ -675,15 +678,15 @@ foreach ($lang_array as $key => $val) {
             </div>
 
             <!-- Contributions -->
-            <div class="tab-pane" id="tabContributions">
+            <div class="tab-pane" id="tabContributions" role="tabpanel">
             </div>
 
             <!-- Extra -->
-            <div class="tab-pane" id="tabExtra">
+            <div class="tab-pane" id="tabExtra" role="tabpanel">
               <h3 class="legend-like"><?= localize("Stamina subskills calculation"); ?></h3>
               <form action="javascript:{}" method="post" class="d-flex flex-wrap align-items-center gap-2">
-                <div class="control-group">
-                  <label for="performanceAt90" class="inline">
+                <div class="control-group d-flex align-items-center gap-2">
+                  <label for="performanceAt90" class="text-nowrap">
                     <?= localize("Performance at 90'"); ?>:
                   </label>
                   <select class="form-select ignore w-auto" id="performanceAt90" name="performanceAt90">
@@ -691,18 +694,18 @@ foreach ($lang_array as $key => $val) {
                       <option value=<?= $i ?>><?= $i ?>%</option>
                     <?php } ?>
                   </select>
-                  <span class="text-success"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
+                  <span class="text-success text-nowrap"><?= localize("The estimate stamina level is"); ?> <b id="staminaSubskillsEstimationTarget">8.7</b><span id="or-higher"> <?= localize("(or higher)"); ?></span></span>
                 </div>
                 <p class="text-body-secondary"><?= icon('circle-question') ?> <?= localize("In order to get performance at minute 90', you need to go under \"Lineup\" tab of match ratings, click on the \"90\" button on the top and leave the mouse on player's stamina bar: a tooltip with stamina percentage will eventually appear. Player should have played all 90 minutes without confusion in the formation."); ?></p>
               </form>
             </div>
 
             <!-- Debug -->
-            <div class="tab-pane" id="tabDebug">
+            <div class="tab-pane" id="tabDebug" role="tabpanel">
             </div>
 
             <!-- Credits -->
-            <div class="tab-pane" id="tabCredits">
+            <div class="tab-pane" id="tabCredits" role="tabpanel">
               <figure class="text-center">
                 <blockquote class="blockquote">
                   <p><?= localize("QUOTE"); ?></p>
@@ -738,11 +741,11 @@ foreach ($lang_array as $key => $val) {
       </div> <!-- First Row End -->
 
       <!-- Help Modal Start -->
-      <div class="modal fade" tabindex="-1" id="helpModal">
+      <div class="modal fade" tabindex="-1" id="helpModal" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title"><?= localize("Help") ?></h5>
+              <h5 class="modal-title" id="helpModalLabel"><?= localize("Help") ?></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -771,7 +774,7 @@ foreach ($lang_array as $key => $val) {
 
     </div> <!-- Container End -->
 
-    <script src="dist/staminia.min.js"></script>
+    <script src="dist/staminia.min.js?v=<?php echo filemtime('dist/staminia.min.js'); ?>"></script>
 
     <script>
       document.startAjax = <?php if ($tryAjax) {
