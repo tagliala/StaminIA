@@ -23,11 +23,11 @@ function resetPermanentToken()
     }
 }
 
-function getTeamDetails($HT, $teamId)
+function getTeamDetails($HT, $team)
 {
-    $team = $HT->getSeniorTeam();
+    $teamId = $team->getId();
     $teamArray = [];
-    $teamArray["TeamId"] = $team->getId();
+    $teamArray["TeamId"] = $teamId;
     $teamArray["TeamName"] = $team->getName();
 
     $teamPlayers = $HT->getSeniorPlayers($teamId);
@@ -123,117 +123,23 @@ if ($oauthToken != null && $oauthTokenSecret != null) {
         // Primary team
         $primaryTeam = $HT->getSeniorTeam();
         if (is_object($primaryTeam)) {
-            $teamArray = [];
-            $teamArray["TeamId"] = $primaryTeam->getId();
-            $teamArray["TeamName"] = $primaryTeam->getName();
-
-            $teamPlayers = $HT->getSeniorPlayers($primaryTeam->getId());
-            $teamPlayersArray = [];
-
-            for ($i = 0; $i < $teamPlayers->getPlayerNumber(); $i++) {
-                $player = $teamPlayers->getPlayer($i);
-                $playerArray = [
-                    'PlayerID'        => $player->getId(),
-                    'PlayerName'      => $player->getName(),
-                    'PlayerNumber'    => $player->getShirtNumber(),
-
-                    'PlayerForm'      => $player->getForm(),
-                    'Experience'      => $player->getExperience(),
-
-                    'InjuryLevel'     => $player->getInjury(),
-                    'TransferListed'  => $player->isTransferListed(),
-                    'Cards'           => $player->getCards(),
-
-                    'StaminaSkill'    => $player->getStamina(),
-
-                    'KeeperSkill'     => $player->getKeeper(),
-                    'PlaymakerSkill'  => $player->getPlaymaker(),
-                    'ScorerSkill'     => $player->getScorer(),
-                    'PassingSkill'    => $player->getPassing(),
-                    'WingerSkill'     => $player->getWinger(),
-                    'DefenderSkill'   => $player->getDefender(),
-                    'SetPiecesSkill'  => $player->getSetPieces(),
-
-                    'Loyalty'         => $player->getLoyalty(),
-                    'MotherClubBonus' => $player->hasMotherClubBonus(),
-                ];
-
-                $playerArray['MainSkill'] = max(
-                    1,
-                    $playerArray['KeeperSkill'],
-                    $playerArray['DefenderSkill'],
-                    $playerArray['PlaymakerSkill'],
-                    $playerArray['ScorerSkill'],
-                    $playerArray['WingerSkill'],
-                    $playerArray['PassingSkill'],
-                );
-
-                array_push($teamPlayersArray, $playerArray);
-            }
-
-            $teamArray["PlayersData"] = $teamPlayersArray;
-            array_push($returnArray["Teams"], $teamArray);
+            array_push($returnArray["Teams"], getTeamDetails($HT, $primaryTeam));
         }
 
-        // Secondary team
-        $teamConfig = new \PHT\Config\Team();
-        $teamConfig->secondary = true;
-        try {
-            $secondaryTeam = $HT->getSeniorTeam($teamConfig);
-            if (is_object($secondaryTeam)) {
-                $teamArray = [];
-                $teamArray["TeamId"] = $secondaryTeam->getId();
-                $teamArray["TeamName"] = $secondaryTeam->getName();
-
-                $teamPlayers = $HT->getSeniorPlayers($secondaryTeam->getId());
-                $teamPlayersArray = [];
-
-                for ($i = 0; $i < $teamPlayers->getPlayerNumber(); $i++) {
-                    $player = $teamPlayers->getPlayer($i);
-                    $playerArray = [
-                        'PlayerID'        => $player->getId(),
-                        'PlayerName'      => $player->getName(),
-                        'PlayerNumber'    => $player->getShirtNumber(),
-
-                        'PlayerForm'      => $player->getForm(),
-                        'Experience'      => $player->getExperience(),
-
-                        'InjuryLevel'     => $player->getInjury(),
-                        'TransferListed'  => $player->isTransferListed(),
-                        'Cards'           => $player->getCards(),
-
-                        'StaminaSkill'    => $player->getStamina(),
-
-                        'KeeperSkill'     => $player->getKeeper(),
-                        'PlaymakerSkill'  => $player->getPlaymaker(),
-                        'ScorerSkill'     => $player->getScorer(),
-                        'PassingSkill'    => $player->getPassing(),
-                        'WingerSkill'     => $player->getWinger(),
-                        'DefenderSkill'   => $player->getDefender(),
-                        'SetPiecesSkill'  => $player->getSetPieces(),
-
-                        'Loyalty'         => $player->getLoyalty(),
-                        'MotherClubBonus' => $player->hasMotherClubBonus(),
-                    ];
-
-                    $playerArray['MainSkill'] = max(
-                        1,
-                        $playerArray['KeeperSkill'],
-                        $playerArray['DefenderSkill'],
-                        $playerArray['PlaymakerSkill'],
-                        $playerArray['ScorerSkill'],
-                        $playerArray['WingerSkill'],
-                        $playerArray['PassingSkill'],
-                    );
-
-                    array_push($teamPlayersArray, $playerArray);
+        // Secondary teams (a user can have multiple)
+        for ($n = 1; $n <= 3; $n++) {
+            $teamConfig = new \PHT\Config\Team();
+            $teamConfig->secondary = true;
+            $teamConfig->number = $n;
+            try {
+                $secondaryTeam = $HT->getSeniorTeam($teamConfig);
+                if (!is_object($secondaryTeam)) {
+                    break;
                 }
-
-                $teamArray["PlayersData"] = $teamPlayersArray;
-                array_push($returnArray["Teams"], $teamArray);
+                array_push($returnArray["Teams"], getTeamDetails($HT, $secondaryTeam));
+            } catch (\PHT\Exception\ChppException $e) {
+                break;
             }
-        } catch (\PHT\Exception\ChppException $e) {
-            // No secondary team — that's fine
         }
 
         $returnArray["Status"] = "OK";
