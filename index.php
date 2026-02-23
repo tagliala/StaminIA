@@ -161,7 +161,7 @@ foreach ($lang_array as $key => $val) {
                 <h2 class="accordion-header">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
                     <?= icon('gear') ?>
-                    <?= localize("Settings") ?>
+                    <span class="ms-2"><?= localize("Settings") ?></span>
                   </button>
                 </h2>
                 <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#accordion-settings">
@@ -236,7 +236,7 @@ foreach ($lang_array as $key => $val) {
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCHPP" aria-expanded="false" aria-controls="collapseCHPP">
                   <?= icon('star') ?>
-                  <?= localize("CHPP Mode") ?>
+                  <span class="ms-2"><?= localize("CHPP Mode") ?></span>
                 </button>
               </h2>
               <div id="collapseCHPP" class="accordion-collapse collapse" data-bs-parent="#accordion-chpp">
@@ -246,10 +246,10 @@ foreach ($lang_array as $key => $val) {
                   } ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group d-flex" role="group">
                       <button class="btn btn-sm btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><?= icon('triangle-exclamation') ?></button>
-                      <button class="btn btn-sm btn-secondary" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn btn-sm btn-secondary flex-grow-1" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
-                    <div id="CHPP_Results" class="d-none shy">
+                    <div id="CHPP_Results" class="d-none text-body-secondary">
                       <p id="CHPP_Status_Description"></p>
                     </div>
 
@@ -501,7 +501,7 @@ foreach ($lang_array as $key => $val) {
                       </td>
                       <td>
                         <div class="toggle-check">
-                          <input class="btn-check" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
+                          <input class="btn-check motherclub-bonus-checkbox" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" autocomplete="off">
                           <label class="btn btn-secondary btn-sm" for="Staminia_Player_1_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
                             <span class="toggle-check-icon"></span>
                             <span class="toggle-check-label"><?= localize("Mother club bonus"); ?></span>
@@ -510,7 +510,7 @@ foreach ($lang_array as $key => $val) {
                       </td>
                       <td>
                         <div class="toggle-check">
-                          <input class="btn-check" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
+                          <input class="btn-check motherclub-bonus-checkbox" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" autocomplete="off">
                           <label class="btn btn-secondary btn-sm" for="Staminia_Player_2_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
                             <span class="toggle-check-icon"></span>
                             <span class="toggle-check-label"><?= localize("Mother club bonus"); ?></span>

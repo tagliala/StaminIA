@@ -469,8 +469,19 @@ const fillForm = () => {
 const checkMotherClubBonus = () => {
   for (const playerId of [1, 2]) {
     const status = document.querySelector(`input[name=Staminia_Player_${playerId}_MotherClubBonus]`).checked;
-    document.querySelector(`select[name=Staminia_Simple_Player_${playerId}_Loyalty]`).disabled = status;
-    document.querySelector(`input[name=Staminia_Advanced_Player_${playerId}_Loyalty]`).disabled = status;
+    const simpleSelect = document.querySelector(`select[name=Staminia_Simple_Player_${playerId}_Loyalty]`);
+    const advancedInput = document.querySelector(`input[name=Staminia_Advanced_Player_${playerId}_Loyalty]`);
+    if (status) {
+      simpleSelect.dataset.savedValue = simpleSelect.value;
+      advancedInput.dataset.savedValue = advancedInput.value;
+      simpleSelect.value = "20";
+      advancedInput.value = "20.00";
+    } else {
+      if (simpleSelect.dataset.savedValue !== undefined) simpleSelect.value = simpleSelect.dataset.savedValue;
+      if (advancedInput.dataset.savedValue !== undefined) advancedInput.value = advancedInput.dataset.savedValue;
+    }
+    simpleSelect.disabled = status;
+    advancedInput.disabled = status;
   }
 };
 

@@ -83,42 +83,8 @@ html.dark-mode .theme-icon-moon { display: none; }
 }
 
 // ============================================================
-// Typography
-// ============================================================
-.mainTitle {
-  font-size: $h5-font-size;
-  margin: 0;
-  line-height: $h5-font-size * 1.2;
-}
-
-.mainTitle .sub {
-  font-size: $font-size-base;
-  font-weight: $font-weight-normal;
-}
-
-h3 {
-  margin: 0;
-  font-size: $h5-font-size;
-  line-height: $h5-font-size * 1.5;
-}
-
-// ============================================================
 // Settings panel
 // ============================================================
-
-// Custom green for checked switches — preserve Staminia green
-$staminia-green: #51a351;
-$staminia-green-light: #62c462;
-
-.form-check-input:checked {
-  background-color: $staminia-green;
-  border-color: $staminia-green;
-}
-
-.form-check-input:focus {
-  border-color: $staminia-green-light;
-  box-shadow: 0 0 0 $focus-ring-width rgba($staminia-green, .25);
-}
 
 // ============================================================
 // Form
@@ -268,10 +234,6 @@ option.isSuspended {
   margin-left: auto;
 }
 
-.shy {
-  color: var(--bs-secondary-color);
-}
-
 // ============================================================
 // Staminia tables
 // ============================================================
@@ -391,9 +353,9 @@ footer {
 // ============================================================
 // CHPP status button
 // ============================================================
-.btn-status {
-  width: 1.75rem;
+.btn-group > .btn-status {
   flex: 0 0 1.75rem;
+  max-width: 1.75rem;
   padding-inline: 0;
 }
 
