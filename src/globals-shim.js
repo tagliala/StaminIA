@@ -1,9 +1,7 @@
-// Ensure jQuery and Bootstrap are available as globals before any
-// module that references bare `jQuery` or `bootstrap` identifiers.
+// Ensure Bootstrap is available as a global before any
+// module that references bare `bootstrap` identifiers.
 // esbuild --inject replaces those bare references with the named
 // exports below, and the globals are set during module init.
-import jQuery from "jquery";
-window.$ = window.jQuery = jQuery;
 
 import Alert from "bootstrap/js/src/alert";
 import Collapse from "bootstrap/js/src/collapse";
@@ -15,4 +13,4 @@ import Tooltip from "bootstrap/js/src/tooltip";
 const bootstrap = { Alert, Collapse, Dropdown, Modal, Tab, Tooltip };
 window.bootstrap = bootstrap;
 
-export { jQuery, bootstrap };
+export { bootstrap };

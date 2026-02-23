@@ -33,6 +33,7 @@ Staminia.messages = {
   copied_to_clipboard: "Kimásolva",
   validation_error: "Kérlek javítsd az alábbi hibát:",
   validation_errors: Staminia.format("Kérlek javítsd az alábbi {0} hibát:"),
+  validation_range: Staminia.format("Kérlek, adj meg egy értéket {0} és {1} között."),
   refresh_throttle: Staminia.format("Adatok nem frissültek. Kérlek várj {0} másodpercet a következő kérésig."),
   status_ok: "OK",
   status_error: "Hiba",

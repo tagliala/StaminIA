@@ -767,10 +767,6 @@ foreach ($lang_array as $key => $val) {
           echo "false";
       } ?>;
 <?php
-$file = "node_modules/jquery-validation/dist/localization/messages_" . localize("validateLang") . ".js";
-if (is_file($file)) {
-    include($file);
-}
 $file = "js/localization/messages_" . localize("lang") . ".js";
 $file_en = "js/localization/messages_en-US.js";
 if (is_file($file)) {

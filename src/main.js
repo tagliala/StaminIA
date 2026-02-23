@@ -130,45 +130,54 @@ const checkIframe = () => {
   }
 };
 
-$(FORM_ID).validate({
-  ignore: ".ignore",
-  errorContainer: "#formErrors",
-  errorLabelContainer: "#formErrorsUl",
-  errorElement: "li",
-  focusInvalid: true,
-  showErrors: function(errorMap, errorList) {
-    if (this.numberOfInvalids() === 0) {
-      document.getElementById("formErrors")?.remove();
+const validateFormField = (el) => {
+  if (el.disabled || el.classList.contains("ignore")) {
+    el.classList.remove("is-invalid");
+    delete el.dataset.validationMessage;
+    return;
+  }
+  if (el.dataset.validate === "range") {
+    const val = parseFloat(String(el.value).replace(",", "."));
+    const min = Number(el.dataset.rangeMin);
+    const max = Number(el.dataset.rangeMax);
+    if (isNaN(val) || val < min || val > max) {
+      el.classList.add("is-invalid");
+      el.dataset.validationMessage = Staminia.messages.validation_range(min, max);
+      return;
     }
-    this.defaultShowErrors();
-  },
-  errorPlacement: (error, element) => null,
-  invalidHandler: (form, validator) => {
-    const errors = validator.numberOfInvalids();
-    if (errors) {
-      let message;
-      if (errors === 1) message = Staminia.messages.validation_error;
-      if (errors > 1) message = Staminia.messages.validation_errors(errors);
-      document.getElementById("formErrors")?.remove();
-      if (validator.errorList.length > 0) {
-        document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
-          id: "formErrors",
-          type: "error",
-          title: message,
-          body: '<ul id="formErrorsUl"></ul>'
-        }));
-        const errorListEl = document.getElementById("formErrorsUl");
-        for (const error of validator.errorList) {
-          errorListEl.insertAdjacentHTML("beforeend", `<li>${error.element.dataset.fieldName}: ${error.message}</li>`);
-        }
-      } else {
-        const formErrorsEl = document.getElementById("formErrors");
-        if (formErrorsEl) bootstrap.Alert.getOrCreateInstance(formErrorsEl).close();
-      }
-      validator.focusInvalid();
-    }
-  },
-  submitHandler: (form) => {
+  }
+  el.classList.remove("is-invalid");
+  delete el.dataset.validationMessage;
+};
+
+const validateForm = () => {
+  const allFields = document.querySelectorAll(`${FORM_ID} input, ${FORM_ID} select`);
+  allFields.forEach(validateFormField);
+  const errors = [...allFields].filter(
+    el => !el.disabled && !el.classList.contains("ignore") && el.classList.contains("is-invalid")
+  );
+  if (errors.length > 0) {
+    document.getElementById("formErrors")?.remove();
+    const title = errors.length === 1
+      ? Staminia.messages.validation_error
+      : Staminia.messages.validation_errors(errors.length);
+    const items = errors.map(el => `<li>${el.dataset.fieldName}: ${el.dataset.validationMessage}</li>`).join("");
+    document.getElementById("AlertsContainer").insertAdjacentHTML("beforeend", createAlert({
+      id: "formErrors",
+      type: "error",
+      title,
+      body: `<ul id="formErrorsUl">${items}</ul>`
+    }));
+    errors[0].focus();
+    return false;
+  }
+  document.getElementById("formErrors")?.remove();
+  return true;
+};
+
+document.querySelector(FORM_ID).addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
     document.getElementById("calculate").classList.add("disabled");
     resetAndHideTabs();
     document.getElementById("AlertsContainer").innerHTML = "";
@@ -307,19 +316,8 @@ $(FORM_ID).validate({
     // Scroll up if needed
     scrollUpToResults();
 
-    // Reset button status
-    document.getElementById("calculate").classList.remove("disabled");
-  },
-  highlight: (element, errorClass, validClass) => {
-    const div = element.closest("div");
-    div.classList.add(errorClass);
-    div.classList.remove(validClass);
-  },
-  unhighlight: (element, errorClass, validClass) => {
-    const div = element.closest("div");
-    div.classList.remove(errorClass);
-    div.classList.add(validClass);
-  }
+  // Reset button status
+  document.getElementById("calculate").classList.remove("disabled");
 });
 
 // GUP
@@ -511,7 +509,7 @@ const formSerialize = () => {
 
 // Stamin.IA! Get Link Button
 document.getElementById("getLink").addEventListener("click", (e) => {
-  if (!$(FORM_ID).validate().form()) {
+  if (!validateForm()) {
     document.getElementById("generatedLink")?.remove();
     return;
   }
@@ -571,7 +569,7 @@ document.getElementById("switchPlayers").addEventListener("click", () => {
     p2Field.checked = p1Checked;
   });
   checkMotherClubBonus();
-  $(FORM_ID).validate().form();
+  validateForm();
 });
 
 document.getElementById("Staminia_Options_AdvancedMode").addEventListener("change", function(e) {
@@ -592,7 +590,8 @@ document.querySelectorAll('input[name="Staminia_Options_Predictions_Type"]').for
 });
 
 document.querySelectorAll('input[data-validate="range"], select[data-validate="range"]').forEach(function(el) {
-  $(el).rules("add", { range: [Number(el.dataset.rangeMin), Number(el.dataset.rangeMax)] });
+  el.addEventListener("change", () => validateFormField(el));
+  el.addEventListener("input", () => validateFormField(el));
 });
 
 // Hide alerts when showing credits and redraw charts if needed
@@ -621,6 +620,8 @@ document.getElementById("resetApp").addEventListener("click", (e) => {
   document.getElementById("AlertsContainer").innerHTML = "";
   resetAndHideTabs();
 
+  document.querySelectorAll(`${FORM_ID} .is-invalid`).forEach(el => el.classList.remove("is-invalid"));
+
   checkMotherClubBonus();
   disableAdvancedMode();
   setupCHPPPlayerFields();
@@ -628,20 +629,6 @@ document.getElementById("resetApp").addEventListener("click", (e) => {
   e.preventDefault();
 });
 
-$.validator.methods.range = function(value, element, param) {
-  const globalizedValue = value.replace(",", ".");
-  return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
-};
-
-$.validator.methods.number = function(value, element) {
-  return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
-};
-
-$.validator.addMethod("position", function(value, element, params) {
-  return this.optional(element) || (value >= params[0] && value <= params[1]);
-}, jQuery.validator.messages.required);
-
-$(document.getElementById("Staminia_Advanced_Position")).rules("add", { position: [0, 19] });
 
 const fetchCHPP = async (refresh = false) => {
   // beforeSend

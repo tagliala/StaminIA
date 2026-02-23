@@ -33,6 +33,7 @@ Staminia.messages = {
   copied_to_clipboard: "Copiato!",
   validation_error: "Correggi il seguente errore:",
   validation_errors: Staminia.format("Correggi i seguenti {0} errori:"),
+  validation_range: Staminia.format("Inserisci un valore compreso tra {0} e {1}."),
   refresh_throttle: Staminia.format("I dati non sono stati aggiornati. Attendere {0} secondi prima della prossima richiesta."),
   status_ok: "OK",
   status_error: "Errore",
