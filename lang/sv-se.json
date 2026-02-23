@@ -12,7 +12,7 @@
    "SHORT_HELP": "Var vänlig och fyll i formuläret så kommer Stamin.IA! räkna ut i vilken minut du bör planera bytet mellan <b>%s</b> och <b>%s</b> för att  maximera bidraget till laget.",
    "LONG_HELP": "<div class=\"alert alert-block alert-error fade in\"><a href=\"#\" data-dismiss=\"alert\" class=\"close\">&times;</a><h4 class=\"alert-heading\">This guide is not updated</h4></div>Funktionaliteten är väldigt enkel: Fyll i formuläret med den information som krävs för <b>Spelare 1</b> (Spelaren som är med i den inledande uppställningen, från start) och <b>Spelare 2</b> (spelaren som senare byts in och tar Spelare 1 plats ).<br/><br/>Den <b>avancerade kalkyleringen</b> ger mer precisa resultat eftersom den tar spelarens alla förmågor i beaktning enligt spelarens position på planen. Avancerat läge är nödvändigt för dubbeltränade spelare.<br/><br/>Efter att ha fyllt i formuläret, klicka på <b>Räkna ut</b>.<br/><br/>Resultatet kommer visa den bästa tiden (En viss minut, eller ett spann) där ett byte bör ske, för att uppnå det maximala bidraget till ditt lag från båda spelarna.<br/><br/>I tabellen nedanför resultaten (som endast är synligt om jämförelse-alternativet är aktiverat) finner du alla detaljer kring uträkningen : för varje minut av matchen, visas spelarnas sammanlagda bidrag, såväl som procenten, deras individuella bidrag, etc.<br/><ul><li><b>MIN</b>: Minimalt bidrag</li><li><b>MAX</b>: Maximalt bidrag</li><li><b>~ 1%</b>: Mindre än 1% skillnad till det maximala bidraget (kan vara användbart att sätta bytet lite före/efter om du vill ge extra rutin till spelarna eller om du är rädd för skador, utan att förlora allt för mycket av optimiseringen)</li><li><b>S1 låg kondition &darr;</b>: Om Spelare 1 spelar denna minut och framåt, finns det risk för ett negativt Special Event på grund av hans låga kondition.</li><li><b>S2 låg kondition &uarr;</b>: Om Spelare 2 spelar denna minut eller tidigare, finns det risk för negativt Special Event på grund av hans låga kondition</li></ul><b>OBS</b>: Stamin.IA! tar inte med skador i beräkningen. Det ska vara en självklarhet att skaderisken är direkt proportionell till hur många minuter en spelare är på planen. Det är också givet att skador oförutsägbara.<br/>",
 
-   "Close": "",
+   "Close": "Stäng",
    "Help": "Hjälp",
    "Hide help...": "Göm hjälp...",
    "Show help...": "Visa hjälp...",
@@ -37,8 +37,8 @@
    "Loyalty": "",
    "Mother club bonus": "",
 
-   "Show charts": "",
-   "Charts": "",
+   "Show charts": "Visa diagram",
+   "Charts": "Diagram",
    "Show contributions table": "",
    "Pressing": "",
    "Advanced strength calculation": "",
@@ -48,9 +48,9 @@
    "Show contributions table": "Visa bidragstabell",
    "Pressing": "",
 
-   "Sort by": "",
-   "Shirt Number": "",
-   "Name": "",
+   "Sort by": "Sortera efter",
+   "Shirt Number": "Tröjnummer",
+   "Name": "Namn",
    "Skill": "",
 
    "non-existent": "",

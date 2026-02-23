@@ -12,7 +12,7 @@
    "SHORT_HELP": "Veuillez compléter le formulaire et Stamin.IA! va calculer à quelle minute vous devriez prévoir le remplacement entre <b>%s</b> et <b>%s</b> pour obtenir une contribution maximale.",
    "LONG_HELP": "<div class=\"alert alert-block alert-error fade in\"><a href=\"#\" data-dismiss=\"alert\" class=\"close\">&times;</a><h4 class=\"alert-heading\">This guide is not updated</h4></div>L'utilisation de cet outil est très simple: remplissez le formulaire en fournissant les informations requises pour <b>Joueur 1</b> (joueur aligné dans l'équipe de départ, au début du match) et <b>Joueur 2</b> (joueur qui entre en jeu plus tard, remplaçant Joueur 1 en cours de match).<br/><br/>Le <b>Calcul avancé de la force</b> fournit des résultats plus précis, étant donné qu'il prend en compte toutes les caractéristiques utilisées par les joueurs, en fonction de leur position sur le terrain. Cette option est requise pour les joueurs multi-caractéristiques.<br/><br/>Après avoir rempli le formulaire, cliquez sur <b>Calculer</b>.<br/><br/>Le résultat va désigner le moment idéal (une minute précise ou un intervalle de minutes) pour effectuer le remplacement, afin d'obtenir la contribution maximale des deux joueurs pour l'équipe.<br/><br/>Dans la table sous les résultats (visible uniquement si l'option correspondante est cochée), vous trouverez tous les détails du calcul: pour chaque minute du match, la contribution totale des joueurs est affichée, ainsi que le pourcentage, leur contribution individuelle, etc.<br/><ul><li><b>MIN</b>: Contribition minimum</li><li><b>MAX</b>: Contribution maximum</li><li><b>~ 1%</b>: Moins d'1% d'écart avec la contribution maximale (utile pour effectuer le remplacement un peu avant/après si vous voulez donner plus d'expérience aux joueurs ou si vous craignez des blessures, sans trop perdre en terme de contribution)</li><li><b>Mauvaise endurance J1 &darr;</b>: Si Joueur 1 reste en jeu après cette minute, il a une chance de subir un événement spécial négatif à cause de son endurance basse</li><li><b>mauvais endurance J2 &uarr;</b>: Si Joueur 2 entre en jeu avant cette minute, il a une chance de subir un événement spécial négatif à cause de son endurance basse</li></ul><b>REMARQUE</b>: Stamin.IA! ne prend pas en compte les blessures. Il est évident que le risque de blessure est directement proportionnel au nombre de minutes pendant lesquelle un joueur reste sur le terrain et il est également évident que les blessure ne sont pas prévisibles. De plus, Staminia ne prend pas en compte le pressing (la tactique pressing a une influence sur l'endurance du joueur).<br/>",
 
-   "Close": "",
+   "Close": "Fermer",
    "Help": "Aide",
    "Hide help...": "Cacher l'aide...",
    "Show help...": "Monter l'aide...",
@@ -37,20 +37,20 @@
    "Loyalty": "",
    "Mother club bonus": "",
 
-   "Show charts": "",
-   "Charts": "",
+   "Show charts": "Afficher les graphiques",
+   "Charts": "Graphiques",
    "Show contributions table": "",
    "Pressing": "",
    "Advanced strength calculation": "",
-   "Predictions Type": "",
+   "Predictions Type": "Type de prédiction",
 
    "Advanced strength calculation": "Calcul avancé de la force",
    "Show contributions table": "Montrer la table des contributions",
    "Pressing": "",
 
-   "Sort by": "",
-   "Shirt Number": "",
-   "Name": "",
+   "Sort by": "Trier par",
+   "Shirt Number": "Numéro de maillot",
+   "Name": "Nom",
    "Skill": "",
 
    "non-existent": "",
