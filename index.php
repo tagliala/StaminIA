@@ -76,7 +76,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     ================================================== -->
     <nav class="navbar navbar-expand-md fixed-top bg-success-subtle">
       <div class="container-fluid">
-        <a class="navbar-brand"><span id="staminia-logo"></span>Stamin.IA!</a>
+        <a class="navbar-brand position-relative main-navbar-brand"><span class="staminia-logo"></span>Stamin.IA!</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -167,7 +167,7 @@ foreach ($lang_array as $key => $val) {
                         <input type="checkbox" class="btn-check" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" autocomplete="off" checked>
                         <label class="btn btn-secondary btn-sm" for="Staminia_Options_OnlySecondHalf" title="<?= localize("Only calculate the second half") ?>">
                           <span class="toggle-check-icon"></span>
-                          <span><?= localize("Only calculate the second half") ?></span>
+                          <span class="toggle-check-label"><?= localize("Only calculate the second half") ?></span>
                         </label>
                       </div>
 
@@ -175,7 +175,7 @@ foreach ($lang_array as $key => $val) {
                         <input type="checkbox" class="btn-check" name="Staminia_Options_Charts" id="Staminia_Options_Charts" autocomplete="off" checked>
                         <label class="btn btn-secondary btn-sm" for="Staminia_Options_Charts" title="<?= localize("Show charts") ?>">
                           <span class="toggle-check-icon"></span>
-                          <span><?= localize("Show charts") ?></span>
+                          <span class="toggle-check-label"><?= localize("Show charts") ?></span>
                         </label>
                       </div>
 
@@ -183,7 +183,7 @@ foreach ($lang_array as $key => $val) {
                         <input type="checkbox" class="btn-check" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" autocomplete="off" checked>
                         <label class="btn btn-secondary btn-sm" for="Staminia_Options_VerboseMode" title="<?= localize("Show contributions table") ?>">
                           <span class="toggle-check-icon"></span>
-                          <span><?= localize("Show contributions table") ?></span>
+                          <span class="toggle-check-label"><?= localize("Show contributions table") ?></span>
                         </label>
                       </div>
 
@@ -191,7 +191,7 @@ foreach ($lang_array as $key => $val) {
                         <input type="checkbox" class="btn-check" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing" autocomplete="off">
                         <label class="btn btn-secondary btn-sm" for="Staminia_Options_Pressing" title="<?= localize("Pressing") ?>">
                           <span class="toggle-check-icon"></span>
-                          <span><?= localize("Pressing") ?></span>
+                          <span class="toggle-check-label"><?= localize("Pressing") ?></span>
                         </label>
                       </div>
 
@@ -199,7 +199,7 @@ foreach ($lang_array as $key => $val) {
                         <input type="checkbox" class="btn-check" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode" autocomplete="off">
                         <label class="btn btn-secondary btn-sm" for="Staminia_Options_AdvancedMode" title="<?= localize("Advanced strength calculation") ?>">
                           <span class="toggle-check-icon"></span>
-                          <span><?= localize("Advanced strength calculation") ?></span>
+                          <span class="toggle-check-label"><?= localize("Advanced strength calculation") ?></span>
                         </label>
                       </div>
                     </div>
@@ -500,7 +500,7 @@ foreach ($lang_array as $key => $val) {
                           <input class="btn-check" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
                           <label class="btn btn-secondary btn-sm" for="Staminia_Player_1_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
                             <span class="toggle-check-icon"></span>
-                            <span><?= localize("Mother club bonus"); ?></span>
+                            <span class="toggle-check-label"><?= localize("Mother club bonus"); ?></span>
                           </label>
                         </div>
                       </td>
@@ -509,7 +509,7 @@ foreach ($lang_array as $key => $val) {
                           <input class="btn-check" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
                           <label class="btn btn-secondary btn-sm" for="Staminia_Player_2_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
                             <span class="toggle-check-icon"></span>
-                            <span><?= localize("Mother club bonus"); ?></span>
+                            <span class="toggle-check-label"><?= localize("Mother club bonus"); ?></span>
                           </label>
                         </div>
                       </td>

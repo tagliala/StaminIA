@@ -34,6 +34,10 @@
 // Vendored flags
 @import "../css/flags.css";
 
+body {
+  padding-top: 4.5rem;
+}
+
 // ============================================================
 // Staminia Icon (.si) — inline SVG icon base
 // ============================================================
@@ -58,8 +62,14 @@
 html.dark-mode .theme-icon-sun { display: inline-block; }
 html.dark-mode .theme-icon-moon { display: none; }
 
-#staminia-logo {
-  display: inline-block;
+.main-navbar-brand {
+  padding-left: 37px;
+}
+
+.staminia-logo {
+  position: absolute;
+  top: $spacer * .5;
+  left: $spacer * .5;
   height: 27px;
   width: 27px;
   vertical-align: middle;
@@ -70,21 +80,6 @@ html.dark-mode .theme-icon-moon { display: none; }
 // ============================================================
 // Layout
 // ============================================================
-@include media-breakpoint-up(lg) {
-  body {
-    padding-top: 56px;
-  }
-
-  #main {
-    padding: $spacer * .625;
-  }
-}
-
-@include media-breakpoint-down(lg) {
-  #main {
-    padding-top: 66px;
-  }
-}
 
 @include media-breakpoint-up(md) {
   .accordion-button::after {
@@ -115,13 +110,6 @@ h3 {
 // ============================================================
 // Settings panel
 // ============================================================
-.staminia-button-panel .form-check {
-  margin: ($spacer * .375) 0;
-}
-
-.staminia-button-panel .btn-group-advanced .btn {
-  width: 50%;
-}
 
 // Custom green for checked switches — preserve Staminia green
 $staminia-green: #51a351;
@@ -447,7 +435,7 @@ footer {
     overflow: hidden;
   }
 
-  span {
+  &-label {
     margin-left: .5rem;
     overflow: hidden;
     text-overflow: ellipsis;
