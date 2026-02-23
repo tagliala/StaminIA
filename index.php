@@ -96,28 +96,30 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" href="#" role="button" aria-expanded="false">
                   <span id="menuLoginTitle"><?= localize("CHPP"); ?></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end" id="loginDropdown">
-                  <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
-                    <p><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
-                    <fieldset>
-                      <div class="d-flex align-items-center gap-2">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" name="permanent" id="chppRememberMe" <?php if ($permanent) {
-                              echo "checked=\"checked\"";
-                          } ?>/>
-                          <label class="form-check-label" for="chppRememberMe"><?php echo localize("Remember me"); ?></label>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <div id="loginDropdown">
+                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                      <p class="small text-body-secondary mb-2"><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
+                      <fieldset>
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="permanent" id="chppRememberMe" <?php if ($permanent) {
+                                echo "checked=\"checked\"";
+                            } ?>/>
+                            <label class="form-check-label" for="chppRememberMe"><?php echo localize("Remember me"); ?></label>
+                          </div>
+                          <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary" id="CHPPLink"><?= localize("Login"); ?></button>
-                      </div>
-                    </fieldset>
-                  </form>
-                  <small><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer. <b>DO NOT USE</b> this option if you are using a public computer (i.e. internet points)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></small>
+                      </fieldset>
+                    </form>
+                    <div class="alert alert-warning small mb-0 mt-2 p-2"><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></div>
+                  </div>
+                  <ul class="list-unstyled mb-0 d-none" id="loggedInDropdown">
+                    <li>
+                      <a class="dropdown-item" id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
+                    </li>
+                  </ul>
                 </div>
-                <ul class="dropdown-menu dropdown-menu-end d-none" id="loggedInDropdown">
-                  <li>
-                    <a class="dropdown-item" id="CHPP_Revoke_Auth_Link" href="chpp/chpp_revokeauth.php"><?= localize("Revoke authorization"); ?></a>
-                  </li>
-                </ul>
               </li>
             <?php } ?>
             <li class="nav-item dropdown" id="dropdownLanguages">
