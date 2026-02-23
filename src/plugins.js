@@ -4,10 +4,15 @@ const Staminia = window.Staminia;
 const copyToClipboard = (text, button) => {
   if (!navigator.clipboard) return;
 
-  const originalText = button.textContent;
+  const originalHTML = button.innerHTML;
+  const tooltip = bootstrap.Tooltip.getInstance(button);
   navigator.clipboard.writeText(text).then(() => {
-    button.textContent = Staminia.messages.copied_to_clipboard;
-    setTimeout(() => { button.textContent = originalText; }, 2000);
+    button.innerHTML = Staminia.icons.check;
+    if (tooltip) tooltip.setContent({ ".tooltip-inner": Staminia.messages.copied_to_clipboard });
+    setTimeout(() => {
+      button.innerHTML = originalHTML;
+      if (tooltip) tooltip.setContent({ ".tooltip-inner": Staminia.messages.copy_to_clipboard });
+    }, 2000);
   });
 };
 

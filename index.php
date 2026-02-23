@@ -264,10 +264,10 @@ foreach ($lang_array as $key => $val) {
         <div class="col-lg-9">
           <ul class="nav nav-tabs mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="#tabPlayersInfo" data-bs-toggle="tab" role="tab"><?= icon('user') ?> <span class="d-none d-sm-inline"><?= localize("Players Info") ?></span></a></li>
-            <li class="nav-item d-none" id="tabChartsNav"><a class="nav-link" href="#tabCharts" data-bs-toggle="tab" role="tab"><?= icon('chart-bar') ?> <span class="d-none d-sm-inline"><?= localize("Charts") ?></span></a></li>
+            <li class="nav-item d-none" id="tabChartsNav"><a class="nav-link" href="#tabCharts" data-bs-toggle="tab" role="tab"><?= icon('chart-line') ?> <span class="d-none d-sm-inline"><?= localize("Charts") ?></span></a></li>
             <li class="nav-item d-none" id="tabContributionsNav"><a class="nav-link" href="#tabContributions" data-bs-toggle="tab" role="tab"><?= icon('rectangle-list') ?> <span class="d-none d-sm-inline"><?= localize("Contributions table") ?></span></a></li>
             <li class="nav-item d-none" id="tabDebugNav"><a class="nav-link" href="#tabDebug" data-bs-toggle="tab" role="tab">Debug</a></li>
-            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('circle-plus') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
+            <li class="nav-item" id="tabExtraNav"><a class="nav-link" href="#tabExtra" data-bs-toggle="tab" role="tab"><?= icon('tools') ?> <span class="d-none d-sm-inline"><?= localize("Extra") ?></span></a></li>
             <li class="nav-item credits"><a class="nav-link" href="#tabCredits" data-bs-toggle="tab" role="tab"><?= icon('gift') ?> <span class="d-none d-sm-inline"><?= localize("Credits") ?></span></a></li>
           </ul>
 
@@ -644,22 +644,6 @@ foreach ($lang_array as $key => $val) {
                     </tr>
                   </tbody>
                 </table>
-<?php if (defined('GOOGLE_AD_CLIENT')) { ?>
-                <!-- Advertising -->
-                <div class="advertising advertising-leaderboard">
-                  <script type="text/javascript">
-                    google_ad_client = "<?= GOOGLE_AD_CLIENT ?>";
-                    /* Stamin.IA! 728x90 */
-                    google_ad_slot = "5365994614";
-                    google_ad_width = 728;
-                    google_ad_height = 90;
-                    //-->
-                    </script>
-                    <script type="text/javascript"
-                    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-                    </script>
-                </div>
-<?php } ?>
                 <div class="text-center form-actions">
                   <button type="submit" id="calculate" class="btn btn-lg btn-primary"><?= icon('wand-magic-sparkles') ?> <?= localize("Calculate") ?></button>
                   <button type="button" id="switchPlayers" class="btn btn-lg btn-secondary"><?= icon('shuffle') ?> <?= localize("Switch players") ?></button>
@@ -727,12 +711,10 @@ foreach ($lang_array as $key => $val) {
               </p>
               <h3><?= localize("Nerd thanks"); ?>:</h3>
               <p>
-                <a href="http://getbootstrap.com/">Twitter Bootstrap's team</a>,
-                <a href="http://html5boilerplate.com/">HTML5 Bolierplate's team</a>,
-                <a href="http://github.com/jzaefferer/jquery-validation">jzaefferer/jquery-validation</a>,
-                <a href="http://github.com/flot/flot">flot/flot</a>,
-                <a href="http://fontawesome.io">Font Awesome</a>,
-                <a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a>
+                <a href="https://getbootstrap.com/">Twitter Bootstrap's team</a>,
+                <a href="https://www.chartjs.org/">Chart.js</a>,
+                <a href="https://fontawesome.com/">Font Awesome</a>,
+                <a href="https://github.com/legacy-icons/famfamfam-flags">Mark James</a>
               </p>
             </div>
 
@@ -768,9 +750,9 @@ foreach ($lang_array as $key => $val) {
           <li class="list-inline-item d-block d-sm-inline-block"><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
           <li class="list-inline-item d-block d-sm-inline-block"><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
           <?php if (CHPP_APP_ID != "") { ?>
-            <li class="list-inline-item d-block d-sm-inline-block"><?= icon('star') ?> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
+            <li class="list-inline-item d-block d-sm-inline-block"><?= icon('star') ?> <a href="https://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
           <?php } ?>
-          <li class="list-inline-item d-block d-sm-inline-block"><?= icon('github') ?> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
+          <li class="list-inline-item d-block d-sm-inline-block"><?= icon('github') ?> <a href="https://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
         </ul>
       </footer> <!-- Footer End -->
 

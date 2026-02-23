@@ -42,8 +42,8 @@ body {
 // Staminia Icon (.si) — inline SVG icon base
 // ============================================================
 .si {
-  width: 1em;
-  height: 1em;
+  width: 1rem;
+  height: 1rem;
   fill: currentcolor;
   vertical-align: -0.125em;
   display: inline-block;
@@ -429,6 +429,7 @@ footer {
 
   .btn {
     display: flex;
+    align-items: center;
     overflow: hidden;
   }
 
@@ -446,7 +447,7 @@ footer {
     height: 1.5rem;
     border-radius: $border-radius-sm;
     background: $danger;
-    position: absolute;
+    position: relative;
     transition: $transition-base;
 
     &::before,

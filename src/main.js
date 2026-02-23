@@ -516,7 +516,7 @@ document.getElementById("getLink").addEventListener("click", (e) => {
 
   link += `params=${formSerialize()}`;
 
-  const copyButton = '<button class="btn btn-sm" id="copyLinkToClipboard" type="button">' + Staminia.messages.copy_to_clipboard + '</button>';
+  const copyButton = `<button class="btn btn-sm btn-secondary" id="copyLinkToClipboard" type="button" data-bs-toggle="tooltip" data-bs-title="${Staminia.messages.copy_to_clipboard}">${Staminia.icons.clipboard}</button>`;
   const body = link;
 
   const linkBody = document.getElementById("generatedLinkBody");
@@ -533,6 +533,7 @@ document.getElementById("getLink").addEventListener("click", (e) => {
 
   const copyBtn = document.getElementById("copyLinkToClipboard");
   if (copyBtn) {
+    if (!bootstrap.Tooltip.getInstance(copyBtn)) new bootstrap.Tooltip(copyBtn);
     copyBtn.onclick = () => {
       Staminia.copyToClipboard(link, copyBtn);
     };
