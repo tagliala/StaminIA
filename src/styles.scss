@@ -1,12 +1,35 @@
 // StaminIA — SCSS bundle entry point
-// Import Bootstrap SCSS source (variables, mixins, then full framework)
+// Import Bootstrap SCSS source (variables, mixins, then components)
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/variables-dark";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
-@import "bootstrap/scss/bootstrap";
+
+// Layout & components (only what StaminIA uses)
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+
+// Helpers & utilities
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
 
 // Vendored flags
 @import "../css/flags.css";
@@ -382,64 +405,11 @@ footer {
   }
 }
 
-@include media-breakpoint-up(md) {
-  footer li {
-    display: inline-block;
-  }
-
-  footer li + li {
-    margin-left: $spacer * .3125;
-    border-left: $border-width solid var(--bs-border-color);
-    padding-left: $spacer * .3125;
-  }
-}
-
-// ============================================================
-// Mother club bonus
-// ============================================================
-.btn-motherclub-bonus {
-  width: 50px;
-  display: inline-flex;
-  align-items: center;
-  gap: $spacer * .25;
-}
-
 // ============================================================
 // CHPP status button
 // ============================================================
-#CHPP_Refresh_Data_Status {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  font-size: $h5-font-size;
-  line-height: $font-size-base;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#Staminia_Options_CHPP > .btn-group {
-  width: 100%;
-}
-
-#CHPP_Status_Description {
-  margin: 0;
-}
-
-.btn-chpp {
-  position: relative;
-}
-
-.btn-chpp .btn-status {
-  position: absolute;
-  z-index: 1;
-}
-
-#CHPP_Refresh_Data {
-  z-index: 0;
-  width: 100%;
-  padding-left: 36px;
-  text-align: left;
+.btn-status {
+  width: 1.75rem;
 }
 
 // ============================================================
@@ -469,30 +439,70 @@ footer {
   box-sizing: border-box;
 }
 
-// ============================================================
-// Spacer / Advertising
-// ============================================================
-.spacer {
-  margin-bottom: $spacer * 1.25;
-}
+.toggle-check {
+  position: relative;
 
-.advertising {
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: $spacer * 1.25;
-  border: $border-width solid var(--bs-border-color);
-  padding: $spacer * .3125;
-  box-sizing: border-box;
-}
-
-@media (max-width: 1023px) {
-  .advertising-leaderboard {
-    display: none;
+  .btn {
+    display: flex;
+    overflow: hidden;
   }
-}
 
-@media (min-width: 1024px) {
-  .advertising {
-    text-align: center;
+  span {
+    margin-left: .5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Colored square icon
+  &-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: $border-radius-sm;
+    background: $danger;
+    position: absolute;
+    transition: $transition-base;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 65%;
+      transition: $transition-base;
+    }
+
+    // X — shown when unchecked
+    &::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    // Check — shown when checked
+    &::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  // Checked state — sibling selector, no :has() needed
+  .btn-check:checked + .btn {
+    .toggle-check-icon {
+      background: $success;
+
+      &::before {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      &::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
   }
 }

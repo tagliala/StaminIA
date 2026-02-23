@@ -151,7 +151,7 @@ foreach ($lang_array as $key => $val) {
         <div class="col-lg-3 side-panel" id="side-panel">
 
           <!-- Staminia Options Start -->
-          <div class="accordion" id="accordion-settings">
+          <div class="accordion mb-3" id="accordion-settings">
             <form id="optionForm" action="javascript:{}" method="post">
               <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -163,38 +163,57 @@ foreach ($lang_array as $key => $val) {
                 <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#accordion-settings">
                   <div class="accordion-body">
                     <div class="staminia-button-panel">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" checked>
-                        <label class="form-check-label" for="Staminia_Options_OnlySecondHalf" title="<?= localize("Only calculate the second half") ?>"><?= localize("Only calculate the second half") ?></label>
+                      <div class="toggle-check mb-2">
+                        <input type="checkbox" class="btn-check" name="Staminia_Options_OnlySecondHalf" id="Staminia_Options_OnlySecondHalf" autocomplete="off" checked>
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_OnlySecondHalf" title="<?= localize("Only calculate the second half") ?>">
+                          <span class="toggle-check-icon"></span>
+                          <span><?= localize("Only calculate the second half") ?></span>
+                        </label>
                       </div>
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="Staminia_Options_Charts" id="Staminia_Options_Charts" checked>
-                        <label class="form-check-label" for="Staminia_Options_Charts" title="<?= localize("Show charts") ?>"><?= localize("Show charts") ?></label>
+
+                      <div class="toggle-check mb-2">
+                        <input type="checkbox" class="btn-check" name="Staminia_Options_Charts" id="Staminia_Options_Charts" autocomplete="off" checked>
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_Charts" title="<?= localize("Show charts") ?>">
+                          <span class="toggle-check-icon"></span>
+                          <span><?= localize("Show charts") ?></span>
+                        </label>
                       </div>
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" checked>
-                        <label class="form-check-label" for="Staminia_Options_VerboseMode" title="<?= localize("Show contributions table") ?>"><?= localize("Show contributions table") ?></label>
+
+                      <div class="toggle-check mb-2">
+                        <input type="checkbox" class="btn-check" name="Staminia_Options_VerboseMode" id="Staminia_Options_VerboseMode" autocomplete="off" checked>
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_VerboseMode" title="<?= localize("Show contributions table") ?>">
+                          <span class="toggle-check-icon"></span>
+                          <span><?= localize("Show contributions table") ?></span>
+                        </label>
                       </div>
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing">
-                        <label class="form-check-label" for="Staminia_Options_Pressing" title="<?= localize("Pressing") ?>"><?= localize("Pressing") ?></label>
+
+                      <div class="toggle-check mb-2">
+                        <input type="checkbox" class="btn-check" name="Staminia_Options_Pressing" id="Staminia_Options_Pressing" autocomplete="off">
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_Pressing" title="<?= localize("Pressing") ?>">
+                          <span class="toggle-check-icon"></span>
+                          <span><?= localize("Pressing") ?></span>
+                        </label>
                       </div>
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode">
-                        <label class="form-check-label" for="Staminia_Options_AdvancedMode" title="<?= localize("Advanced strength calculation") ?>"><?= localize("Advanced strength calculation") ?></label>
+
+                      <div class="toggle-check">
+                        <input type="checkbox" class="btn-check" name="Staminia_Options_AdvancedMode" id="Staminia_Options_AdvancedMode" autocomplete="off">
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_AdvancedMode" title="<?= localize("Advanced strength calculation") ?>">
+                          <span class="toggle-check-icon"></span>
+                          <span><?= localize("Advanced strength calculation") ?></span>
+                        </label>
                       </div>
                     </div>
 
                     <!-- Staminia Predictions Type Start -->
                     <div class="staminia-button-panel d-none" id="Staminia_Options_Predictions_Type">
-                      <?= localize("Predictions Type") ?>
+                      <small class="text-body-secondary d-block my-1 text-center"><?= localize("Predictions Type") ?></small>
                       <div class="btn-group d-flex" role="group">
                         <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_HO" value="ho" checked autocomplete="off">
-                        <label class="btn btn-secondary" for="Staminia_Options_AdvancedMode_Predictions_HO">
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_AdvancedMode_Predictions_HO">
                           HO
                         </label>
                         <input type="radio" class="btn-check" name="Staminia_Options_Predictions_Type" id="Staminia_Options_AdvancedMode_Predictions_AndreaC" value="andreac" autocomplete="off">
-                        <label class="btn btn-secondary" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
+                        <label class="btn btn-secondary btn-sm" for="Staminia_Options_AdvancedMode_Predictions_AndreaC">
                           AndreaC
                         </label>
                       </div>
@@ -206,7 +225,7 @@ foreach ($lang_array as $key => $val) {
           </div> <!-- Staminia Options End -->
 
           <!-- Staminia CHPP Start -->
-          <div class="accordion<?php if (!$tryAjax) {
+          <div class="accordion mb-3<?php if (!$tryAjax) {
               echo " d-none";
           } ?>" id="accordion-chpp">
             <div class="accordion-item">
@@ -221,7 +240,7 @@ foreach ($lang_array as $key => $val) {
                   <div class="staminia-button-panel<?php if (!$tryAjax) {
                       echo " d-none";
                   } ?>" id="Staminia_Options_CHPP">
-                    <div class="btn-group btn-chpp">
+                    <div class="btn-group d-flex" role="group">
                       <button class="btn btn-sm btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><?= icon('triangle-exclamation') ?></button>
                       <button class="btn btn-sm btn-secondary" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
@@ -474,18 +493,24 @@ foreach ($lang_array as $key => $val) {
                       </td>
                     </tr>
                     <tr class="motherClubBonus">
-                      <td><?= localize("Mother club bonus") ?></td>
                       <td>
-                        <span class="field-caption"><?= localize("Mother club bonus"); ?></span>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox">
-                          <label class="form-check-label" for="Staminia_Player_1_MotherClubBonus"><?= icon('heart') ?></label>
+                      </td>
+                      <td>
+                        <div class="toggle-check">
+                          <input class="btn-check" type="checkbox" name="Staminia_Player_1_MotherClubBonus" id="Staminia_Player_1_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
+                          <label class="btn btn-secondary btn-sm" for="Staminia_Player_1_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
+                            <span class="toggle-check-icon"></span>
+                            <span><?= localize("Mother club bonus"); ?></span>
+                          </label>
                         </div>
                       </td>
                       <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox">
-                          <label class="form-check-label" for="Staminia_Player_2_MotherClubBonus"><?= icon('heart') ?></label>
+                        <div class="toggle-check">
+                          <input class="btn-check" type="checkbox" name="Staminia_Player_2_MotherClubBonus" id="Staminia_Player_2_MotherClubBonus" class="motherclub-bonus-checkbox" autocomplete="off">
+                          <label class="btn btn-secondary btn-sm" for="Staminia_Player_2_MotherClubBonus" title="<?= localize("Mother club bonus") ?>">
+                            <span class="toggle-check-icon"></span>
+                            <span><?= localize("Mother club bonus"); ?></span>
+                          </label>
                         </div>
                       </td>
                     </tr>
@@ -734,13 +759,13 @@ foreach ($lang_array as $key => $val) {
 
       <!-- Footer Start -->
       <footer>
-        <ul class="list-unstyled">
-          <li><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
-          <li><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
+        <ul class="list-inline">
+          <li class="list-inline-item d-block d-sm-inline-block"><b>Stamin.IA!</b> by <b>Lizardopoli</b> (5246225)</li>
+          <li class="list-inline-item d-block d-sm-inline-block"><a href="https://github.com/<?= GH_REPO ?>/blob/master/CHANGELOG.md">v<?= $staminia_version ?></a></li>
           <?php if (CHPP_APP_ID != "") { ?>
-            <li><?= icon('star') ?> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
+            <li class="list-inline-item d-block d-sm-inline-block"><?= icon('star') ?> <a href="http://www.hattrick.org/Community/CHPP/ChppProgramDetails.aspx?ApplicationId=<?= CHPP_APP_ID ?>">Certified Hattrick Product Provider</a></li>
           <?php } ?>
-          <li><?= icon('github') ?> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
+          <li class="list-inline-item d-block d-sm-inline-block"><?= icon('github') ?> <a href="http://github.com/<?= GH_REPO ?>">Stamin.IA! @ github</a></li>
         </ul>
       </footer> <!-- Footer End -->
 
