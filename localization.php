@@ -95,7 +95,7 @@ if (is_null($translations)) {
 *
 * The language file is JSON encoded and returns an associative array
 * Language filename is determined by BCP 47 + RFC 4646
-* http://www.rfc-editor.org/rfc/bcp/bcp47.txt
+* https://www.rfc-editor.org/rfc/bcp/bcp47.txt
 *
 * @param string $phrase The phrase that needs to be translated
 * @return string

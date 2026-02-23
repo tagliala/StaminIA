@@ -1,9 +1,9 @@
-[Stamin.IA!](http://lizardopoli.altervista.org/bootstam/)
+[Stamin.IA!](https://lizardopoli.altervista.org/staminia/)
 =================
 
 Stamin.IA! is the Hattrick's first substitutions calculator tool
 
-[Hattrick](http://www.hattrick.org) is the original online football manager game, and it's free to play. Here you get to create your own club, build the team of your dreams, and compete against hundreds of thousands of real people from all over the globe. 
+[Hattrick](https://www.hattrick.org) is the original online football manager game, and it's free to play. Here you get to create your own club, build the team of your dreams, and compete against hundreds of thousands of real people from all over the globe.
 
 
 Bug tracker
@@ -41,7 +41,7 @@ Authors
 
 **Geremia Taglialatela**
 
-+ http://github.com/tagliala
++ https://github.com/tagliala
 
 
 
@@ -66,14 +66,14 @@ PHT is licensed under the LGPL-3.0 License
 
 Font Awesome is licensed under CC BY 3.0 License
 
-This product includes PHP, freely available from <http://www.php.net/>
+This product includes PHP, freely available from <https://www.php.net/>
 
 
 
 Thanks
 ---------------------
 
-Special thanks to [Mark James](http://www.famfamfam.com/) for [FAMFAMFAM flag icons](http://www.famfamfam.com/lab/icons/flags/)
+Special thanks to Mark James for [FAMFAMFAM flag icons](https://github.com/legacy-icons/famfamfam-flags)
 
 
 #### Translators
