@@ -1,5 +1,4 @@
-window.Staminia = window.Staminia || {};
-const Staminia = window.Staminia;
+import Staminia from "./staminia.js";
 Staminia.Engine = Staminia.Engine || {};
 
 const VERSION = 5;

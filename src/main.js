@@ -1,7 +1,5 @@
 import { renderTotalChart, renderPartialsChart, destroyCharts, resizeCharts, updateChartsTheme } from "./charts.js";
-
-window.Staminia = window.Staminia || {};
-const Staminia = window.Staminia;
+import Staminia from "./staminia.js";
 Staminia.CONFIG = Staminia.CONFIG || {};
 
 Object.assign(Staminia.CONFIG, {

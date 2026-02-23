@@ -1,5 +1,4 @@
-window.Staminia = window.Staminia || {};
-const Staminia = window.Staminia;
+import Staminia from "./staminia.js";
 
 const copyToClipboard = (text, button) => {
   if (!navigator.clipboard) return;
