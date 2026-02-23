@@ -39,7 +39,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     }
 }
 ?>
-<?php $staminia_version = "13.09.29" ?>
+<?php $staminia_version = "26.02.23" ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
@@ -246,11 +246,11 @@ foreach ($lang_array as $key => $val) {
                   } ?>" id="Staminia_Options_CHPP">
                     <div class="btn-group d-flex" role="group">
                       <button class="btn btn-sm btn-status" id="CHPP_Refresh_Data_Status" disabled="disabled"><?= icon('triangle-exclamation') ?></button>
-                      <button class="btn btn-sm btn-secondary flex-grow-1" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
+                      <button class="btn btn-sm btn-secondary flex-grow-1 text-start" disabled="disabled" id="CHPP_Refresh_Data" data-error-text="<?= localize("Error"); ?>" data-loading-text="<?= localize("Loading..."); ?>" data-success-text="<?= localize("Refresh data") ?>" data-complete-text="<?= localize("Refresh data") ?>"><?= localize("Unauthorized") ?></button>
                     </div>
 
-                    <div id="CHPP_Results" class="d-none text-body-secondary">
-                      <p id="CHPP_Status_Description"></p>
+                    <div id="CHPP_Results" class="d-none">
+                      <p class="small text-body-secondary m-0 mt-2" id="CHPP_Status_Description"></p>
                     </div>
 
                   </div> <!-- Staminia CHPP Options End -->
@@ -285,7 +285,7 @@ foreach ($lang_array as $key => $val) {
 
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo" role="tabpanel">
-              <h1 class="mainTitle">Stamin.IA! <span class="sub"><?= localize("SUBTITLE") ?></span></h1>
+              <h1 class="h4">Stamin.IA! <span class="h5 text-body-secondary"><?= localize("SUBTITLE") ?></span></h1>
               <p><?= sprintf(localize("SHORT_HELP"), localize("Player 1"), localize("Player 2")) ?></p>
 
               <!-- Main Form Start -->
