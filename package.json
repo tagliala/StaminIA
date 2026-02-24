@@ -18,6 +18,7 @@
     "lint:css": "stylelint 'src/**/*.scss'",
     "lint:php": "composer lint",
     "lint:translations": "node scripts/lint-translations.js",
+    "fix:translations": "node scripts/fix-translations.js",
     "test": "vitest run",
     "prepare": "husky"
   },

@@ -118,6 +118,35 @@ img/             → Images and icons
 3. Run `pnpm run lint` before committing
 4. Run `pnpm run build` to verify production builds
 
+### Translation Workflow
+
+**After any change to `lang/*.json` files, ALL of the following linters must be
+run and must pass:**
+
+```bash
+pnpm run lint:translations   # Validates all lang/*.json files
+pnpm run lint:js             # Biome — JS may reference translation keys
+pnpm run lint:css            # Stylelint — no-op but required for full green
+pnpm run lint:php            # PHP CS Fixer — localization.php changes
+pnpm run lint                # Run all of the above in one command (preferred)
+```
+
+These are **mandatory, not optional**. Do not consider a translation task done
+until `pnpm run lint` exits with all checks green. The translation linter
+(`lint:translations`) reports missing top-level keys in `lang/*.json` as
+warnings — existing warnings are acceptable, but no **new** warnings may be
+introduced.
+
+**i18n architecture notes:**
+- `lang/*.json` — single source of truth for all translations
+- Top-level keys → used by PHP (`localization.php`) for server-rendered UI
+- `JAVASCRIPT_STRINGS` nested object → used by JS via `localizeJavascript()`
+- All 15 locale files must have `JAVASCRIPT_STRINGS` with exactly 46 keys
+- English (`en-us`) is the fallback: missing keys are filled per-key from `en-us`
+- `best_in_first_half` uses football terminology per language (e.g. "primera
+  parte" in Spanish, "première mi-temps" in French, "erste Halbzeit" in German)
+- `es-CA` is Central American Spanish, not Catalan
+
 ## Testing Expectations
 
 - All linters must pass before merging
