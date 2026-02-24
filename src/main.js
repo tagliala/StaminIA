@@ -971,7 +971,7 @@ document.getElementById("performanceAt90").addEventListener("change", function()
   }
 });
 
-document.getElementById("extraLink").addEventListener("click", (e) => {
+document.getElementById("extraLink")?.addEventListener("click", (e) => {
   e.preventDefault();
   const extraTab = document.querySelector("#tabExtraNav a");
   if (extraTab) bootstrap.Tab.getOrCreateInstance(extraTab).show();

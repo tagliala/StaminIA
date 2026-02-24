@@ -13,10 +13,11 @@
     "watch": "pnpm run watch:css & pnpm run watch:js",
     "watch:js": "chokidar \"src/**/*.js\" -c \"esbuild src/index.js --bundle --inject:src/globals-shim.js --outfile=dist/staminia.min.js --format=iife --target=es2015 --define:this=window\"",
     "watch:css": "chokidar \"src/**/*.scss\" -c \"sass src/styles.scss dist/staminia.min.css --style=compressed --load-path=node_modules --no-source-map --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function\"",
-    "lint": "run-s lint:js lint:css lint:php",
+    "lint": "run-s lint:js lint:css lint:php lint:translations",
     "lint:js": "biome check src/",
     "lint:css": "stylelint 'src/**/*.scss'",
     "lint:php": "composer lint",
+    "lint:translations": "node scripts/lint-translations.js",
     "test": "vitest run",
     "prepare": "husky"
   },
@@ -27,6 +28,7 @@
     "calculator"
   ],
   "license": "BSD-2-Clause",
+  "type": "module",
   "lint-staged": {
     "src/**/*.js": "biome check --write",
     "src/**/*.scss": "stylelint --fix",

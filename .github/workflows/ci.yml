@@ -35,6 +35,9 @@ jobs:
       - name: Lint CSS
         run: pnpm run lint:css
 
+      - name: Lint translations
+        run: pnpm run lint:translations
+
       - name: Test
         run: pnpm test
 
