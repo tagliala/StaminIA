@@ -100,19 +100,22 @@ if (is_null($translations)) {
 * @param string $phrase The phrase that needs to be translated
 * @return string
 */
-function localize($phrase)
+function localize($phrase, $escape = true)
 {
     global $translations, $translations_en;
-    /* Return translation from selected language if present */
     if (isset($translations[$phrase]) && $translations[$phrase] !== "") {
-        return $translations[$phrase];
+        $result = $translations[$phrase];
+    } elseif (isset($translations_en[$phrase]) && $translations_en[$phrase] !== "") {
+        $result = $translations_en[$phrase];
+    } else {
+        $result = $phrase;
     }
-    /* Fallback to English translation if available */
-    if (isset($translations_en[$phrase]) && $translations_en[$phrase] !== "") {
-        return $translations_en[$phrase];
-    }
-    /* Last resort: return the key itself */
-    return $phrase;
+    return $escape ? htmlspecialchars($result, ENT_QUOTES, 'UTF-8') : $result;
+}
+
+function e(string $s): string
+{
+    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
 function localizeJavascript()

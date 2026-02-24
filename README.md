@@ -14,6 +14,34 @@ Have a bug? Please create an issue here on GitHub! Also, when filing please make
 https://github.com/tagliala/StaminIA/issues
 
 
+`.htaccess`
+-----------------
+
+The repository includes an `.htaccess` file for Apache that provides:
+
+- **Security headers** — CSP, X-Frame-Options, X-Content-Type-Options,
+  Referrer-Policy, Permissions-Policy (requires `mod_headers`)
+- **Session hardening** — HttpOnly, Secure, SameSite=Lax cookies and strict
+  mode (requires `mod_php`)
+- **Gzip compression** (requires `mod_deflate`)
+- **Far-future expires** for static assets (requires `mod_expires`)
+- **www-stripping redirect** (requires `mod_rewrite`)
+
+**HSTS:** The `Strict-Transport-Security` header is commented out by default.
+Uncomment it once HTTPS is confirmed in production:
+
+```apache
+Header set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+```
+
+If you are using Nginx or another web server, add the equivalent
+configuration for headers, compression, and session settings.
+
+**Planned PHP upgrade:** The project currently keeps some compatibility
+workarounds for PHP 7.3 environments. When the runtime baseline is raised,
+we should migrate to **PHP 8.4** and remove those 7.3-specific workarounds
+(including compatibility-oriented linter/runtime settings).
+
 
 Developers
 ----------

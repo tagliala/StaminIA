@@ -3,11 +3,14 @@
 error_reporting(E_ALL & ~E_DEPRECATED);
 require __DIR__ . '/../vendor/autoload.php';
 include __DIR__ . '/config.php';
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_samesite', 'Lax');
-ini_set('session.use_strict_mode', 1);
 session_start();
+
+if (!isset($_POST['csrf_token'], $_SESSION['csrf_token'])
+    || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    http_response_code(403);
+    echo "Invalid request.";
+    exit();
+}
 
 /*
 You must supply your chpp credentials and a callback url.
@@ -19,7 +22,7 @@ try {
     $HT = new \PHT\Connection(getPhtConfig());
     $callbackUrl = APP_ROOT . 'chpp/chpp_callback.php';
 
-    if (isset($_GET['permanent'])) {
+    if (isset($_POST['permanent'])) {
         $auth = $HT->getPermanentAuthorization($callbackUrl);
         $_SESSION['storeTokens'] = true;
     } else {

@@ -7,6 +7,7 @@ $finder = (new PhpCsFixer\Finder())
     ->exclude('node_modules');
 
 return (new PhpCsFixer\Config())
+    ->setUnsupportedPhpVersionAllowed(true)
     ->setRules([
         '@PER-CS' => true,
     ])

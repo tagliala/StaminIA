@@ -2,14 +2,13 @@
 require __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/config.php';
 include __DIR__ . '/includes/icon.php';
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_samesite', 'Lax');
-ini_set('session.use_strict_mode', 1);
 session_start();
 $oauthToken = $_SESSION['oauthToken'] ?? null;
 $permanent = $_COOKIE['permanent'] ?? null;
 $tryAjax = (($oauthToken != null) || $permanent);
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 <?php
 include 'localization.php';
@@ -102,7 +101,8 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                   <div id="loginDropdown">
-                    <form id="LoginForm" action="chpp/chpp_auth.php" method="get">
+                    <form id="LoginForm" action="chpp/chpp_auth.php" method="post">
+                      <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
                       <p class="small text-body-secondary mb-2"><?= localize("Authorize Stamin.IA! to access your data"); ?></p>
                       <fieldset>
                         <div class="d-flex align-items-center justify-content-between gap-2">
@@ -116,7 +116,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
                         </div>
                       </fieldset>
                     </form>
-                    <div class="alert alert-warning small mb-0 mt-2 p-2"><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel)."), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></div>
+                    <div class="alert alert-warning small mb-0 mt-2 p-2"><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).", false), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></div>
                   </div>
                   <ul class="list-unstyled mb-0 d-none" id="loggedInDropdown">
                     <li>
@@ -128,9 +128,9 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
             <?php } ?>
             <li class="nav-item dropdown" id="dropdownLanguages">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                <i class="flag-<?= $lang_array[strtolower(localize("lang"))]["flag"] ?>"></i>
+                <i class="flag-<?= e($lang_array[strtolower(localize("lang"))]["flag"]) ?>"></i>
                 <span class="d-none d-sm-inline">
-                  <?= $lang_array[strtolower(localize("lang"))]["lang-name"] ?>
+                  <?= e($lang_array[strtolower(localize("lang"))]["lang-name"]) ?>
                 </span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
@@ -139,7 +139,7 @@ foreach ($lang_array as $key => $val) {
     if (strtolower(localize("lang")) === $key) {
         continue;
     }
-    echo "                  <li><a class=\"dropdown-item\" href=\"?locale=$key\"><i class=\"flag-" . $val["flag"] . "\"></i> " . $val["lang-name"] . "</a></li>\n";
+    echo "                  <li><a class=\"dropdown-item\" href=\"?locale=" . e($key) . "\"><i class=\"flag-" . e($val["flag"]) . "\"></i> " . e($val["lang-name"]) . "</a></li>\n";
 }
 ?>
               </ul>
@@ -290,7 +290,7 @@ foreach ($lang_array as $key => $val) {
             <!-- Tab Players Info -->
             <div class="tab-pane active" id="tabPlayersInfo" role="tabpanel">
               <h1 class="h4">Stamin.IA! <span class="h5 text-body-secondary"><?= localize("SUBTITLE") ?></span></h1>
-              <p><?= sprintf(localize("SHORT_HELP"), localize("Player 1"), localize("Player 2")) ?></p>
+              <p><?= sprintf(localize("SHORT_HELP", false), localize("Player 1"), localize("Player 2")) ?></p>
 
               <!-- Main Form Start -->
 
@@ -698,7 +698,7 @@ foreach ($lang_array as $key => $val) {
             <div class="tab-pane" id="tabCredits" role="tabpanel">
               <figure class="text-center">
                 <blockquote class="blockquote">
-                  <p><?= localize("QUOTE"); ?></p>
+                  <p><?= localize("QUOTE", false); ?></p>
                 </blockquote>
                 <figcaption class="blockquote-footer">
                   Danfisico (3232936)
@@ -711,7 +711,7 @@ foreach ($lang_array as $key => $val) {
               </p>
               <h3><?= localize("Translated by"); ?>:</h3>
               <p>
-                <?= localize("TRANSLATED_BY"); ?>
+                <?= localize("TRANSLATED_BY", false); ?>
               </p>
               <h3><?= localize("Nerd thanks"); ?>:</h3>
               <p>
@@ -737,7 +737,7 @@ foreach ($lang_array as $key => $val) {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <?= localize("LONG_HELP") ?>
+              <?= localize("LONG_HELP", false) ?>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= localize("Close") ?></button>

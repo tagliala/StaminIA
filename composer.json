@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
+        "php": ">=7.3",
         "jetwitaussi/pht": "^3.15"
     },
     "require-dev": {
@@ -18,5 +18,10 @@
     },
     "scripts": {
         "lint": "php-cs-fixer fix --dry-run --diff"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3.33"
+        }
     }
 }
