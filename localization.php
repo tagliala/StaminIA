@@ -121,18 +121,20 @@ function e(string $s): string
 function localizeJavascript()
 {
     global $translations, $translations_en;
-    /* Find JS messages in selected language, fallback to English */
-    $javascript_translation = [];
-    if (isset($translations[JAVASCRIPT_MESSAGES]) && is_array($translations[JAVASCRIPT_MESSAGES])) {
-        $javascript_translation = $translations[JAVASCRIPT_MESSAGES];
-    } elseif (isset($translations_en[JAVASCRIPT_MESSAGES]) && is_array($translations_en[JAVASCRIPT_MESSAGES])) {
-        $javascript_translation = $translations_en[JAVASCRIPT_MESSAGES];
+    /* Merge English base with locale overrides so any untranslated key falls back to English */
+    $base = $translations_en['JAVASCRIPT_STRINGS'] ?? [];
+    $locale = $translations['JAVASCRIPT_STRINGS'] ?? [];
+    $js = array_merge($base, $locale);
+    $items = [];
+    foreach ($js as $key => $message) {
+        $escaped = addslashes($message);
+        if (strpos($message, '{') !== false) {
+            $items[] = $key . ': Staminia.format("' . $escaped . '")';
+        } else {
+            $items[] = $key . ': "' . $escaped . '"';
+        }
     }
-    $javascript_messages = "Staminia.JAVASCRIPT_MESSAGES = { ";
-    foreach ((array) $javascript_translation as $func => $message) {
-        $javascript_messages = $javascript_messages . strtolower($func) . ": Staminia.format(\"" . addslashes($message) . "\"), ";
-    }
-    return $javascript_messages . " };";
+    return 'Staminia.messages = { ' . implode(', ', $items) . ' };';
 }
 
 $localizedSkills = [localize("non-existent"), localize("disastrous"), localize("wretched"), localize("poor"), localize("weak"),

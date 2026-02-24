@@ -772,13 +772,7 @@ foreach ($lang_array as $key => $val) {
           echo "false";
       } ?>;
 <?php
-$file = "js/localization/messages_" . localize("lang") . ".js";
-$file_en = "js/localization/messages_en-US.js";
-if (is_file($file)) {
-    readfile($file);
-} else {
-    readfile($file_en);
-}
+echo localizeJavascript();
 ?>
     </script>
   </body>
