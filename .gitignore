@@ -9,6 +9,9 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+# Test coverage
+coverage/
+
 # Dependencies
 node_modules/
 vendor/

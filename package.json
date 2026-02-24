@@ -35,6 +35,7 @@
   "packageManager": "pnpm@10.30.1",
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
+    "@vitest/coverage-v8": "^4.0.18",
     "chokidar-cli": "^3.0.0",
     "esbuild": "^0.27.3",
     "husky": "^9.1.7",

@@ -11,7 +11,6 @@ import {
 beforeAll(() => {
   window.Staminia = window.Staminia || {};
   window.Staminia.CONFIG = { DEBUG: false };
-  window.$ = () => {};
 });
 
 // ---------- validateSkill ----------
@@ -167,5 +166,138 @@ describe("estimateStaminaSubskills", () => {
   it("caps at 9 for very low performance values", () => {
     // The formula has a min(9, ...) cap
     expect(window.Staminia.estimateStaminaSubskills(10)).toBeLessThanOrEqual(9);
+  });
+});
+
+// ---------- validateSkill (extra edge cases) ----------
+
+describe("validateSkill edge cases", () => {
+  it("accepts exactly the minimum boundary", () => {
+    expect(validateSkill(1, "form")).toBe(1);
+    expect(validateSkill(1, "stamina")).toBe(1);
+    expect(validateSkill(0, "skill")).toBe(0);
+    expect(validateSkill(0, "exp")).toBe(0);
+    expect(validateSkill(1, "loyalty")).toBe(1);
+  });
+
+  it("accepts exactly the maximum boundary", () => {
+    expect(validateSkill(8, "form")).toBe(8);
+    expect(validateSkill(9, "stamina")).toBe(9);
+    expect(validateSkill(22, "skill")).toBe(22);
+    expect(validateSkill(30, "exp")).toBe(30);
+    expect(validateSkill(20, "loyalty")).toBe(20);
+  });
+
+  it("handles numeric strings without decimals", () => {
+    expect(validateSkill("7", "form")).toBe(7);
+    expect(validateSkill("9", "stamina")).toBe(9);
+  });
+
+  it("handles decimal values within range", () => {
+    expect(validateSkill("6.5", "stamina")).toBe(6.5);
+    expect(validateSkill(3.75, "stamina")).toBe(3.75);
+  });
+
+  it("clamps decimal values below minimum to min", () => {
+    expect(validateSkill("0.5", "form")).toBe(1);
+  });
+
+  it("clamps decimal values above maximum to max", () => {
+    expect(validateSkill("22.5", "skill")).toBe(22);
+  });
+});
+
+// ---------- getPlayerBonus (extra edge cases) ----------
+
+describe("getPlayerBonus edge cases", () => {
+  it("returns max (1.5) regardless of passed loyalty when mother club enabled", () => {
+    expect(getPlayerBonus(1, true)).toBe(getPlayerBonus(5, true));
+    expect(getPlayerBonus(10, true)).toBe(getPlayerBonus(20, true));
+  });
+
+  it("loyalty 1 gives zero loyalty bonus (no mother club)", () => {
+    expect(getPlayerBonus(1, false)).toBe(0);
+  });
+
+  it("loyalty 20 gives full loyalty bonus of 1 (no mother club)", () => {
+    expect(getPlayerBonus(20, false)).toBe(1);
+  });
+
+  it("loyalty increases monotonically", () => {
+    for (let l = 2; l <= 20; l++) {
+      expect(getPlayerBonus(l, false)).toBeGreaterThan(getPlayerBonus(l - 1, false));
+    }
+  });
+});
+
+// ---------- getContribution (extra edge cases) ----------
+
+describe("getContribution edge cases", () => {
+  it("returns exactly 1 for stamina 9 at any minute", () => {
+    expect(getContribution(1, 9, 0, false)).toBe(1);
+    expect(getContribution(45, 9, 0, false)).toBe(1);
+    expect(getContribution(90, 9, 0, false)).toBe(1);
+  });
+
+  it("halftime rest improves energy at start of second half", () => {
+    const endFirstHalf = getContribution(44, 5, 0, false);
+    const startSecondHalf = getContribution(0, 5, 46, false);
+    // Sub entering at 46 should start with more energy than player at end of first half
+    expect(startSecondHalf).toBeGreaterThan(endFirstHalf);
+  });
+
+  it("second half player contribution decreases as the half progresses", () => {
+    const early = getContribution(5, 4, 46, false);
+    const late = getContribution(40, 4, 46, false);
+    expect(early).toBeGreaterThan(late);
+  });
+
+  it("pressing reduces contribution for mid/low stamina players", () => {
+    for (const stamina of [3, 5, 7]) {
+      const normal = getContribution(70, stamina, 0, false);
+      const pressing = getContribution(70, stamina, 0, true);
+      expect(normal).toBeGreaterThanOrEqual(pressing);
+    }
+  });
+});
+
+// ---------- calculateStrength (extra edge cases) ----------
+
+describe("calculateStrength edge cases", () => {
+  it("scales positively with skill", () => {
+    const low = calculateStrength(5, 5, 5, 10, true);
+    const high = calculateStrength(10, 5, 5, 10, true);
+    expect(high).toBeGreaterThan(low);
+  });
+
+  it("stamina coefficient at stamina=9 exceeds 1, so including it boosts strength", () => {
+    const with_ = calculateStrength(10, 5, 9, 10, true);
+    const without = calculateStrength(10, 5, 9, 10, false);
+    // c_stamina = ((9 + 6.5) / 14) ^ 0.6 ≈ 1.064 > 1, so with_ > without
+    expect(with_).toBeGreaterThan(without);
+  });
+
+  it("very low form produces proportionally lower strength", () => {
+    const high = calculateStrength(10, 8, 5, 10, true);
+    const low = calculateStrength(10, 1, 5, 10, true);
+    expect(high / low).toBeGreaterThan(2);
+  });
+});
+
+// ---------- getAvgAt90 (extra edge cases) ----------
+
+describe("getAvgAt90 edge cases", () => {
+  it("monotonically increases with stamina from 1 to 9", () => {
+    for (let s = 2; s <= 9; s++) {
+      expect(getAvgAt90(s)).toBeGreaterThanOrEqual(getAvgAt90(s - 1));
+    }
+  });
+
+  it("returns exactly 1 for stamina 9", () => {
+    expect(getAvgAt90(9)).toBe(1);
+  });
+
+  it("returns a value below 0.9 for stamina 5", () => {
+    expect(getAvgAt90(5)).toBeLessThan(0.9);
   });
 });
