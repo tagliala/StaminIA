@@ -38,7 +38,8 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     }
 
     for ($i = $start; $i <= $stop; ++$i) {
-        echo "<option value=\"$i\"" . (($select == $i) ? " selected=\"selected\"" : "") . ">$localizedSkills[$i]</option>\n";
+        $skillLabel = $localizedSkills[$i] . ' (' . $i . ')';
+        echo "<option value=\"$i\"" . (($select == $i) ? " selected=\"selected\"" : "") . ">$skillLabel</option>\n";
     }
 }
 ?>
