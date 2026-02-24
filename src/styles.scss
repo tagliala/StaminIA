@@ -76,12 +76,6 @@ html.dark-mode .theme-icon-moon { display: none; }
 // Layout
 // ============================================================
 
-@include media-breakpoint-up(md) {
-  .accordion-button::after {
-    display: none;
-  }
-}
-
 // ============================================================
 // Settings panel
 // ============================================================
