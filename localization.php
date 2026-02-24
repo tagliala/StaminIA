@@ -20,7 +20,7 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 }
 
 if (!empty($_GET['locale'])) {
-    preg_match('/([a-z]{1,8}(-[a-z]{1,8})?)/i', $_GET['locale'], $lang_parse);
+    preg_match('/^([a-z]{1,8}(-[a-z]{1,8})?)$/i', $_GET['locale'], $lang_parse);
     if (!empty($lang_parse[0])) {
         //highest priority
         $langs[$lang_parse[0]] = 2;

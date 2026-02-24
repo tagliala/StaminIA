@@ -2,6 +2,10 @@
 require __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/config.php';
 include __DIR__ . '/includes/icon.php';
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.use_strict_mode', 1);
 session_start();
 $oauthToken = $_SESSION['oauthToken'] ?? null;
 $permanent = $_COOKIE['permanent'] ?? null;
@@ -770,9 +774,9 @@ foreach ($lang_array as $key => $val) {
 $file = "js/localization/messages_" . localize("lang") . ".js";
 $file_en = "js/localization/messages_en-US.js";
 if (is_file($file)) {
-    include($file);
+    readfile($file);
 } else {
-    include($file_en);
+    readfile($file_en);
 }
 ?>
     </script>

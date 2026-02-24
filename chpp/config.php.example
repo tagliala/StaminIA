@@ -13,6 +13,14 @@ define('MIN_REFRESH_SECONDS', 60);
 define('COOKIE_DOMAIN', '');
 define('COOKIE_PATH', '');
 define('COOKIE_EXPIRE_TIME', mktime(0, 0, 0, 1, 1, 2030));
+define('COOKIE_OPTIONS', [
+    'expires'  => COOKIE_EXPIRE_TIME,
+    'path'     => COOKIE_PATH,
+    'domain'   => COOKIE_DOMAIN,
+    'secure'   => true,
+    'httponly'  => true,
+    'samesite' => 'Lax',
+]);
 
 function getPhtConfig(array $extra = []): array
 {
