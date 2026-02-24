@@ -1,0 +1,448 @@
+// StaminIA — SCSS bundle entry point
+// Import Bootstrap SCSS source (variables, mixins, then components)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Layout & components (only what StaminIA uses)
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+
+// Helpers & utilities
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
+
+// Vendored flags
+@import "../css/flags.css";
+
+body {
+  padding-top: 4.5rem;
+}
+
+// ============================================================
+// Staminia Icon (.si) — inline SVG icon base
+// ============================================================
+.si {
+  width: 1rem;
+  height: 1rem;
+  fill: currentcolor;
+  vertical-align: -0.125em;
+  display: inline-block;
+}
+
+// ============================================================
+// Theme toggle icons
+// ============================================================
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: inline-block; }
+html.dark-mode .theme-icon-sun { display: inline-block; }
+html.dark-mode .theme-icon-moon { display: none; }
+
+.main-navbar-brand {
+  padding-left: 37px;
+}
+
+.staminia-logo {
+  position: absolute;
+  top: $spacer * .5;
+  left: $spacer * .5;
+  height: 27px;
+  width: 27px;
+  vertical-align: middle;
+  background: url("../img/logo-A99BEC36.png") no-repeat;
+  background-size: 27px 27px;
+}
+
+// ============================================================
+// Layout
+// ============================================================
+
+// ============================================================
+// Settings panel
+// ============================================================
+
+// ============================================================
+// Form
+// ============================================================
+form.staminiaForm {
+  display: block;
+  margin-bottom: 0;
+}
+
+form.staminiaForm table {
+  width: auto;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+form.staminiaForm td,
+form.staminiaForm th {
+  vertical-align: middle;
+}
+
+form.staminiaForm select,
+form.staminiaForm input {
+  width: 100%;
+  margin: 0;
+}
+
+#Staminia_Player_1,
+#Staminia_Player_2 {
+  min-width: 100px;
+}
+
+// ============================================================
+// Table stripe
+// ============================================================
+.table tbody tr:not(:hover) td.stripe,
+.table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($black, .02);
+}
+
+[data-bs-theme="dark"] .table tbody tr:not(:hover) td.stripe,
+[data-bs-theme="dark"] .table tbody tr:not(:hover) th.stripe {
+  background-color: rgba($white, .02);
+}
+
+// ============================================================
+// Generated link
+// ============================================================
+#generatedLinkBody {
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+// ============================================================
+// Login dropdown
+// ============================================================
+#loginDropdown {
+  width: 280px;
+  padding: $spacer;
+}
+
+#loginDropdown small {
+  font-size: $small-font-size;
+}
+
+// ============================================================
+// Form actions
+// ============================================================
+.form-actions {
+  margin-bottom: 0;
+  padding: $spacer ($spacer * 1.25);
+  background-color: var(--bs-tertiary-bg);
+  border-top: $border-width solid var(--bs-border-color);
+  border-radius: 0 0 $border-radius $border-radius;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer * .5;
+  justify-content: center;
+}
+
+.form-actions .btn {
+  margin-bottom: 0;
+}
+
+.field-caption {
+  display: none;
+}
+
+// ============================================================
+// Responsive table
+// ============================================================
+@media (max-width: 479px) {
+  .form-actions .btn {
+    width: 100% !important;
+  }
+
+  #playersInfoTable th:first-child,
+  #playersInfoTable td:first-child {
+    display: none !important;
+  }
+
+  #playersInfoTable td {
+    vertical-align: bottom !important;
+  }
+
+  .field-caption {
+    display: block;
+    margin-bottom: ($spacer * .125);
+    line-height: $line-height-sm;
+    font-weight: $font-weight-bold;
+    color: var(--bs-secondary-color);
+    text-transform: uppercase;
+  }
+}
+
+// ============================================================
+// Player option states
+// ============================================================
+option.isTransferListed {
+  color: #00b400;
+}
+
+option.isBruised {
+  color: #640000;
+}
+
+option.isInjured {
+  color: #c80000;
+}
+
+option.isSuspended {
+  color: #c81414;
+}
+
+// ============================================================
+// Side panel
+// ============================================================
+.side-panel > form {
+  margin-bottom: 0;
+}
+
+// ============================================================
+// Tabs
+// ============================================================
+.nav-tabs > li.credits {
+  margin-left: auto;
+}
+
+// ============================================================
+// Staminia tables
+// ============================================================
+table.table-staminia th,
+table.table-staminia td {
+  text-align: right;
+}
+
+table.table-staminia th:first-child,
+table.table-staminia td:first-child {
+  text-align: left;
+}
+
+table.table-staminia-debug th {
+  text-align: center;
+}
+
+table.table-staminia-debug th:first-child,
+table.table-staminia-debug td:first-child {
+  text-align: center;
+}
+
+table.table-staminia-contributions td:first-child {
+  text-align: center;
+}
+
+table.table-staminia-contributions th:not(:first-child),
+table.table-staminia-contributions td:not(:first-child) {
+  padding-left: $spacer * 1.25;
+}
+
+table.table-staminia-contributions td:nth-child(2) {
+  font-weight: $font-weight-bold;
+}
+
+table.table-staminia th[colspan] {
+  text-align: center;
+}
+
+// ============================================================
+// CHPP Button group
+// ============================================================
+.btn-progress:disabled {
+  color: $white;
+  background-color: #149bdf;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba($white, .15) 10px,
+    rgba($white, .15) 20px
+  );
+  background-size: 40px 40px;
+  animation: progress-bar-stripes 2s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  from { background-position: 40px 0; }
+  to { background-position: 0 0; }
+}
+
+.legend-like {
+  border-bottom: $border-width solid var(--bs-border-color);
+  margin-bottom: $spacer * 1.25;
+  font-weight: $font-weight-normal;
+}
+
+ul.nav.nav-tabs {
+  background: var(--bs-tertiary-bg);
+}
+
+span.minutes {
+  display: block;
+  margin-bottom: $spacer * .375;
+  font-size: $h4-font-size;
+  line-height: $h4-font-size * 1.1;
+}
+
+.min-width {
+  width: 1px;
+}
+
+// ============================================================
+// Charts
+// ============================================================
+#chartTotal,
+#chartPartials {
+  position: relative;
+  height: 250px;
+  width: 100% !important;
+  margin: ($spacer * 1.125) 0 ($spacer * .5625);
+}
+
+// ============================================================
+// Credits
+// ============================================================
+#tabCredits > p,
+#tabCredits > blockquote {
+  margin-bottom: $spacer * 1.125;
+}
+
+// ============================================================
+// Footer
+// ============================================================
+footer {
+  color: var(--bs-secondary-color);
+
+  a {
+    color: var(--bs-secondary-color);
+
+    &:hover {
+      color: var(--bs-body-color);
+    }
+  }
+}
+
+// ============================================================
+// CHPP status button
+// ============================================================
+.btn-group > .btn-status {
+  flex: 0 0 2rem;
+}
+
+// ============================================================
+// Button group radio
+// ============================================================
+.btn-group-radio input[type="radio"] {
+  visibility: hidden;
+  position: absolute !important;
+}
+
+.btn-group-radio input[type="radio"]:checked + .btn {
+  color: var(--bs-btn-active-color, #{$gray-700});
+  background-color: var(--bs-btn-active-bg, #{$gray-200});
+  box-shadow: inset 0 2px 4px rgba($black, .15), 0 1px 2px rgba($black, .05);
+}
+
+.btn-group-radio > input:first-child + .btn {
+  margin-left: 0;
+}
+
+.btn-group-radio > .btn {
+  margin-left: -$border-width;
+}
+
+#Staminia_Options_Predictions_Type .btn {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.toggle-check {
+  position: relative;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  &-label {
+    margin-left: .5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Colored square icon
+  &-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: $border-radius-sm;
+    background: $danger;
+    position: relative;
+    transition: $transition-base;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 65%;
+      transition: $transition-base;
+    }
+
+    // X — shown when unchecked
+    &::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    // Check — shown when checked
+    &::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  // Checked state — sibling selector, no :has() needed
+  .btn-check:checked + .btn {
+    .toggle-check-icon {
+      background: $success;
+
+      &::before {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      &::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+}

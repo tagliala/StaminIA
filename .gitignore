@@ -9,9 +9,25 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+# Test coverage
+coverage/
+
+# Dependencies
+node_modules/
+vendor/
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
+
+# Build output
+dist/
+
+# Legacy build system
 build/apache-ant-1.8.3
 build/tools
 intermediate
 publish
+
+# Configuration (contains secrets)
 chpp/config.php
 config.php

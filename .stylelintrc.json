@@ -1,0 +1,40 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "ignoreFiles": [
+    "css/bootstrap.css",
+    "css/bootstrap-responsive.css",
+    "css/flags.css"
+  ],
+  "rules": {
+    "import-notation": null,
+    "no-empty-source": null,
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "selector-id-pattern": null,
+    "custom-property-pattern": null,
+    "property-no-vendor-prefix": null,
+    "property-no-deprecated": null,
+    "value-no-vendor-prefix": null,
+    "selector-no-vendor-prefix": null,
+    "font-family-name-quotes": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "declaration-block-no-duplicate-properties": null,
+    "declaration-property-value-no-unknown": null,
+    "shorthand-property-no-redundant-values": null,
+    "alpha-value-notation": null,
+    "color-function-notation": null,
+    "color-function-alias-notation": null,
+    "color-hex-length": null,
+    "media-feature-range-notation": null,
+    "selector-attribute-quotes": null,
+    "selector-pseudo-element-colon-notation": null,
+    "at-rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "length-zero-no-unit": null,
+    "number-max-precision": null
+  }
+}

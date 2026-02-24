@@ -1,9 +1,9 @@
-[Stamin.IA!](http://lizardopoli.altervista.org/bootstam/)
+[Stamin.IA!](https://lizardopoli.altervista.org/staminia/)
 =================
 
 Stamin.IA! is the Hattrick's first substitutions calculator tool
 
-[Hattrick](http://www.hattrick.org) is the original online football manager game, and it's free to play. Here you get to create your own club, build the team of your dreams, and compete against hundreds of thousands of real people from all over the globe. 
+[Hattrick](https://www.hattrick.org) is the original online football manager game, and it's free to play. Here you get to create your own club, build the team of your dreams, and compete against hundreds of thousands of real people from all over the globe.
 
 
 Bug tracker
@@ -13,6 +13,34 @@ Have a bug? Please create an issue here on GitHub! Also, when filing please make
 
 https://github.com/tagliala/StaminIA/issues
 
+
+`.htaccess`
+-----------------
+
+The repository includes an `.htaccess` file for Apache that provides:
+
+- **Security headers** — CSP, X-Frame-Options, X-Content-Type-Options,
+  Referrer-Policy, Permissions-Policy (requires `mod_headers`)
+- **Session hardening** — HttpOnly, Secure, SameSite=Lax cookies and strict
+  mode (requires `mod_php`)
+- **Gzip compression** (requires `mod_deflate`)
+- **Far-future expires** for static assets (requires `mod_expires`)
+- **www-stripping redirect** (requires `mod_rewrite`)
+
+**HSTS:** The `Strict-Transport-Security` header is commented out by default.
+Uncomment it once HTTPS is confirmed in production:
+
+```apache
+Header set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+```
+
+If you are using Nginx or another web server, add the equivalent
+configuration for headers, compression, and session settings.
+
+**Planned PHP upgrade:** The project currently keeps some compatibility
+workarounds for PHP 7.3 environments. When the runtime baseline is raised,
+we should migrate to **PHP 8.4** and remove those 7.3-specific workarounds
+(including compatibility-oriented linter/runtime settings).
 
 
 Developers
@@ -41,7 +69,7 @@ Authors
 
 **Geremia Taglialatela**
 
-+ http://github.com/tagliala
++ https://github.com/tagliala
 
 
 
@@ -62,18 +90,18 @@ jQuery throttle / debounce is licensed under the MIT License
 
 flot is licensed under the MIT License
 
-PHT is licensed under the PHP License, version 3.0
+PHT is licensed under the LGPL-3.0 License
 
 Font Awesome is licensed under CC BY 3.0 License
 
-This product includes PHP, freely available from <http://www.php.net/>
+This product includes PHP, freely available from <https://www.php.net/>
 
 
 
 Thanks
 ---------------------
 
-Special thanks to [Mark James](http://www.famfamfam.com/) for [FAMFAMFAM flag icons](http://www.famfamfam.com/lab/icons/flags/)
+Special thanks to Mark James for [FAMFAMFAM flag icons](https://github.com/legacy-icons/famfamfam-flags)
 
 
 #### Translators
