@@ -301,3 +301,75 @@ describe("getAvgAt90 edge cases", () => {
     expect(getAvgAt90(5)).toBeLessThan(0.9);
   });
 });
+
+// ---------- getAvgAt90 – fractional stamina > 8 (boost branch) ----------
+
+describe("getAvgAt90 fractional stamina > 8", () => {
+  it("hits the stamina > 8 boost branch and returns a value between stamina-8 and 1", () => {
+    const avg = getAvgAt90(8.5);
+    // boost is applied, should be higher than stamina=8 result
+    expect(avg).toBeGreaterThan(getAvgAt90(8));
+    // but still <= 1
+    expect(avg).toBeLessThanOrEqual(1);
+  });
+
+  it("returns 1 for stamina exactly 9", () => {
+    expect(getAvgAt90(9)).toBe(1);
+  });
+
+  it("result for 8.9 is between result for 8 and 1", () => {
+    const avg = getAvgAt90(8.9);
+    expect(avg).toBeGreaterThan(getAvgAt90(8));
+    expect(avg).toBeLessThanOrEqual(1);
+  });
+});
+
+// ---------- getContribution – fractional stamina > 8 (boost branch) ----------
+
+describe("getContribution fractional stamina > 8", () => {
+  it("contribution for stamina 8.5 is higher than for stamina 8 at the same minute", () => {
+    const c8 = getContribution(20, 8, 0, false);
+    const c85 = getContribution(20, 8.5, 0, false);
+    expect(c85).toBeGreaterThanOrEqual(c8);
+  });
+
+  it("contribution for stamina 8.5 does not exceed 1", () => {
+    for (const minute of [1, 30, 60, 89]) {
+      expect(getContribution(minute, 8.5, 0, false)).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+// ---------- getContribution – player starts in second half ----------
+
+describe("getContribution player entering in the second half", () => {
+  it("does not throw for startsAtMinute=60", () => {
+    expect(() => getContribution(10, 5, 60, false)).not.toThrow();
+  });
+
+  it("initialCheckpoint >= HALF_TIME_CHECKPOINT path: returns value in range (0,1]", () => {
+    // startsAtMinute=60: initialCheckpoint = ceil(60/5) = 12 >= 10 (HALF_TIME_CHECKPOINT)
+    const c = getContribution(10, 5, 60, false);
+    expect(c).toBeGreaterThan(0);
+    expect(c).toBeLessThanOrEqual(1);
+  });
+
+  it("contribution decreases as more minutes are played after a second-half entry", () => {
+    const early = getContribution(5, 4, 60, false);  // 5 min after entering at 60
+    const late = getContribution(25, 4, 60, false); // 25 min after entering at 60
+    expect(early).toBeGreaterThan(late);
+  });
+
+  it("second-half entry contribution is better than playing from kickoff for low stamina", () => {
+    // Player with low stamina entering at 60 is fresher than one who played 65 minutes
+    const starter = getContribution(65, 3, 0, false);
+    const sub = getContribution(5, 3, 60, false);
+    expect(sub).toBeGreaterThan(starter);
+  });
+
+  it("pressing still degrades contribution for a second-half entrant", () => {
+    const normal = getContribution(20, 4, 60, false);
+    const pressing = getContribution(20, 4, 60, true);
+    expect(normal).toBeGreaterThanOrEqual(pressing);
+  });
+});
