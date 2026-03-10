@@ -63,13 +63,10 @@ html.dark-mode .theme-icon-moon { display: none; }
 
 .staminia-logo {
   position: absolute;
-  top: $spacer * .5;
-  left: $spacer * .5;
-  height: 27px;
-  width: 27px;
-  vertical-align: middle;
-  background: url("../img/logo-A99BEC36.png") no-repeat;
-  background-size: 27px 27px;
+  top: $spacer * .25;
+  left: 0;
+  height: 32px;
+  width: 32px;
 }
 
 // ============================================================
