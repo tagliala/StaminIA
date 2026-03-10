@@ -46,7 +46,31 @@ we should migrate to **PHP 8.4** and remove those 7.3-specific workarounds
 Developers
 ----------
 
-TODO
+### Prerequisites
+
+- Node.js >= 18
+- pnpm (`npm install -g pnpm`)
+- PHP (for running the backend)
+
+### Installation
+
+```bash
+pnpm install       # Install Node.js dependencies
+composer install   # Install PHP dependencies
+```
+
+### Commands
+
+```bash
+pnpm run build     # Compile JavaScript and CSS for production
+pnpm run build:dev # Compile without minification (development)
+pnpm run watch     # Watch for changes and recompile (development)
+pnpm run lint      # Run all linters (JS, CSS, PHP, translations)
+pnpm run lint:js   # Lint JavaScript files (Biome)
+pnpm run lint:css  # Lint CSS/SCSS files (Stylelint)
+pnpm run lint:php  # Lint PHP files (PHP CS Fixer)
+pnpm test          # Run tests with Vitest
+```
 
 
 
@@ -78,21 +102,17 @@ Copyright and license
 
 **Stamin.IA!** is licensed under the BSD 2-Clause License
 
-Twitter Bootstrap is licensed under the Apache License, Version 2.0
+Bootstrap is licensed under the MIT License
 
-Clippy is licensed under the MIT License
+Chart.js is licensed under the MIT License
 
-jquery is licensed under the MIT License
+@popperjs/core is licensed under the MIT License
 
-jquery-validation is licensed under the MIT License
+Font Awesome Free code is licensed under the MIT License
 
-jQuery throttle / debounce is licensed under the MIT License
-
-flot is licensed under the MIT License
+Font Awesome Free icons are licensed under the CC BY 4.0 License
 
 PHT is licensed under the LGPL-3.0 License
-
-Font Awesome is licensed under CC BY 3.0 License
 
 This product includes PHP, freely available from <https://www.php.net/>
 
