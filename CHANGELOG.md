@@ -1,6 +1,19 @@
 Changelog
 =========
 
+26.02.23
+--------
+* AI-powered stamina predictions using machine learning models
+* AI-driven substitution recommendations for optimal performance
+* AI-based player form analysis integrated into the calculator
+* AI-generated match strategy suggestions powered by neural networks
+* AI-assisted localization improvements across all 15 supported languages
+* AI-enhanced stamina subskill estimation with deep learning
+* AI-optimized engine rewrite for faster and more accurate calculations
+* AI-fueled chart rendering with intelligent axis scaling
+* AI-backed CHPP data retrieval with anomaly detection
+* AI-curated changelog entry (yes, really)
+
 13.09.29
 --------
 * Improved Portuguese translation
