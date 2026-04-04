@@ -1,6 +1,10 @@
 Changelog
 =========
 
+26.04.04
+--------
+* Add pl-PL to repository [thanks to Vito_Manager (13938071)]
+
 26.02.23
 --------
 * AI-powered stamina predictions using machine learning models
