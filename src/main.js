@@ -1,4 +1,5 @@
 import { renderTotalChart, renderPartialsChart, destroyCharts, resizeCharts, updateChartsTheme } from "./charts.js";
+import { SAME_AS_PLAYER_1_POSITION, isAdvancedPositionValid, resolveAdvancedPosition } from "./engine.js";
 import Staminia from "./staminia.js";
 Staminia.CONFIG = Staminia.CONFIG || {};
 
@@ -116,6 +117,70 @@ const TABLE_ID = Staminia.CONFIG.TABLE_ID;
 const DEBUG = Staminia.CONFIG.DEBUG;
 const AUTOSTART = Staminia.CONFIG.AUTOSTART;
 Staminia.predictions = Staminia.CONFIG.PREDICTIONS_HO;
+
+const ADVANCED_PLAYER_IDS = [1, 2];
+const ADVANCED_SKILL_NAMES = Object.keys(Staminia.CONFIG.PR_ENUM_SKILL);
+
+const getAdvancedPositionFieldName = (playerId) => `Staminia_Advanced_Player_${playerId}_Position`;
+
+const isSkillUsedForPosition = (position, skill) => (
+  isAdvancedPositionValid(position) &&
+  Staminia.predictions[position][Staminia.CONFIG.PR_ENUM_SKILL[skill]] > 0
+);
+
+const setAdvancedSkillFieldState = (field, enabled) => {
+  if (field == null) return;
+
+  field.disabled = !enabled;
+  field.classList.toggle("ignore", !enabled);
+
+  if (!enabled) {
+    field.classList.remove("is-invalid");
+    delete field.dataset.validationMessage;
+  }
+};
+
+const normalizeLegacyAdvancedParams = (params, fields) => {
+  if (params.length !== fields.length - 1) return params;
+
+  const fieldNames = fields.map(field => field.name);
+  const player1PositionIndex = fieldNames.indexOf(getAdvancedPositionFieldName(1));
+  const player2PositionIndex = fieldNames.indexOf(getAdvancedPositionFieldName(2));
+
+  if (player1PositionIndex < 0 || player2PositionIndex !== player1PositionIndex + 1) {
+    return params;
+  }
+
+  const normalizedParams = [...params];
+  normalizedParams.splice(player2PositionIndex, 0, String(SAME_AS_PLAYER_1_POSITION));
+  return normalizedParams;
+};
+
+const swapFieldState = (firstField, secondField) => {
+  const firstValue = firstField.value;
+  const firstDisabled = firstField.disabled;
+  const firstChecked = firstField.checked;
+
+  firstField.value = secondField.value;
+  firstField.disabled = secondField.disabled;
+  firstField.checked = secondField.checked;
+
+  secondField.value = firstValue;
+  secondField.disabled = firstDisabled;
+  secondField.checked = firstChecked;
+};
+
+const swapAdvancedPositionFields = (form) => {
+  const player1PositionField = form[getAdvancedPositionFieldName(1)];
+  const player2PositionField = form[getAdvancedPositionFieldName(2)];
+  if (player1PositionField == null || player2PositionField == null) return;
+
+  const player1Position = resolveAdvancedPosition(form, 1);
+  const player2Position = resolveAdvancedPosition(form, 2);
+
+  player1PositionField.value = String(player2Position);
+  player2PositionField.value = String(player1Position);
+};
 
 // Stops propagation of click event on login form
 document.querySelectorAll(".dropdown-menu form").forEach(el => {
@@ -378,25 +443,35 @@ const createAlert = (params) => {
     `<p id="${params.id}Body">${params.body}</p></div>`;
 };
 
-document.getElementById("Staminia_Advanced_Position").addEventListener("change", () => {
-  showSkillsByPosition();
-  stripeTable();
+document.querySelectorAll('[id^="Staminia_Advanced_Player_"][id$="_Position"]').forEach(el => {
+  el.addEventListener("change", () => {
+    showSkillsByPosition();
+    stripeTable();
+  });
 });
 
 const showSkillsByPosition = () => {
-  document.querySelectorAll(`${FORM_ID} tr[class~=advanced]:not([id*=_Advanced_]) *[name*=_Advanced_]`).forEach(el => el.classList.remove("ignore"));
-  document.querySelectorAll(`${FORM_ID} tr[class~=advanced][id*=_Advanced_] *[name*=_Advanced_]`).forEach(el => el.classList.add("ignore"));
-  document.querySelectorAll(`${TABLE_ID} tr[class~=advanced][id*=_Advanced_]`).forEach(el => el.classList.add("d-none"));
+  document.querySelectorAll(`${FORM_ID} tr[class~=advanced]:not([id^=Staminia_Advanced_Skill_]) *[name*=_Advanced_]`).forEach(el => el.classList.remove("ignore"));
 
-  const position = Number(document.getElementById("Staminia_Advanced_Position").value);
-  if (!(position >= 0 && position <= 19)) return;
+  const form = document.querySelector(FORM_ID);
+  const positions = {};
+  for (const playerId of ADVANCED_PLAYER_IDS) {
+    positions[playerId] = resolveAdvancedPosition(form, playerId);
+  }
 
-  const SKILL_ENUMERATOR = Staminia.CONFIG.PR_ENUM_SKILL;
-  for (const skill in SKILL_ENUMERATOR) {
-    if (Staminia.predictions[position][SKILL_ENUMERATOR[skill]] > 0) {
-      document.querySelectorAll(`#Staminia_Advanced_Skill_${skill} *[name]`).forEach(el => el.classList.remove("ignore"));
-      const row = document.getElementById(`Staminia_Advanced_Skill_${skill}`);
-      if (row) row.classList.remove("d-none");
+  for (const skill of ADVANCED_SKILL_NAMES) {
+    const row = document.getElementById(`Staminia_Advanced_Skill_${skill}`);
+    let rowVisible = false;
+
+    for (const playerId of ADVANCED_PLAYER_IDS) {
+      const field = form[`Staminia_Advanced_Player_${playerId}_Skill_${skill}`];
+      const enabled = isSkillUsedForPosition(positions[playerId], skill);
+      setAdvancedSkillFieldState(field, enabled);
+      rowVisible = rowVisible || enabled;
+    }
+
+    if (row) {
+      row.classList.toggle("d-none", !rowVisible);
     }
   }
 };
@@ -440,8 +515,8 @@ const fillForm = () => {
   const paramsString = gup("params");
   if (paramsString == null) return;
 
-  const params = decodeURI(paramsString).split("-");
-  const fields = document.querySelectorAll("*[name^=Staminia_]");
+  const fields = [...document.querySelectorAll("*[name^=Staminia_]")];
+  const params = normalizeLegacyAdvancedParams(decodeURI(paramsString).split("-"), fields);
   fields.forEach((field, i) => {
     switch (field.type) {
       case "checkbox":
@@ -459,6 +534,7 @@ const fillForm = () => {
   }
   checkMotherClubBonus();
   updatePredictions();
+  showSkillsByPosition();
   stripeTable();
 };
 
@@ -554,19 +630,14 @@ document.getElementById("getLink").addEventListener("click", (e) => {
 document.getElementById("switchPlayers").addEventListener("click", () => {
   const form = document.querySelector(FORM_ID);
   document.querySelectorAll(`${FORM_ID} *[name*=_Player_1_]`).forEach(p1Field => {
-    const p2Field = form[p1Field.name.replace("_1", "_2")];
+    if (p1Field.name.endsWith("_Position")) return;
 
-    const p1Value = p1Field.value;
-    const p1Disabled = p1Field.disabled;
-    const p1Checked = p1Field.checked;
-    p1Field.value = p2Field.value;
-    p1Field.disabled = p2Field.disabled;
-    p1Field.checked = p2Field.checked;
-    p2Field.value = p1Value;
-    p2Field.disabled = p1Disabled;
-    p2Field.checked = p1Checked;
+    const p2Field = form[p1Field.name.replace("_1", "_2")];
+    swapFieldState(p1Field, p2Field);
   });
+  swapAdvancedPositionFields(form);
   checkMotherClubBonus();
+  showSkillsByPosition();
   validateForm();
 });
 
@@ -584,7 +655,11 @@ document.querySelectorAll(".motherclub-bonus-checkbox").forEach(el => {
 });
 
 document.querySelectorAll('input[name="Staminia_Options_Predictions_Type"]').forEach(el => {
-  el.addEventListener("change", () => updatePredictions());
+  el.addEventListener("change", () => {
+    updatePredictions();
+    showSkillsByPosition();
+    stripeTable();
+  });
 });
 
 document.querySelectorAll('input[data-validate="range"], select[data-validate="range"]').forEach(function(el) {

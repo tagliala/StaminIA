@@ -86,7 +86,8 @@ function buildForm(opts = {}) {
  */
 function buildAdvancedForm(opts = {}) {
   const {
-    position = 8, // IM – playmaking-dominant position
+    p1Position = 8, // IM – playmaking-dominant position
+    p2Position = -1,
     p1Form = 5, p1Stamina = 7, p1Experience = 8, p1Loyalty = 10, p1MotherClub = false,
     p1Keeper = 4, p1Defending = 7, p1Playmaking = 10, p1Winger = 5, p1Passing = 6, p1Scoring = 3,
     p2Form = 4, p2Stamina = 5, p2Experience = 6, p2Loyalty = 10, p2MotherClub = false,
@@ -106,7 +107,8 @@ function buildAdvancedForm(opts = {}) {
       <input type="checkbox" name="Staminia_Options_Pressing" ${checked(pressing)}>
       <input type="checkbox" name="Staminia_Options_Charts">
       <input type="checkbox" name="Staminia_Options_VerboseMode">
-      ${sel("Staminia_Advanced_Position", position)}
+      ${sel("Staminia_Advanced_Player_1_Position", p1Position)}
+      ${sel("Staminia_Advanced_Player_2_Position", p2Position)}
       ${inp("Staminia_Advanced_Player_1_Form", p1Form)}
       ${inp("Staminia_Advanced_Player_1_Stamina", p1Stamina)}
       ${inp("Staminia_Advanced_Player_1_Experience", p1Experience)}
@@ -576,10 +578,11 @@ describe("Engine.start() – advanced mode", () => {
     expect(result).toHaveProperty("substituteAt");
     expect(result).toHaveProperty("player1Strength");
     expect(result).toHaveProperty("player2Strength");
+    expect(result).toHaveProperty("playerRolesMatch");
   });
 
   it("position=-1 causes both player skills to be 0, so strength is 0", () => {
-    currentForm = buildAdvancedForm({ position: -1 });
+    currentForm = buildAdvancedForm({ p1Position: -1 });
     const result = Staminia.Engine.start();
     expect(Number(result.player1Strength)).toBe(0);
     expect(Number(result.player2Strength)).toBe(0);
@@ -598,6 +601,32 @@ describe("Engine.start() – advanced mode", () => {
     expect(result.player2_stronger_than_player1).toBe(true);
   });
 
+  it("treats Player 2 default role as Player 1's role", () => {
+    currentForm = buildAdvancedForm({ p1Position: 8, p2Position: -1, p1Playmaking: 4, p2Playmaking: 16 });
+    const result = Staminia.Engine.start();
+
+    expect(result.playerRolesMatch).toBe(true);
+    expect(result.player2Position).toBe(8);
+    expect(result.player2_stronger_than_player1).toBe(true);
+  });
+
+  it("suppresses stronger-player warning when advanced roles differ", () => {
+    currentForm = buildAdvancedForm({
+      p1Position: 0,
+      p2Position: 16,
+      p1Keeper: 4,
+      p1Defending: 0,
+      p2Winger: 22,
+      p2Passing: 22,
+      p2Scoring: 22,
+    });
+    const result = Staminia.Engine.start();
+
+    expect(Number(result.player2Strength)).toBeGreaterThan(Number(result.player1Strength));
+    expect(result.playerRolesMatch).toBe(false);
+    expect(result.player2_stronger_than_player1).toBe(false);
+  });
+
   it("mother club bonus increases strength in advanced mode", () => {
     currentForm = buildAdvancedForm({ p1Loyalty: 10, p1MotherClub: false });
     const withoutBonus = Number(Staminia.Engine.start().player1Strength);
@@ -611,14 +640,14 @@ describe("Engine.start() – advanced mode", () => {
 
   it("GK position (0) is dominated by keeper skill", () => {
     // position 0: keeper_coeff=0.4897, defending_coeff=0.2310
-    currentForm = buildAdvancedForm({ position: 0, p1Keeper: 18, p2Keeper: 3 });
+    currentForm = buildAdvancedForm({ p1Position: 0, p2Position: 0, p1Keeper: 18, p2Keeper: 3 });
     const result = Staminia.Engine.start();
     expect(Number(result.player1Strength)).toBeGreaterThan(Number(result.player2Strength));
   });
 
   it("FW position (16) is dominated by scoring+winger, not keeper", () => {
     // position 16: keeper=0, scoring_coeff=0.3046, winger_coeff=0.0790
-    currentForm = buildAdvancedForm({ position: 16, p1Scoring: 18, p2Scoring: 3 });
+    currentForm = buildAdvancedForm({ p1Position: 16, p2Position: 16, p1Scoring: 18, p2Scoring: 3 });
     const result = Staminia.Engine.start();
     expect(Number(result.player1Strength)).toBeGreaterThan(Number(result.player2Strength));
   });

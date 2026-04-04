@@ -42,6 +42,80 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
         echo "<option value=\"$i\"" . (($select == $i) ? " selected=\"selected\"" : "") . ">$skillLabel</option>\n";
     }
 }
+
+function optionRoles($select = 0, $includeSameAsPlayer1 = false)
+{
+    $groups = [
+        [
+            'label' => null,
+            'options' => [
+                0 => 'Keeper',
+            ],
+        ],
+        [
+            'label' => 'Defender',
+            'options' => [
+                1 => 'Defender',
+                2 => 'Defender (Off)',
+                3 => 'Defender (TW)',
+            ],
+        ],
+        [
+            'label' => 'Winger Back',
+            'options' => [
+                4 => 'Winger Back',
+                5 => 'Winger Back (Off)',
+                6 => 'Winger Back (Def)',
+                7 => 'Winger Back (TM)',
+            ],
+        ],
+        [
+            'label' => 'Midfielder',
+            'options' => [
+                8 => 'Midfielder',
+                9 => 'Midfielder (Off)',
+                10 => 'Midfielder (Def)',
+                11 => 'Midfielder (TW)',
+            ],
+        ],
+        [
+            'label' => 'Winger',
+            'options' => [
+                12 => 'Winger',
+                13 => 'Winger (Off)',
+                14 => 'Winger (Def)',
+                15 => 'Winger (TM)',
+            ],
+        ],
+        [
+            'label' => 'Forward',
+            'options' => [
+                16 => 'Forward',
+                17 => 'Forward (Def)',
+                18 => 'Forward (Def+Tec)',
+                19 => 'Forward (TW)',
+            ],
+        ],
+    ];
+
+    if ($includeSameAsPlayer1) {
+        echo '<option value="-1"' . (($select == -1) ? ' selected="selected"' : '') . '>' . localize("Same as Player 1") . "</option>\n";
+    }
+
+    foreach ($groups as $group) {
+        if ($group['label'] !== null) {
+            echo '<optgroup label="' . localize($group['label']) . "\">\n";
+        }
+
+        foreach ($group['options'] as $value => $label) {
+            echo '<option value="' . $value . '"' . (($select == $value) ? ' selected="selected"' : '') . '>' . localize($label) . "</option>\n";
+        }
+
+        if ($group['label'] !== null) {
+            echo "</optgroup>\n";
+        }
+    }
+}
 ?>
 <?php $staminia_version = "26.2.23" ?>
 <!DOCTYPE html>
@@ -528,40 +602,18 @@ foreach ($lang_array as $key => $val) {
                     </tr>
                     <tr class="advanced d-none">
                       <td><?= localize("Position"); ?></td>
-                      <td colspan="2">
+                      <td>
                         <div class="control-group">
                           <span class="field-caption"><?= localize("Position"); ?></span>
-                          <select class="form-select form-select-sm ignore" id="Staminia_Advanced_Position" name="Staminia_Advanced_Position" data-field-name="<?php echo localize("Position"); ?>">
-                            <option value="0"><?php echo localize("Keeper"); ?></option>
-                            <optgroup label="<?= localize("Defender"); ?>">
-                              <option value="1"><?php echo localize("Defender"); ?></option>
-                              <option value="2"><?php echo localize("Defender (Off)"); ?></option>
-                              <option value="3"><?php echo localize("Defender (TW)"); ?></option>
-                            </optgroup>
-                            <optgroup label="<?= localize("Winger Back"); ?>">
-                              <option value="4"><?php echo localize("Winger Back"); ?></option>
-                              <option value="5"><?php echo localize("Winger Back (Off)"); ?></option>
-                              <option value="6"><?php echo localize("Winger Back (Def)"); ?></option>
-                              <option value="7"><?php echo localize("Winger Back (TM)"); ?></option>
-                            </optgroup>
-                            <optgroup label="<?= localize("Midfielder"); ?>">
-                              <option value="8"><?php echo localize("Midfielder"); ?></option>
-                              <option value="9"><?php echo localize("Midfielder (Off)"); ?></option>
-                              <option value="10"><?php echo localize("Midfielder (Def)"); ?></option>
-                              <option value="11"><?php echo localize("Midfielder (TW)"); ?></option>
-                            </optgroup>
-                            <optgroup label="<?= localize("Winger"); ?>">
-                              <option value="12"><?php echo localize("Winger"); ?></option>
-                              <option value="13"><?php echo localize("Winger (Off)"); ?></option>
-                              <option value="14"><?php echo localize("Winger (Def)"); ?></option>
-                              <option value="15"><?php echo localize("Winger (TM)"); ?></option>
-                            </optgroup>
-                            <optgroup label="<?= localize("Forward"); ?>">
-                              <option value="16"><?php echo localize("Forward"); ?></option>
-                              <option value="17"><?php echo localize("Forward (Def)"); ?></option>
-                              <option value="18"><?php echo localize("Forward (Def+Tec)"); ?></option>
-                              <option value="19"><?php echo localize("Forward (TW)"); ?></option>
-                            </optgroup>
+                          <select class="form-select form-select-sm ignore" id="Staminia_Advanced_Player_1_Position" name="Staminia_Advanced_Player_1_Position" data-field-name="<?= localize("Player 1") ?> <?= localize("Position"); ?>">
+                            <?php optionRoles(); ?>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="control-group">
+                          <select class="form-select form-select-sm ignore" id="Staminia_Advanced_Player_2_Position" name="Staminia_Advanced_Player_2_Position" data-field-name="<?= localize("Player 2") ?> <?= localize("Position"); ?>">
+                            <?php optionRoles(-1, true); ?>
                           </select>
                         </div>
                       </td>

@@ -50,6 +50,38 @@ const PR_ENUM_ROLE = {
   19: "FW TW"
 };
 
+export const SAME_AS_PLAYER_1_POSITION = -1;
+
+const MAX_ADVANCED_POSITION = Object.keys(PR_ENUM_ROLE).length - 1;
+const ADVANCED_POSITION_FIELD_NAMES = {
+  1: "Staminia_Advanced_Player_1_Position",
+  2: "Staminia_Advanced_Player_2_Position"
+};
+const LEGACY_ADVANCED_POSITION_FIELD_NAME = "Staminia_Advanced_Position";
+
+export const isAdvancedPositionValid = (position) => position >= 0 && position <= MAX_ADVANCED_POSITION;
+
+const getAdvancedRawPosition = (formReference, player) => {
+  const fieldName = ADVANCED_POSITION_FIELD_NAMES[player];
+  if (fieldName != null && formReference[fieldName] != null) {
+    return Number(formReference[fieldName].value);
+  }
+  if (formReference[LEGACY_ADVANCED_POSITION_FIELD_NAME] != null) {
+    return Number(formReference[LEGACY_ADVANCED_POSITION_FIELD_NAME].value);
+  }
+  return SAME_AS_PLAYER_1_POSITION;
+};
+
+export const resolveAdvancedPosition = (formReference, player) => {
+  const player1Position = getAdvancedRawPosition(formReference, 1);
+  if (player === 1) {
+    return player1Position;
+  }
+
+  const playerPosition = getAdvancedRawPosition(formReference, player);
+  return playerPosition === SAME_AS_PLAYER_1_POSITION ? player1Position : playerPosition;
+};
+
 Staminia.estimateStaminaSubskills = (performanceAt90) => {
   if (performanceAt90 <= 89) {
     return Math.min(9, Number(0.10134 * performanceAt90 - 0.9899));
@@ -209,8 +241,8 @@ const getSimpleSkill = (player) => {
 
 const getAdvancedSkill = (player) => {
   const formReference = document.querySelector(Staminia.CONFIG.FORM_ID);
-  const position = Number(formReference.Staminia_Advanced_Position.value);
-  if (position < 0) return 0;
+  const position = resolveAdvancedPosition(formReference, player);
+  if (!isAdvancedPositionValid(position)) return 0;
 
   const playerLoyalty = validateSkill(formReference["Staminia_Advanced_Player_" + player + "_Loyalty"].value, "loyalty");
   const playerMotherClubBonus = formReference["Staminia_Player_" + player + "_MotherClubBonus"].checked;
@@ -265,8 +297,12 @@ Staminia.Engine.start = function() {
   const formReference = document.querySelector(Staminia.CONFIG.FORM_ID);
   let player1Form, player2Form, player1Stamina, player2Stamina;
   let player1Experience, player2Experience, player1Skill, player2Skill;
+  let player1Position = null;
+  let player2Position = null;
 
   if (Staminia.isAdvancedModeEnabled()) {
+    player1Position = resolveAdvancedPosition(formReference, 1);
+    player2Position = resolveAdvancedPosition(formReference, 2);
     player1Form = validateSkill(formReference.Staminia_Advanced_Player_1_Form.value, "form");
     player2Form = validateSkill(formReference.Staminia_Advanced_Player_2_Form.value, "form");
     player1Stamina = validateSkill(formReference.Staminia_Advanced_Player_1_Stamina.value, "stamina");
@@ -292,7 +328,10 @@ Staminia.Engine.start = function() {
   const player1StrengthStaminaIndependent = calculateStrength(player1Skill, player1Form, player1Stamina, player1Experience, false);
   const player2StrengthStaminaIndependent = calculateStrength(player2Skill, player2Form, player2Stamina, player2Experience, false);
 
-  this.result.player2_stronger_than_player1 = player2Strength > player1Strength;
+  this.result.player1Position = player1Position;
+  this.result.player2Position = player2Position;
+  this.result.playerRolesMatch = !Staminia.isAdvancedModeEnabled() || player1Position === player2Position;
+  this.result.player2_stronger_than_player1 = this.result.playerRolesMatch && player2Strength > player1Strength;
   this.result.player1Strength = Staminia.number_format(player1Strength, 2);
   this.result.player2Strength = Staminia.number_format(player2Strength, 2);
 

@@ -77,6 +77,9 @@ const PAGE_HTML = `
     ${selectEl("Staminia_Simple_Player_1_MainSkill", 8)}
     ${selectEl("Staminia_Simple_Player_1_Loyalty", 10)}
     <input type="checkbox" name="Staminia_Player_1_MotherClubBonus">
+    <input type="text" name="Staminia_Advanced_Player_1_Form" value="5.00">
+    <input type="text" name="Staminia_Advanced_Player_1_Stamina" value="7.00">
+    <input type="text" name="Staminia_Advanced_Player_1_Experience" value="8.00">
     <input type="text" name="Staminia_Advanced_Player_1_Loyalty" value="10.00">
 
     ${selectEl("Staminia_Simple_Player_2_Form", 4, 1, 8)}
@@ -85,6 +88,9 @@ const PAGE_HTML = `
     ${selectEl("Staminia_Simple_Player_2_MainSkill", 6)}
     ${selectEl("Staminia_Simple_Player_2_Loyalty", 15)}
     <input type="checkbox" name="Staminia_Player_2_MotherClubBonus">
+    <input type="text" name="Staminia_Advanced_Player_2_Form" value="4.00">
+    <input type="text" name="Staminia_Advanced_Player_2_Stamina" value="5.00">
+    <input type="text" name="Staminia_Advanced_Player_2_Experience" value="6.00">
     <input type="text" name="Staminia_Advanced_Player_2_Loyalty" value="15.00">
 
     <input type="checkbox" id="Staminia_Options_AdvancedMode"
@@ -97,13 +103,62 @@ const PAGE_HTML = `
            name="Staminia_Options_VerboseMode">
     <input type="checkbox" id="Staminia_Options_OnlySecondHalf"
            name="Staminia_Options_OnlySecondHalf">
-    <select id="Staminia_Advanced_Position" name="Staminia_Advanced_Position">
-      <option value="8" selected>IM</option>
-    </select>
+
+    <table id="playersInfoTable">
+      <tbody>
+        <tr class="advanced d-none">
+          <td>Position</td>
+          <td>
+            <select id="Staminia_Advanced_Player_1_Position" name="Staminia_Advanced_Player_1_Position">
+              <option value="0">GK</option>
+              <option value="8" selected>IM</option>
+              <option value="16">FW</option>
+            </select>
+          </td>
+          <td>
+            <select id="Staminia_Advanced_Player_2_Position" name="Staminia_Advanced_Player_2_Position">
+              <option value="-1" selected>Same as Player 1</option>
+              <option value="0">GK</option>
+              <option value="8">IM</option>
+              <option value="16">FW</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Keeper">
+          <td>Keeper</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Keeper" value="4.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Keeper" value="3.00"></td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Defending">
+          <td>Defending</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Defending" value="7.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Defending" value="6.00"></td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Playmaking">
+          <td>Playmaking</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Playmaking" value="10.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Playmaking" value="7.00"></td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Winger">
+          <td>Winger</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Winger" value="5.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Winger" value="4.00"></td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Passing">
+          <td>Passing</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Passing" value="6.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Passing" value="5.00"></td>
+        </tr>
+        <tr class="advanced d-none" id="Staminia_Advanced_Skill_Scoring">
+          <td>Scoring</td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_1_Skill_Scoring" value="3.00"></td>
+          <td><input type="text" class="ignore" name="Staminia_Advanced_Player_2_Skill_Scoring" value="4.00"></td>
+        </tr>
+      </tbody>
+    </table>
   </form>
 
   <form id="optionForm"></form>
-  <table id="playersInfoTable"></table>
 
   <div id="AlertsContainer"></div>
   <button id="calculate"></button>
@@ -213,12 +268,34 @@ const resetForm = () => {
   f("Staminia_Simple_Player_1_MainSkill").value = "8";
   f("Staminia_Simple_Player_1_Loyalty").value = "10";
   f("Staminia_Player_1_MotherClubBonus").checked = false;
+  f("Staminia_Advanced_Player_1_Form").value = "5.00";
+  f("Staminia_Advanced_Player_1_Stamina").value = "7.00";
+  f("Staminia_Advanced_Player_1_Experience").value = "8.00";
+  f("Staminia_Advanced_Player_1_Loyalty").value = "10.00";
+  f("Staminia_Advanced_Player_1_Position").value = "8";
+  f("Staminia_Advanced_Player_1_Skill_Keeper").value = "4.00";
+  f("Staminia_Advanced_Player_1_Skill_Defending").value = "7.00";
+  f("Staminia_Advanced_Player_1_Skill_Playmaking").value = "10.00";
+  f("Staminia_Advanced_Player_1_Skill_Winger").value = "5.00";
+  f("Staminia_Advanced_Player_1_Skill_Passing").value = "6.00";
+  f("Staminia_Advanced_Player_1_Skill_Scoring").value = "3.00";
   f("Staminia_Simple_Player_2_Form").value = "4";
   f("Staminia_Simple_Player_2_Stamina").value = "5";
   f("Staminia_Simple_Player_2_Experience").value = "6";
   f("Staminia_Simple_Player_2_MainSkill").value = "6";
   f("Staminia_Simple_Player_2_Loyalty").value = "15";
   f("Staminia_Player_2_MotherClubBonus").checked = false;
+  f("Staminia_Advanced_Player_2_Form").value = "4.00";
+  f("Staminia_Advanced_Player_2_Stamina").value = "5.00";
+  f("Staminia_Advanced_Player_2_Experience").value = "6.00";
+  f("Staminia_Advanced_Player_2_Loyalty").value = "15.00";
+  f("Staminia_Advanced_Player_2_Position").value = "-1";
+  f("Staminia_Advanced_Player_2_Skill_Keeper").value = "3.00";
+  f("Staminia_Advanced_Player_2_Skill_Defending").value = "6.00";
+  f("Staminia_Advanced_Player_2_Skill_Playmaking").value = "7.00";
+  f("Staminia_Advanced_Player_2_Skill_Winger").value = "4.00";
+  f("Staminia_Advanced_Player_2_Skill_Passing").value = "5.00";
+  f("Staminia_Advanced_Player_2_Skill_Scoring").value = "4.00";
 };
 
 beforeEach(() => {
@@ -479,6 +556,54 @@ describe("Form submission – charts mode", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Advanced mode role handling
+// ---------------------------------------------------------------------------
+
+describe("Advanced mode role handling", () => {
+  const f = (name) => document.querySelector(`[name="${name}"]`);
+
+  const enableAdvancedMode = () => {
+    const advancedModeToggle = document.getElementById("Staminia_Options_AdvancedMode");
+    advancedModeToggle.checked = true;
+    advancedModeToggle.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+
+  it("shows the union of required skill rows and disables irrelevant inputs", () => {
+    enableAdvancedMode();
+    f("Staminia_Advanced_Player_1_Position").value = "0";
+    f("Staminia_Advanced_Player_1_Position").dispatchEvent(new Event("change", { bubbles: true }));
+    f("Staminia_Advanced_Player_2_Position").value = "16";
+    f("Staminia_Advanced_Player_2_Position").dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(document.getElementById("Staminia_Advanced_Skill_Keeper").classList.contains("d-none")).toBe(false);
+    expect(document.getElementById("Staminia_Advanced_Skill_Scoring").classList.contains("d-none")).toBe(false);
+    expect(f("Staminia_Advanced_Player_1_Skill_Keeper").disabled).toBe(false);
+    expect(f("Staminia_Advanced_Player_2_Skill_Keeper").disabled).toBe(true);
+    expect(f("Staminia_Advanced_Player_1_Skill_Scoring").disabled).toBe(true);
+    expect(f("Staminia_Advanced_Player_2_Skill_Scoring").disabled).toBe(false);
+  });
+
+  it("does not show the stronger-player warning when advanced roles differ", () => {
+    enableAdvancedMode();
+    f("Staminia_Advanced_Player_1_Position").value = "0";
+    f("Staminia_Advanced_Player_1_Position").dispatchEvent(new Event("change", { bubbles: true }));
+    f("Staminia_Advanced_Player_2_Position").value = "16";
+    f("Staminia_Advanced_Player_2_Position").dispatchEvent(new Event("change", { bubbles: true }));
+
+    f("Staminia_Advanced_Player_1_Skill_Keeper").value = "4.00";
+    f("Staminia_Advanced_Player_1_Skill_Defending").value = "0.00";
+    f("Staminia_Advanced_Player_2_Skill_Winger").value = "22.00";
+    f("Staminia_Advanced_Player_2_Skill_Passing").value = "22.00";
+    f("Staminia_Advanced_Player_2_Skill_Scoring").value = "22.00";
+
+    submitForm();
+
+    const warnings = document.getElementById("formWarnings");
+    expect(warnings?.textContent ?? "").not.toContain(messages.player2_stronger_than_player1);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Switch players button
 // ---------------------------------------------------------------------------
 
@@ -515,6 +640,14 @@ describe("Switch players button", () => {
     document.getElementById("switchPlayers").click();
     expect(f("Staminia_Player_1_MotherClubBonus").checked).toBe(false);
     expect(f("Staminia_Player_2_MotherClubBonus").checked).toBe(true);
+  });
+
+  it("swaps advanced position values by effective role", () => {
+    f("Staminia_Advanced_Player_1_Position").value = "0";
+    f("Staminia_Advanced_Player_2_Position").value = "16";
+    document.getElementById("switchPlayers").click();
+    expect(f("Staminia_Advanced_Player_1_Position").value).toBe("16");
+    expect(f("Staminia_Advanced_Player_2_Position").value).toBe("0");
   });
 
   it("result after switch reflects swapped players", () => {
