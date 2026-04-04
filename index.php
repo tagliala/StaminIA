@@ -43,7 +43,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
     }
 }
 ?>
-<?php $staminia_version = "26.2.23" ?>
+<?php $staminia_version = trim((string) file_get_contents(__DIR__ . '/VERSION')); ?>
 <!DOCTYPE html>
 <html lang="<?php echo localize("lang"); ?>">
   <head>
