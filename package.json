@@ -37,19 +37,19 @@
   },
   "packageManager": "pnpm@10.30.1",
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@biomejs/biome": "^2.4.10",
+    "@vitest/coverage-v8": "^4.1.2",
     "chokidar-cli": "^3.0.0",
-    "esbuild": "^0.27.3",
+    "esbuild": "^0.28.0",
     "husky": "^9.1.7",
-    "jsdom": "^28.1.0",
-    "lint-staged": "^16.3.3",
+    "jsdom": "^29.0.1",
+    "lint-staged": "^16.4.0",
     "npm-run-all2": "^8.0.4",
-    "sass": "^1.97.3",
-    "stylelint": "^17.4.0",
+    "sass": "^1.99.0",
+    "stylelint": "^17.6.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.2"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
