@@ -9,10 +9,11 @@ on player stamina, form, experience, and other attributes.
 ### Current State
 
 - **Backend**: PHP (index.php, localization.php, CHPP OAuth integration)
-- **Frontend logic**: CoffeeScript sources in `coffee/` compiled to JavaScript in `js/`
-- **Stylesheets**: Custom CSS in `css/main.css`, vendored Bootstrap 2.3.0 in `css/bootstrap.css`
-- **Build system**: pnpm with npm scripts (migrated from legacy Apache Ant)
+- **Frontend logic**: JavaScript sources in `src/` compiled to `dist/`
+- **Stylesheets**: SCSS in `src/styles.scss`, Bootstrap 5.3.8 via npm
+- **Build system**: pnpm with npm scripts (esbuild + sass)
 - **Package manager**: pnpm
+- **Testing**: Vitest
 - **CI**: GitHub Actions
 
 ## Technology Stack
@@ -20,29 +21,31 @@ on player stamina, form, experience, and other attributes.
 | Layer            | Technology                        |
 | ---------------- | --------------------------------- |
 | Package manager  | pnpm                              |
-| JS compilation   | CoffeeScript (coffeescript)       |
-| CSS framework    | Bootstrap 2.3.0 (vendored)        |
+| JS bundler       | esbuild                           |
+| CSS preprocessor | sass (Dart Sass)                  |
+| CSS framework    | Bootstrap 5.3.8 (npm)             |
 | JS linting       | Biome                             |
 | CSS linting      | Stylelint                         |
+| Testing          | Vitest                            |
 | CI               | GitHub Actions                    |
 | Pre-commit hooks | Husky + lint-staged               |
 | Backend          | PHP                               |
 
 ## Code Style and Conventions
 
-### JavaScript / CoffeeScript
+### JavaScript
 
-- Follow the existing CoffeeScript style in `coffee/` files
+- Follow the existing JavaScript style in `src/` files
 - Use double quotes for strings
 - Use two-space indentation
 - Prefer descriptive variable names (camelCase)
 - Keep functions short and focused
 
-### CSS
+### CSS / SCSS
 
 - Use two-space indentation
-- Custom styles go in `css/main.css`
-- Do not modify vendored files (`css/bootstrap.css`, `css/bootstrap-responsive.css`, `css/flags.css`)
+- Custom styles go in `src/styles.scss`
+- Do not modify files in `node_modules/`
 
 ### Ruby Conventions (where applicable)
 
@@ -67,11 +70,10 @@ on player stamina, form, experience, and other attributes.
 Examples:
 
 ```
-Add CoffeeScript compilation to build scripts
+Add esbuild bundling for JavaScript
 
-Replace the legacy Ant-based CoffeeScript compilation with a pnpm
-script using the coffeescript package. This ensures the build system
-works without Java dependencies.
+Replace the legacy CoffeeScript compilation with esbuild for
+faster builds and better tree-shaking support.
 ```
 
 ```
@@ -85,38 +87,41 @@ Fix stamina calculation for pressing mode
 - Node.js >= 18
 - pnpm (`npm install -g pnpm`)
 - PHP (for running the backend)
+- Composer (for PHP linting)
 
 ### Commands
 
 ```bash
 pnpm install       # Install dependencies
-pnpm run build     # Compile CoffeeScript to JavaScript
-pnpm run watch     # Watch CoffeeScript for changes (development)
+pnpm run build     # Build JS and CSS for production
+pnpm run build:dev # Build JS and CSS for development (unminified)
+pnpm run watch     # Watch for changes (development)
 pnpm run lint      # Run all linters
 pnpm run lint:js   # Lint JavaScript files (Biome)
 pnpm run lint:css  # Lint CSS files (Stylelint)
+pnpm run test      # Run tests (Vitest)
 ```
 
 ### Directory Structure
 
 ```
-coffee/          → CoffeeScript source files (project code)
-js/              → Compiled JavaScript (output from CoffeeScript)
-js/vendor/       → Vendored JavaScript libraries (do not modify)
-css/             → Stylesheets (main.css is project code, rest is vendored)
-less/            → Vendored Bootstrap 2.3.0 LESS source (reference only)
-chpp/            → CHPP API integration (PHP)
-lang/            → Localization JSON files
-lib/             → PHP libraries (PHT)
-img/             → Images and icons
+src/          → JavaScript and SCSS source files (project code)
+dist/         → Compiled output (JS and CSS)
+node_modules/ → Dependencies (do not modify)
+lang/         → Localization JSON files
+chpp/         → CHPP API integration (PHP)
+img/          → Images and icons
+test/         → Vitest test files
+scripts/      → Build and utility scripts
 ```
 
 ### Development Workflow
 
-1. Make changes to CoffeeScript files in `coffee/`
-2. Run `pnpm run watch` for automatic recompilation during development
+1. Make changes to JavaScript/SCSS files in `src/`
+2. Run `pnpm run watch` for automatic rebuild during development
 3. Run `pnpm run lint` before committing
-4. Run `pnpm run build` to verify production builds
+4. Run `pnpm run test` to run tests
+5. Run `pnpm run build` to verify production builds
 
 ### Translation Workflow
 
@@ -124,11 +129,11 @@ img/             → Images and icons
 run and must pass:**
 
 ```bash
-pnpm run lint:translations   # Validates all lang/*.json files
-pnpm run lint:js             # Biome — JS may reference translation keys
-pnpm run lint:css            # Stylelint — no-op but required for full green
-pnpm run lint:php            # PHP CS Fixer — localization.php changes
-pnpm run lint                # Run all of the above in one command (preferred)
+pnpm run lint:translations # Validates all lang/*.json files
+pnpm run lint:js           # Biome — JS may reference translation keys
+pnpm run lint:css          # Stylelint — no-op but required for full green
+pnpm run lint:php          # PHP CS Fixer — localization.php changes
+pnpm run lint              # Run all of the above in one command (preferred)
 ```
 
 These are **mandatory, not optional**. Do not consider a translation task done
@@ -141,7 +146,7 @@ introduced.
 - `lang/*.json` — single source of truth for all translations
 - Top-level keys → used by PHP (`localization.php`) for server-rendered UI
 - `JAVASCRIPT_STRINGS` nested object → used by JS via `localizeJavascript()`
-- All 15 locale files must have `JAVASCRIPT_STRINGS` with exactly 46 keys
+- All locale files must have `JAVASCRIPT_STRINGS` with the same keys
 - English (`en-us`) is the fallback: missing keys are filled per-key from `en-us`
 - `best_in_first_half` uses football terminology per language (e.g. "primera
   parte" in Spanish, "première mi-temps" in French, "erste Halbzeit" in German)
@@ -151,6 +156,7 @@ introduced.
 
 - All linters must pass before merging
 - CI must be green on every pull request
-- Build output (`js/`) must match expected compilation results
+- Build output (`dist/`) must match expected compilation results
+- Tests must pass (`pnpm run test`)
 - No regressions in existing PHP backend functionality
 - Manual testing with a PHP server to verify the application works
