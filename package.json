@@ -1,0 +1,59 @@
+{
+  "name": "staminia",
+  "version": "13.9.29",
+  "description": "Hattrick's first substitutions calculator tool",
+  "private": true,
+  "scripts": {
+    "build": "run-s build:js build:css",
+    "build:js": "esbuild src/index.js --bundle --inject:src/globals-shim.js --outfile=dist/staminia.min.js --format=iife --target=es2015 --minify --define:this=window",
+    "build:css": "sass src/styles.scss dist/staminia.min.css --style=compressed --load-path=node_modules --no-source-map --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function",
+    "build:dev": "run-s build:dev:js build:dev:css",
+    "build:dev:js": "esbuild src/index.js --bundle --inject:src/globals-shim.js --outfile=dist/staminia.min.js --format=iife --target=es2015 --define:this=window",
+    "build:dev:css": "sass src/styles.scss dist/staminia.min.css --style=compressed --load-path=node_modules --no-source-map --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function",
+    "watch": "pnpm run watch:css & pnpm run watch:js",
+    "watch:js": "chokidar \"src/**/*.js\" -c \"esbuild src/index.js --bundle --inject:src/globals-shim.js --outfile=dist/staminia.min.js --format=iife --target=es2015 --define:this=window\"",
+    "watch:css": "chokidar \"src/**/*.scss\" -c \"sass src/styles.scss dist/staminia.min.css --style=compressed --load-path=node_modules --no-source-map --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function\"",
+    "lint": "run-s lint:js lint:css lint:php lint:translations",
+    "lint:js": "biome check src/",
+    "lint:css": "stylelint 'src/**/*.scss'",
+    "lint:php": "composer lint",
+    "lint:translations": "node scripts/lint-translations.js",
+    "fix:translations": "node scripts/fix-translations.js",
+    "test": "vitest run",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "hattrick",
+    "stamina",
+    "substitutions",
+    "calculator"
+  ],
+  "license": "BSD-2-Clause",
+  "type": "module",
+  "lint-staged": {
+    "src/**/*.js": "biome check --write",
+    "src/**/*.scss": "stylelint --fix",
+    "*.php": "vendor/bin/php-cs-fixer fix --dry-run --config=.php-cs-fixer.dist.php"
+  },
+  "packageManager": "pnpm@10.30.1",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@vitest/coverage-v8": "^4.1.2",
+    "chokidar-cli": "^3.0.0",
+    "esbuild": "^0.28.0",
+    "husky": "^9.1.7",
+    "jsdom": "^29.0.1",
+    "lint-staged": "^16.4.0",
+    "npm-run-all2": "^8.0.4",
+    "sass": "^1.99.0",
+    "stylelint": "^17.6.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "vitest": "^4.1.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "5.3.8",
+    "chart.js": "^4.5.1"
+  }
+}

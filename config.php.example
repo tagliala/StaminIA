@@ -6,10 +6,6 @@ define('APP_ROOT', '');
 // Leave it empty if your application is not CHPP certified
 define('CHPP_APP_ID', '');
 
-// Facebook Admins IDs array
-// Leave it empty if you don't need facebook integration
-define('FB_ADMINS', '');
-
 // github repository
 define('GH_REPO', 'tagliala/StaminIA');
 

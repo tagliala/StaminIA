@@ -1,6 +1,6 @@
 <?php
 
-$langs = array();
+$langs = [];
 
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     // break up string into pieces (languages and q factors)
@@ -9,23 +9,25 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     if (count($lang_parse[1])) {
         // create a list like "en" => 0.8
         $langs = array_combine($lang_parse[1], $lang_parse[4]);
-    	
+
         // set default to 1 for any without q factor
         foreach ($langs as $lang => $val) {
-            if ($val === '') $langs[$lang] = 1;
+            if ($val === '') {
+                $langs[$lang] = 1;
+            }
         }
     }
 }
 
-if ($_GET["locale"]) {
-    preg_match('/([a-z]{1,8}(-[a-z]{1,8})?)/i', $_GET['locale'], $lang_parse);
-    if ($lang_parse[0]) {
-      //highest priority
-      $langs{$lang_parse[0]} = 2;
+if (!empty($_GET['locale'])) {
+    preg_match('/^([a-z]{1,8}(-[a-z]{1,8})?)$/i', $_GET['locale'], $lang_parse);
+    if (!empty($lang_parse[0])) {
+        //highest priority
+        $langs[$lang_parse[0]] = 2;
     }
 }
 
-// sort list based on value	
+// sort list based on value
 arsort($langs, SORT_NUMERIC);
 
 /**
@@ -33,40 +35,41 @@ arsort($langs, SORT_NUMERIC);
 */
 defined('LANG_PATH') or define('LANG_PATH', 'lang/');
 
-$lang_array = array();
-$lang_nocountry_array = array();
+$lang_array = [];
+$lang_nocountry_array = [];
 
 if ($handle = opendir(LANG_PATH)) {
     while (false !== ($file = readdir($handle))) {
         if (preg_match("/^[a-zA-Z\-]+\.json$/", $file)) {
-            $name = preg_replace('/\.json$/', '', $file); 
-            $nocountry = preg_replace('/-.*$/', '', $name); 
+            $name = preg_replace('/\.json$/', '', $file);
+            $nocountry = preg_replace('/-.*$/', '', $name);
             $content = file_get_contents(LANG_PATH . $file);
             $lang_strings = json_decode($content, true);
-            $lang_array[strtolower($lang_strings["lang"])] = array("lang-name" => $lang_strings["lang-name"], "flag" => $lang_strings["flag"]);
+            $lang_array[strtolower($lang_strings["lang"])] = ["lang-name" => $lang_strings["lang-name"], "flag" => $lang_strings["flag"]];
             $lang_nocountry_array[strtolower($nocountry)] = strtolower($lang_strings["lang"]);
         }
     }
-    $content = NULL;
-    $lang_strings = NULL;
+    $content = null;
+    $lang_strings = null;
     closedir($handle);
 }
 asort($lang_array);
 
 // look through sorted list and use first one that matches our languages
 foreach ($langs as $lang => $val) {
-  $lang = strtolower($lang);
-  if ($lang_array[$lang]) {
-    defined('LANGUAGE') or define('LANGUAGE', $lang);
-  } else if ($lang_nocountry_array[$lang]) {
-    defined('LANGUAGE') or define('LANGUAGE', $lang_nocountry_array[$lang]);
-  }
+    $lang = strtolower($lang);
+    if (isset($lang_array[$lang])) {
+        defined('LANGUAGE') or define('LANGUAGE', $lang);
+    } elseif (isset($lang_nocountry_array[$lang])) {
+        defined('LANGUAGE') or define('LANGUAGE', $lang_nocountry_array[$lang]);
+    }
 }
 
 //if no suitable languages were found, set LANGUAGE to english (us)
 defined('LANGUAGE') or define('LANGUAGE', "en-us");
 
-static $translations = NULL;
+static $translations = null;
+static $translations_en = null;
 
 /* If no instance of $translations has occured load the language file */
 if (is_null($translations)) {
@@ -77,6 +80,14 @@ if (is_null($translations)) {
     $lang_file_content = file_get_contents($lang_file);
     /* Load the language file as a JSON object and transform it into an associative array */
     $translations = json_decode($lang_file_content, true);
+
+    /* Load English fallback translations as a second-level fallback */
+    $en_file = LANG_PATH . 'en-us.json';
+    if (file_exists($en_file)) {
+        $translations_en = json_decode(file_get_contents($en_file), true);
+    } else {
+        $translations_en = [];
+    }
 }
 
 /**
@@ -84,38 +95,55 @@ if (is_null($translations)) {
 *
 * The language file is JSON encoded and returns an associative array
 * Language filename is determined by BCP 47 + RFC 4646
-* http://www.rfc-editor.org/rfc/bcp/bcp47.txt
+* https://www.rfc-editor.org/rfc/bcp/bcp47.txt
 *
 * @param string $phrase The phrase that needs to be translated
 * @return string
 */
-function localize($phrase) {
-    global $translations;
-    /* Static keyword is used to ensure the file is loaded only once */
-    if ($translations[$phrase])
-      return $translations[$phrase];
-    else
-      return $phrase;
-}
-
-function localizeJavascript() {
-    global $translations;
-    /* Static keyword is used to ensure the file is loaded only once */
-    $javascript_translation = $translations[JAVASCRIPT_MESSAGES];
-    $javascript_messages = "Staminia.JAVASCRIPT_MESSAGES = { ";
-    foreach ($javascript_translation as $func => $message) {
-      $javascript_messages = $javascript_messages . strtolower($func) . ": Staminia.format(\"" . addslashes($message) . "\"), ";
+function localize($phrase, $escape = true)
+{
+    global $translations, $translations_en;
+    if (isset($translations[$phrase]) && $translations[$phrase] !== "") {
+        $result = $translations[$phrase];
+    } elseif (isset($translations_en[$phrase]) && $translations_en[$phrase] !== "") {
+        $result = $translations_en[$phrase];
+    } else {
+        $result = $phrase;
     }
-    return $javascript_messages . " };";
+    return $escape ? htmlspecialchars($result, ENT_QUOTES, 'UTF-8') : $result;
 }
 
-$localizedSkills = array(localize("non-existent"), localize("disastrous"), localize("wretched"), localize("poor"), localize("weak"),
-                  localize("inadequate"), localize("passable"), localize("solid"), localize("excellent"),
-                  localize("formidable"), localize("outstanding"), localize("brilliant"), localize("magnificent"),
-                  localize("world class"), localize("supernatural"), localize("titanic"), localize("extra-terrestrial"),
-                  localize("mythical"), localize("magical"), localize("utopian"), localize("divine"));
+function e(string $s): string
+{
+    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+}
 
-$italianFacts = array(
+function localizeJavascript()
+{
+    global $translations, $translations_en;
+    /* Merge English base with locale overrides so any untranslated key falls back to English */
+    $base = $translations_en['JAVASCRIPT_STRINGS'] ?? [];
+    $locale = $translations['JAVASCRIPT_STRINGS'] ?? [];
+    $js = array_merge($base, $locale);
+    $items = [];
+    foreach ($js as $key => $message) {
+        $escaped = addslashes($message);
+        if (strpos($message, '{') !== false) {
+            $items[] = $key . ': Staminia.format("' . $escaped . '")';
+        } else {
+            $items[] = $key . ': "' . $escaped . '"';
+        }
+    }
+    return 'Staminia.messages = { ' . implode(', ', $items) . ' };';
+}
+
+$localizedSkills = [localize("non-existent"), localize("disastrous"), localize("wretched"), localize("poor"), localize("weak"),
+    localize("inadequate"), localize("passable"), localize("solid"), localize("excellent"),
+    localize("formidable"), localize("outstanding"), localize("brilliant"), localize("magnificent"),
+    localize("world class"), localize("supernatural"), localize("titanic"), localize("extra-terrestrial"),
+    localize("mythical"), localize("magical"), localize("utopian"), localize("divine")];
+
+$italianFacts = [
     "Italians are grrrrreat!",
     "Spaghetti, pizza and mandolino!",
     "Italians sing",
@@ -143,8 +171,7 @@ $italianFacts = array(
     "Sicilians - People from Sicily are labeled as 'omertosi', meaning that they don't talk especially when it comes to denouncing offenses. Sicilians are also famous for their jealousy",
     "Tuscans - They are called 'mangiafagioli' (bean eaters) and they're known for loving nature",
     "Umbrians - They are associated with kindness and reserve",
-    "Veneti - People from Veneto are said to be heavy drinkers and not patriotic at all"
-);
+    "Veneti - People from Veneto are said to be heavy drinkers and not patriotic at all",
+];
 
 //$WARNING = "WARNING: ";
-?>

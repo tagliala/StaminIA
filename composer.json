@@ -1,0 +1,27 @@
+{
+    "name": "tagliala/staminia",
+    "description": "Hattrick's first substitutions calculator tool",
+    "type": "project",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Geremia Taglialatela",
+            "email": "tagliala.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "jetwitaussi/pht": "^3.15"
+    },
+    "require-dev": {
+        "php-cs-fixer/shim": "^3.94"
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix --dry-run --diff"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3.33"
+        }
+    }
+}
