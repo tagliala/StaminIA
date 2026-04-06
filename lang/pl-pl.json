@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "St. fragmenty",
   "Settings": "Ustawienia",
   "Shirt Number": "Numery koszulek",
-  "SHORT_HELP": "Wypełnij formularz, a Stamin.IA! obliczy, w której minucie należy zaplanować zamianę między <b>%s</b> a <b>%s</b>, aby uzyskać maksymalny wkład.",
+  "SHORT_HELP": "Wypełnij formularz, a Stamin.IA! obliczy, w której minucie należy zaplanować zamianę między <b>%s</b> a <b>%s</b>, aby uzyskać maksymalny wkład. Stamin.IA oblicza wkład przy zmianach na tej samej pozycji.",
   "Show charts": "Pokaż wykresy",
   "Show contributions table": "Pokaż tabelę wkładu",
   "Skill": "Umiejętność",

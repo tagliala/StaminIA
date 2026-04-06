@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Pontrúgás",
   "Settings": "Általános beállítások",
   "Shirt Number": "Mezszám",
-  "SHORT_HELP": "Töltsd ki az űrlapot és a Stamin.IA! kiszámítja, hogy melyik percre érdemes cserét tervezned <b>%s</b> és <b>%s</b> között, hogy mindketten maximálisan járuljanak hozzá az értékeléseidhez.",
+  "SHORT_HELP": "Töltsd ki az űrlapot és a Stamin.IA! kiszámítja, hogy melyik percre érdemes cserét tervezned <b>%s</b> és <b>%s</b> között, hogy mindketten maximálisan járuljanak hozzá az értékeléseidhez. A Stamin.IA kiszámítja a hozzájárulásokat azonos szerepkörben végrehajtott cseréknél.",
   "Show charts": "Grafikonok megjelenítése",
   "Show contributions table": "Hozzájárulás-táblázat megjelenítése",
   "Skill": "Képesség",

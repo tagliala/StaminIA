@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Balon Parado",
   "Settings": "Ajustes",
   "Shirt Number": "Número de camiseta",
-  "SHORT_HELP": "Rellena el formulario y Stamin.IA! calculará en que minuto es mejor planificar la sustitución entre <b>%s</b> y <b>%s</b> para obtener la máxima contribución.",
+  "SHORT_HELP": "Rellena el formulario y Stamin.IA! calculará en que minuto es mejor planificar la sustitución entre <b>%s</b> y <b>%s</b> para obtener la máxima contribución. Stamin.IA calcula las contribuciones para sustituciones en la misma posición.",
   "Show charts": "Ver gráficos",
   "Show contributions table": "Ver tablas de contribuciones",
   "Skill": "Habilidad",

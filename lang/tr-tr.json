@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Set Pieces",
   "Settings": "Ayarlar",
   "Shirt Number": "Forma numarası",
-  "SHORT_HELP": "Lütfen formu doldurun, Stamin.IA! hangi dakikada <b>%s</b> ve <b>%s</b> arasındaki değişiklikten maksimum verim alacağınızı hesaplayıp gösterecektir.",
+  "SHORT_HELP": "Lütfen formu doldurun, Stamin.IA! hangi dakikada <b>%s</b> ve <b>%s</b> arasındaki değişiklikten maksimum verim alacağınızı hesaplayıp gösterecektir. Stamin.IA aynı pozisyondaki oyuncu değişiklikleri için katkıları hesaplar.",
   "Show charts": "Grafikleri göster",
   "Show contributions table": "Katkı tablosunu göster",
   "Skill": "",
