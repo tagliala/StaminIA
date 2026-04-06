@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Spelhervatten",
   "Settings": "Instellingen",
   "Shirt Number": "Shirt Nummer",
-  "SHORT_HELP": "Vul onderstaand formulier in en Stamin.IA! berekent in welke minuut jouw vervanging tussen <b>%s</b> en <b>%s</b> gepland moet worden om een maximale prestatiebijdrage te bekomen.",
+  "SHORT_HELP": "Vul onderstaand formulier in en Stamin.IA! berekent in welke minuut jouw vervanging tussen <b>%s</b> en <b>%s</b> gepland moet worden om een maximale prestatiebijdrage te bekomen. Stamin.IA berekent de bijdragen voor vervangingen binnen dezelfde positie.",
   "Show charts": "Toon grafieken",
   "Show contributions table": "Toon bijdrage tabel",
   "Skill": "",

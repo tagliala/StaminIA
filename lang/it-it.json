@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Calci piazzati",
   "Settings": "Impostazioni",
   "Shirt Number": "Numero maglia",
-  "SHORT_HELP": "Compila il modulo e Stamin.IA! calcolerà in quale minuto pianificare la sostituzione tra <b>%s</b> e <b>%s</b> per ottenere il massimo contributo.",
+  "SHORT_HELP": "Compila il modulo e Stamin.IA! calcolerà in quale minuto pianificare la sostituzione tra <b>%s</b> e <b>%s</b> per ottenere il massimo contributo. Stamin.IA calcola i contributi per le sostituzioni nello stesso ruolo.",
   "Show charts": "Mostra grafici",
   "Show contributions table": "Mostra la tabella dei contributi",
   "Skill": "Abilità",

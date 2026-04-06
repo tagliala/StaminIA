@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Standards",
   "Settings": "Grundeinstellungen",
   "Shirt Number": "Trikotnummer",
-  "SHORT_HELP": "Fülle bitte das Forumlar aus und Stamin.IA! wird berechnen in welcher Minute du die Auswechselung zwischen <b>%s</b> und <b>%s</b> einplanen solltest um den maximalen Beitrag zu den Ratings zu erhalten.",
+  "SHORT_HELP": "Fülle bitte das Forumlar aus und Stamin.IA! wird berechnen in welcher Minute du die Auswechselung zwischen <b>%s</b> und <b>%s</b> einplanen solltest um den maximalen Beitrag zu den Ratings zu erhalten. Stamin.IA berechnet die Beiträge bei Auswechslungen auf derselben Position.",
   "Show charts": "Zeige Graphiken",
   "Show contributions table": "Zeige Beitragstabelle",
   "Skill": "",

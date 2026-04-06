@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Set Pieces",
   "Settings": "Innstillinger",
   "Shirt Number": "Draktnummer",
-  "SHORT_HELP": "Vennligst fyll ut skjemaet og Stamin.IA! vil beregne hvilket minutt du bør foreta det planlagte byttet mellom <b>%s</b> og <b>%s</b> for å få det maksimale bidraget ut av spillerne.",
+  "SHORT_HELP": "Vennligst fyll ut skjemaet og Stamin.IA! vil beregne hvilket minutt du bør foreta det planlagte byttet mellom <b>%s</b> og <b>%s</b> for å få det maksimale bidraget ut av spillerne. Stamin.IA beregner bidrag for bytter i samme rolle.",
   "Show charts": "Vis diagrammer",
   "Show contributions table": "Vis bidragstabell",
   "Skill": "",

@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Bolas Paradas",
   "Settings": "Preferências",
   "Shirt Number": "Número da Camisola",
-  "SHORT_HELP": "Por favor preencha o formulário e o Stamin.IA! irá calcular o minuto em que deve planear a substituição entre o <b>%s</b> e o <b>%s</b> por forma a obter a contribuição máxima.",
+  "SHORT_HELP": "Por favor preencha o formulário e o Stamin.IA! irá calcular o minuto em que deve planear a substituição entre o <b>%s</b> e o <b>%s</b> por forma a obter a contribuição máxima. Stamin.IA calcula as contribuições para substituições na mesma posição.",
   "Show charts": "Mostrar gráficos",
   "Show contributions table": "Mostrar a tabela de contribuições",
   "Skill": "Característica",

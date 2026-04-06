@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Set Pieces",
   "Settings": "",
   "Shirt Number": "",
-  "SHORT_HELP": "Please fill out the form and Stamin.IA! will calculate in which minute you should plan the substitution between <b>%s</b> and <b>%s</b> in order to gain the maximum contribution.",
+  "SHORT_HELP": "Please fill out the form and Stamin.IA! will calculate in which minute you should plan the substitution between <b>%s</b> and <b>%s</b> in order to gain the maximum contribution. Stamin.IA calculates contributions for same-role substitutions.",
   "Show charts": "",
   "Show contributions table": "",
   "Skill": "",

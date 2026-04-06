@@ -127,7 +127,7 @@
   "Set Pieces (skill)": "Set Pieces",
   "Settings": "Paramètres",
   "Shirt Number": "Numéro de maillot",
-  "SHORT_HELP": "Veuillez compléter le formulaire et Stamin.IA! va calculer à quelle minute vous devriez prévoir le remplacement entre <b>%s</b> et <b>%s</b> pour obtenir une contribution maximale.",
+  "SHORT_HELP": "Veuillez compléter le formulaire et Stamin.IA! va calculer à quelle minute vous devriez prévoir le remplacement entre <b>%s</b> et <b>%s</b> pour obtenir une contribution maximale. Stamin.IA calcule les contributions pour les remplacements au même poste.",
   "Show charts": "Afficher les graphiques",
   "Show contributions table": "Montrer la table des contributions",
   "Skill": "",
