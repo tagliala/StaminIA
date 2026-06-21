@@ -1,5 +1,9 @@
 # Changelog
 
+## 27.1.0 - 2026-06-23
+
+- Add missing translations
+
 ## 27.0.0 - 2026-04-06
 
 - Improve short help
