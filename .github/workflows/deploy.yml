@@ -51,7 +51,7 @@ jobs:
           mkdir -p deploy/chpp
           cp index.php localization.php VERSION deploy/
           cp -R css dist img includes lang vendor deploy/
-          cp chpp/chpp_auth.php chpp/chpp_callback.php chpp/chpp_retrievedata.php chpp/chpp_revokeauth.php deploy/chpp/
+          cp chpp/chpp_auth.php chpp/chpp_callback.php chpp/chpp_retrievedata.php chpp/chpp_revokeauth.php chpp/crypto.php deploy/chpp/
 
       - name: Deploy to Altervista
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0

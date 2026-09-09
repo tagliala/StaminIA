@@ -48,8 +48,6 @@
     "verbose_mode": "Mode verbeux (v{0})"
   },
   "(or higher)": "(ou supérieur)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>ATTENTION :</b> en activant \"%s\", vos données d'autorisation sont stockées dans un %s sur votre ordinateur.<br><b>NE PAS UTILISER</b> cette option sur un WiFi public ou des appareils partagés (ex. bibliothèque, hôtel).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Un cookie est utilisé par un site web pour envoyer des informations d'état au navigateur d'un utilisateur et pour que le navigateur renvoie les informations d'état au site d'origine.",
   "Advanced strength calculation": "Calcul avancé de la force",
   "Authorize Stamin.IA! to access your data": "Autoriser Stamin.IA! à accéder à vos données",
   "brilliant": "brillant",

@@ -48,8 +48,6 @@
     "verbose_mode": "Αναλυτική Λειτουργία (v{0})"
   },
   "(or higher)": "(ή υψηλότερο)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>ΣΗΜΕΙΩΣΗ:</b> Ενεργοποιώντας αυτή την επιλογή, τα στοιχεία εξουσιοδότησής σας αποθηκεύονται σε ένα %s στον υπολογιστή σας.<br><b>ΜΗΝ ΧΡΗΣΙΜΟΠΟΙΕΙΤΕ</b> αυτήν την επιλογή σε δημόσιο WiFi ή κοινόχρηστες συσκευές (π.χ. βιβλιοθήκη, ξενοδοχείο).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Ένα κούκι χρησιμοποιείται από μια ιστοσελίδα για να στέλνει πληροφορίες κατάστασης στην ιστοσελίδα προέλευσης",
   "Advanced strength calculation": "Σύνθετος υπολογισμός",
   "Authorize Stamin.IA! to access your data": "Εξουσιοδοτήστε το Stamin.IA! να αποκτήσει πρόσβαση στα δεδομένα σας",
   "brilliant": "Εκπληκτικός (11)",

@@ -48,8 +48,6 @@
     "verbose_mode": "Tungprat-modus (v{0})"
   },
   "(or higher)": "(eller høyere)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>ADVARSEL:</b> ved å aktivere \"%s\", lagres autorisasjonsdataene dine i en %s på datamaskinen din.<br><b>IKKE BRUK</b> dette alternativet på offentlig WiFi eller delte enheter (f.eks. bibliotek, hotell).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "En cookie brukes av et nettsted for å sende tilstandsinformasjon til en brukers nettleser og for at nettleseren skal returnere tilstandsinformasjonen til det opprinnelige nettstedet.",
   "Advanced strength calculation": "Avansert beregning",
   "Authorize Stamin.IA! to access your data": "Gi Stamin.IA! autorisasjon til å hente dine data",
   "brilliant": "briljant",

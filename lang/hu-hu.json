@@ -48,8 +48,6 @@
     "verbose_mode": "Bővített mód"
   },
   "(or higher)": "(vagy magasabb)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>FIGYELMEZTETÉS:</b> \"%s\" engedélyezésével az azonosítási információid egy %s-ban kerül tárolásra.<br><b>NE HASZNÁLD</b> ezt a lehetőséget nyilvános WiFi-n vagy megosztott eszközökön (pl. könyvtár, hotel).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "A sütit (cookie) arra használja egy eredeti weboldal, hogy állapot információkat küldjön a felhasználó böngészőjének, majd a böngésző információkat adjon vissza az eredeti weboldalnak.",
   "Advanced strength calculation": "Bővített erősség számítás",
   "Authorize Stamin.IA! to access your data": "Engedélyezd a Stamin.IA!-nak, hogy hozzáférhessen az adataidhoz",
   "brilliant": "ragyogó",
