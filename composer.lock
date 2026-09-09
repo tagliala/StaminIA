@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9f7a71a491463b41d10c3e3d275c7c6",
+    "content-hash": "aec047935da334d1d6bdbdeace2f3115",
     "packages": [
         {
             "name": "jetwitaussi/pht",
@@ -107,7 +107,12 @@
     "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": ">=7.4"
+    },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "7.4.0"
+    },
     "plugin-api-version": "2.9.0"
 }
