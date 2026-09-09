@@ -48,8 +48,6 @@
     "verbose_mode": "Ayrıntılı Görünüm Modu (v{0})"
   },
   "(or higher)": "(veya daha yüksek)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>UYARI:</b> \"%s\" etkinleştirilerek, yetkilendirme verileriniz bilgisayarınızda bir %s içinde saklanır.<br><b>KULLANMAYIN</b> bu seçeneği halka açık WiFi'de veya ortak cihazlarda (örn. kütüphane, otel).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Bir çerez, bir kaynak web sitesinin durum bilgilerini kullanıcının tarayıcısına göndermesi ve tarayıcının durum bilgilerini kaynak siteye geri döndürmesi için kullanılır.",
   "Advanced strength calculation": "Gelişmiş Mod",
   "Authorize Stamin.IA! to access your data": "Verilere ulaşmak için Stamin.IA!'yı onaylayın.",
   "brilliant": "görkemli",

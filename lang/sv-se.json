@@ -48,8 +48,6 @@
     "verbose_mode": "Minutiöst läge (v{0})"
   },
   "(or higher)": "(eller högre)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>VARNING:</b> genom att aktivera \"%s\" lagras dina auktoriseringsuppgifter i en %s på din dator.<br><b>ANVÄND INTE</b> detta alternativ på offentligt WiFi eller delade enheter (t.ex. bibliotek, hotell).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "En cookie används av en webbplats för att skicka tillståndsinformation till en användares webbläsare och för att webbläsaren ska returnera tillståndsinformationen till den ursprungliga webbplatsen.",
   "Advanced strength calculation": "Avancerad kalkylering",
   "Authorize Stamin.IA! to access your data": "Godkänn Stamin.IA! för att få tillgång till din data",
   "brilliant": "gudabenådad",

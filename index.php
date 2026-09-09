@@ -120,7 +120,7 @@ function optionSkills($start = 0, $stop = 20, $select = 6)
                         </div>
                       </fieldset>
                     </form>
-                    <div class="alert alert-warning small mb-0 mt-2 p-2"><?= icon('triangle-exclamation') ?> <?php echo sprintf(localize("<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).", false), localize("Remember me"), "<abbr title=\"" . localize("A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.") . "\">" . localize("cookie") . "</abbr>"); ?></div>
+
                   </div>
                   <ul class="list-unstyled mb-0 d-none" id="loggedInDropdown">
                     <li>

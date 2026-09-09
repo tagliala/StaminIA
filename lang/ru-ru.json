@@ -48,8 +48,6 @@
     "verbose_mode": "Развернутые результаты (v{0})"
   },
   "(or higher)": "(или выше)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>ПРЕДУПРЕЖДЕНИЕ:</b> включив \"%s\", ваши авторизационные данные будут сохранены в %s на вашем компьютере.<br><b>НЕ ИСПОЛЬЗУЙТЕ</b> эту опцию в общедоступных сетях WiFi или на общих устройствах (например, библиотека, отель).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Cookie-файл используется исходным веб-сайтом для отправки информации о состоянии в браузер пользователя и для возврата браузером информации о состоянии исходному сайту.",
   "Advanced strength calculation": "Расширенный расчет",
   "Authorize Stamin.IA! to access your data": "Авторизируйте Stamin.IA! для получения данных",
   "brilliant": "блестяще",

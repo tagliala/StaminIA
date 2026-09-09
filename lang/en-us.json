@@ -48,8 +48,6 @@
     "verbose_mode": "Verbose mode"
   },
   "(or higher)": "",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "",
   "Advanced strength calculation": "",
   "Authorize Stamin.IA! to access your data": "",
   "brilliant": "",

@@ -48,8 +48,6 @@
     "verbose_mode": "Ausführlicher Ausgabemodus (v{0})"
   },
   "(or higher)": "(oder höher)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>WARNUNG:</b> wenn du diese Option aktivierst, dann werden deine Anmeldedaten in einem %s auf diesem Computer gespeichert.<br>Benutze diese Option <b>NICHT</b> in öffentlichem WLAN oder auf geteilten Geräten (z.B. Bibliothek, Hotel).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Ein Cookie wird benutzt, um Statusinformationen von einer Webseite auf dem Computer des Nutzers zu speichern und diese später wieder an diese Webseite zurück zu senden.",
   "Advanced strength calculation": "Erweiterte Stärkeberechnung",
   "Authorize Stamin.IA! to access your data": "Autorisiere Stamin.IA! auf deine Daten zuzugreifen",
   "brilliant": "brillant",

@@ -48,8 +48,6 @@
     "verbose_mode": "Extra informatie modus (v{0})"
   },
   "(or higher)": "(of hoger)",
-  "<b>WARNING:</b> by enabling \"%s\", your authorization data are stored in a %s on your computer.<br><b>DO NOT USE</b> this option on public WiFi or shared devices (e.g. library, hotel).": "<b>WAARSCHUWING:</b> door \"%s\" in te schakelen, worden uw autorisatiegegevens opgeslagen in een %s op uw computer.<br><b>NIET GEBRUIKEN</b> deze optie op openbare WiFi of gedeelde apparaten (b.v. bibliotheek, hotel).",
-  "A cookie is used for an origin website to send state information to a user's browser and for the browser to return the state information to the origin site.": "Een cookie wordt gebruikt door een website om statusinformatie naar de browser van een gebruiker te sturen en voor de browser om de statusinformatie terug te sturen naar de oorspronkelijke site.",
   "Advanced strength calculation": "Geavanceerde Sterkteberekening",
   "Authorize Stamin.IA! to access your data": "Geef Stamin.IA! toegand tot jouw data",
   "brilliant": "Briljant",

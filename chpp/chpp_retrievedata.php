@@ -5,6 +5,7 @@ ob_start('ob_gzhandler');
 header('Content-type: application/json');
 require __DIR__ . '/../vendor/autoload.php';
 include __DIR__ . '/config.php';
+include __DIR__ . '/crypto.php';
 session_start();
 $returnArray = [];
 
@@ -80,12 +81,21 @@ function getTeamDetails($HT, $team)
 }
 
 if ($oauthToken == null && ($_COOKIE['permanent'] ?? false)) {
-    $oauthToken = $_COOKIE['userToken'] ?? null;
-    $oauthTokenSecret = $_COOKIE['userTokenSecret'] ?? null;
+    $rawToken = $_COOKIE['userToken'] ?? null;
+    $rawSecret = $_COOKIE['userTokenSecret'] ?? null;
 
-    if ($oauthToken && $oauthTokenSecret) {
-        $_SESSION['oauthToken'] = $oauthToken;
-        $_SESSION['oauthTokenSecret'] = $oauthTokenSecret;
+    if ($rawToken && $rawSecret) {
+        $oauthToken = decrypt_cookie($rawToken);
+        $oauthTokenSecret = decrypt_cookie($rawSecret);
+
+        if ($oauthToken === false || $oauthTokenSecret === false) {
+            resetPermanentToken();
+            $returnArray['Status'] = 'Error';
+            $returnArray['ErrorCode'] = 'InvalidToken';
+        } else {
+            $_SESSION['oauthToken'] = $oauthToken;
+            $_SESSION['oauthTokenSecret'] = $oauthTokenSecret;
+        }
     } else {
         $returnArray['Status'] = 'Error';
         $returnArray['ErrorCode'] = 'InvalidToken';

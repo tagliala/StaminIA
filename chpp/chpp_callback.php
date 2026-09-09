@@ -3,6 +3,7 @@
 error_reporting(E_ALL & ~E_DEPRECATED);
 require __DIR__ . '/../vendor/autoload.php';
 include __DIR__ . '/config.php';
+include __DIR__ . '/crypto.php';
 session_start();
 
 $temporaryToken = $_SESSION['temporaryToken'] ?? null;
@@ -26,8 +27,8 @@ if ($temporaryToken != null) {
         session_regenerate_id(true);
 
         if ($storeTokens) {
-            setcookie('userToken', $access->oauthToken, COOKIE_OPTIONS);
-            setcookie('userTokenSecret', $access->oauthTokenSecret, COOKIE_OPTIONS);
+            setcookie('userToken', encrypt_cookie($access->oauthToken), COOKIE_OPTIONS);
+            setcookie('userTokenSecret', encrypt_cookie($access->oauthTokenSecret), COOKIE_OPTIONS);
             setcookie('permanent', '1', COOKIE_OPTIONS);
 
             unset($_SESSION['storeTokens']);
