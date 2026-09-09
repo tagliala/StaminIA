@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
-        "jetwitaussi/pht": "^3.15"
+        "php": ">=7.4",
+        "jetwitaussi/pht": "3.15"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.94"
@@ -21,7 +21,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.3.33"
+            "php": "7.4.0"
         }
     }
 }
