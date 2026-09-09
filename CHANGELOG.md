@@ -1,5 +1,9 @@
 # Changelog
 
+## 27.1.1 - 2026-09-09
+
+- Add automated deploy to Altervista on release
+
 ## 27.1.0 - 2026-06-23
 
 - Add missing translations

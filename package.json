@@ -1,6 +1,6 @@
 {
   "name": "staminia",
-  "version": "27.1.0",
+  "version": "27.1.1",
   "description": "Hattrick's first substitutions calculator tool",
   "private": true,
   "scripts": {
