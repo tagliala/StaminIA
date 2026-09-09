@@ -1,0 +1,66 @@
+name: Deploy to Altervista
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Print files that would be uploaded without uploading"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6.0.9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install npm dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build assets
+        run: pnpm run build
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Stage deploy files
+        run: |
+          rm -rf deploy
+          mkdir -p deploy/chpp
+          cp index.php localization.php VERSION deploy/
+          cp -R css dist img includes lang vendor deploy/
+          cp chpp/chpp_auth.php chpp/chpp_callback.php chpp/chpp_retrievedata.php chpp/chpp_revokeauth.php deploy/chpp/
+
+      - name: Deploy to Altervista
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          server-dir: ./
+          local-dir: deploy/
+          dry-run: ${{ github.event.inputs.dry-run || 'false' }}
