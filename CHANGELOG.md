@@ -1,5 +1,9 @@
 # Changelog
 
+## 29.0.1 - 2026-11-01
+
+- Update PHT to 3.16
+
 ## 29.0.0 - 2026-09-09
 
 - Encrypt CHPP authorization tokens stored in cookies (AES-256-CBC + HMAC)
