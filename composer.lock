@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "870373f522e4cd28c4deea9c5d64d634",
+    "content-hash": "31c7836052c3a62a9cddf2ab9801d7dd",
     "packages": [
         {
             "name": "jetwitaussi/pht",
-            "version": "3.16",
+            "version": "3.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jetwitaussi/PHT.git",
-                "reference": "bbd72b21506795646a544c27801191aff6a3073d"
+                "reference": "e245c573c5802e5f5c1c47239219f5e96026ad67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jetwitaussi/PHT/zipball/bbd72b21506795646a544c27801191aff6a3073d",
-                "reference": "bbd72b21506795646a544c27801191aff6a3073d",
+                "url": "https://api.github.com/repos/jetwitaussi/PHT/zipball/e245c573c5802e5f5c1c47239219f5e96026ad67",
+                "reference": "e245c573c5802e5f5c1c47239219f5e96026ad67",
                 "shasum": ""
             },
             "require": {
@@ -43,9 +43,10 @@
             "homepage": "https://github.com/jetwitaussi/PHT",
             "support": {
                 "issues": "https://github.com/jetwitaussi/PHT/issues",
-                "source": "https://github.com/jetwitaussi/PHT/tree/3.16"
+                "source": "https://github.com/jetwitaussi/PHT/tree/3.17"
             },
-            "time": "2026-10-24T13:01:45+00:00"
+            "time": "2026-11-22T08:41:13+00:00",
+            "published-time": "2026-11-22T08:46:23+00:00"
         }
     ],
     "packages-dev": [
@@ -120,5 +121,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }

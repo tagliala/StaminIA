@@ -11,13 +11,14 @@
     ],
     "require": {
         "php": ">=7.4",
-        "jetwitaussi/pht": "3.16"
+        "jetwitaussi/pht": "3.17"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.94"
     },
     "scripts": {
-        "lint": "php-cs-fixer fix --dry-run --diff"
+        "lint": "php-cs-fixer fix --dry-run --diff",
+        "test": "php scripts/php-smoke.php"
     },
     "config": {
         "platform": {
