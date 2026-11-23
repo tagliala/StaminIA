@@ -1,5 +1,11 @@
 # Changelog
 
+## 29.0.2 - 2026-11-22
+
+- Update PHT to 3.17, which no longer calls functions deprecated in PHP 8.5
+- Stop suppressing E_DEPRECATED in the CHPP endpoints
+- Add a PHP smoke test that fails on any notice, warning or deprecation
+
 ## 29.0.1 - 2026-11-01
 
 - Update PHT to 3.16

@@ -43,3 +43,30 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+  php:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@2.37.2
+        with:
+          php-version: '8.5'
+          extensions: curl, dom, libxml, xml
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Lint PHP
+        run: composer lint
+
+      - name: Create test configuration
+        run: |
+          cp config.php.example config.php
+          cp chpp/config.php.example chpp/config.php
+
+      - name: Test
+        run: composer test
